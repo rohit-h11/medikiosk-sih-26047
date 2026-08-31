@@ -92,22 +92,22 @@ Validate AI4Bharat IndicConformer or IndicWhisper ASR models on local sample Ind
 - [ ] Latency per 5-second audio chunk benchmarked under 1.5 seconds."""
     },
     5: {
-        "title": "[Voice Pipeline] Browser WebAudio Streaming & WebSocket ASR Integration",
+        "title": "[Voice Pipeline] Push-to-Talk HTTP Audio Capture & ASR Integration",
         "body": """### 🎯 Objective
-Build a real-time browser WebAudio capture module streaming raw PCM/WAV chunks over WebSockets to the FastAPI ASR engine.
+Build a Push-to-Talk browser audio capture module sending recorded audio utterances over HTTP POST requests to the FastAPI ASR engine.
 
 ### 📋 Scope & Requirements
 - **Frontend Audio Capture**:
-  - Use HTML5 MediaRecorder / AudioContext API to capture microphone stream.
-  - Stream 16kHz mono audio chunks over WebSocket (`ws://localhost:8000/api/v1/ws/audio`).
-- **Backend Streaming Pipeline**:
-  - FastAPI WebSocket endpoint buffering audio chunks per utterance.
-  - Pass audio buffer to IndicConformer / IndicWhisper inference worker.
-  - Return transcribed text frame back to the client over WebSocket.
+  - Use HTML5 MediaRecorder / AudioContext API to capture microphone audio on Push-to-Talk interaction.
+  - Export recorded WebM/WAV audio blob on button release/stop and send via `POST /api/v1/ai/transcribe-speech`.
+- **Backend Audio Endpoint**:
+  - FastAPI HTTP endpoint accepting audio file uploads per utterance.
+  - Pass audio buffer to IndicConformer / IndicWhisper / Groq Whisper inference worker.
+  - Return transcribed text payload back to the client.
 
 ### ✅ Acceptance Criteria
-- [ ] WebAudio capture working in browser without UI freeze.
-- [ ] Continuous speech transcribed into text frames within 1 second of pause."""
+- [ ] Push-to-Talk audio capture working reliably in browser without UI freeze.
+- [ ] Recorded audio utterance transcribed into text within 1.5 seconds of button release."""
     },
     6: {
         "title": "[Translation & TTS] IndicTrans2 Bidirectional Translation & Bhashini TTS",
@@ -182,20 +182,20 @@ Configure Supabase `pgvector` index and build historical document embedding pipe
 - [ ] Vector search returns relevant chunks strictly filtered by `patient_id`."""
     },
     10: {
-        "title": "[Voice Expansion] Multilingual ASR Support & Audio Noise Filtering",
+        "title": "[Voice Expansion] Multilingual ASR Support & Audio Pre-Filtering",
         "body": """### 🎯 Objective
-Expand ASR language capabilities to Hindi, Tamil, Assamese, and Bengali while adding background audio noise reduction.
+Expand ASR language capabilities to Hindi, Tamil, Assamese, and Bengali while adding background audio noise pre-filtering for Push-to-Talk utterances.
 
 ### 📋 Scope & Requirements
 - **Multilingual Support**:
   - Support language selection at kiosk onset (Hindi, Tamil, Assamese, Bengali, English).
   - Load appropriate ASR language acoustic model dynamically.
-- **Noise Cancellation**:
-  - Implement WebRTC / NoiseSuppressor audio pre-filter to handle noisy OPD environment background chatter.
+- **Audio Pre-Filtering**:
+  - Implement browser-level noise suppression (WebAudio AudioConstraints) and server-side audio normalization to handle OPD background chatter.
 
 ### ✅ Acceptance Criteria
-- [ ] Kiosk accurately transcribes audio across 4+ Indian languages.
-- [ ] Background OPD noise effectively suppressed without clipping speech."""
+- [ ] Kiosk accurately transcribes Push-to-Talk audio across 4+ Indian languages.
+- [ ] Background OPD noise effectively suppressed without clipping spoken utterances."""
     },
     11: {
         "title": "[AYUSH Engine] CCRAS Prakriti Assessment Scale (PAS) Fixed Question Battery",
@@ -233,12 +233,12 @@ Build a deterministic rule-based triage system to detect medical emergencies and
     13: {
         "title": "[Frontend UI] React Kiosk Patient Interface & Doctor Dashboard Skeletons",
         "body": """### 🎯 Objective
-Develop modern, accessible React (Vite) user interfaces for both the Patient Kiosk and the Doctor Consultation Dashboard.
+Develop modern, accessible React (Vite) user interfaces for both the Patient Kiosk and the Doctor Dashboard.
 
 ### 📋 Scope & Requirements
 - **Patient Kiosk UI**:
   - High-contrast, large touch targets designed for non-tech-literate patients.
-  - Language selection screen, ABHA auth modal, animated voice visualizer (mic activity), document photo capture widget.
+  - Language selection screen, ABHA auth modal, Push-to-Talk audio widget, document photo capture widget.
 - **Doctor Dashboard UI**:
   - Patient queue list with red-flag priority badges.
   - High-density clinical summary view with interactive edit/confirm buttons.
@@ -250,16 +250,16 @@ Develop modern, accessible React (Vite) user interfaces for both the Patient Kio
     14: {
         "title": "[Pipeline Integration] End-to-End Multilingual Voice & Document Processing",
         "body": """### 🎯 Objective
-Connect all standalone microservices into a continuous, real-time end-to-end processing pipeline.
+Connect all standalone microservices into a continuous, reliable end-to-end processing pipeline using Push-to-Talk HTTP requests.
 
 ### 📋 Scope & Requirements
 - **Full Voice Flow**:
-  - Browser Microphone ➔ WebSocket ➔ ASR ➔ IndicTrans2 ➔ LLM Dialogue Manager ➔ IndicTrans2 ➔ TTS Audio ➔ Kiosk Speaker.
+  - Push-to-Talk Audio ➔ HTTP POST /transcribe-speech ➔ ASR ➔ IndicTrans2 ➔ LLM Dialogue Manager ➔ IndicTrans2 ➔ TTS Audio ➔ Kiosk Speaker.
 - **Full Document Flow**:
   - Document Photo ➔ Cloud Vision OCR ➔ LLM Structured JSON ➔ Supabase DB ➔ pgvector Index.
 
 ### ✅ Acceptance Criteria
-- [ ] Patient can complete full voice interview with active audio feedback.
+- [ ] Patient can complete full Push-to-Talk voice interview with active audio feedback.
 - [ ] Document photo uploaded during interview is processed and available for summary generation."""
     },
     15: {
@@ -361,11 +361,11 @@ Implement privacy guardrails and data protection measures in accordance with the
     21: {
         "title": "[Code Freeze & Optimization] Performance Tuning & Latency Cutoff",
         "body": """### 🎯 Objective
-Execute code freeze, resolve lingering performance bottlenecks, and optimize WebSocket audio streaming latency.
+Execute code freeze, resolve lingering performance bottlenecks, and optimize Push-to-Talk audio processing latency.
 
 ### 📋 Scope & Requirements
 - **Performance Cutoffs**:
-  - WebSocket audio-to-text latency < 1.0 second.
+  - Push-to-Talk audio-to-text HTTP latency < 1.5 seconds.
   - Summary generation context-stuffing < 4.0 seconds.
 - **Stability**:
   - Fix any UI memory leaks during long-running kiosk sessions.

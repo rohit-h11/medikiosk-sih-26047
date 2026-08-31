@@ -26,47 +26,136 @@ Indian OPDs handle 4,000–10,000 patients daily with only 2–5 minutes availab
 
 ---
 
-## 🏗️ Architecture Overview
+## 🏗️ Architecture & Backend Structure
 
 ```
-               +-------------------------------------------------------+
-               |                  MediKiosk Platform                   |
-               +-------------------------------------------------------+
-                                           |
-    +--------------------------------------+--------------------------------------+
-    |                                      |                                      |
-    v                                      v                                      v
-[ Patient Kiosk ]                [ AI Processing Pipeline ]              [ Doctor Dashboard ]
-  - ABHA Sandbox Auth              - IndicConformer / Whisper (ASR)        - FHIR Clinical Summary
-  - Voice / Touch UI               - IndicTrans2 (Translation)             - Interactive Edit / Confirm
-  - Doc Photo Capture              - LLM Clinical Dialogue Manager         - Ad-hoc RAG Patient Q&A
-  - Multilingual TTS               - OCR + Structured Extraction           - Emergency Triage Alerts
-                                   - pgvector Context Store
-```
-
-### Voice / Language Pipeline ("Translate-Then-Reason")
-```
-Patient Speech (Hindi/Tamil/etc.) 
-   ➔ IndicConformer / IndicWhisper (ASR) 
-   ➔ IndicTrans2 (Translate to English) 
-   ➔ LLM Clinical Reasoning (SOCRATES / CCRAS-PAS) 
-   ➔ IndicTrans2 (Translate back) 
-   ➔ Bhashini / Indic TTS (Audio Out)
+backend/
+├── .env
+├── .env.example
+├── requirements.txt
+└── app/
+    ├── main.py                   # FastAPI initialization, middlewares, /healthz
+    ├── config.py                 # Pydantic BaseSettings & Environment config
+    ├── db.py                     # Supabase DB client connection setup
+    ├── core/
+    │   ├── security.py           # JWT auth tokens, password hashing & RBAC
+    │   └── middleware.py         # CORS, Request logging, Security headers, Exceptions
+    ├── api/
+    │   ├── deps.py               # FastAPI dependency injection (Current User, DB)
+    │   └── v1/
+    │       ├── router.py         # Master API v1 router
+    │       └── endpoints/
+    │           ├── auth.py       # /api/v1/auth (Login, Register, Profiles)
+    │           ├── interview.py  # /api/v1/interview (Voice/Text Intake, SOCRATES, AYUSH PAS)
+    │           ├── ocr.py        # /api/v1/ocr (Document upload & OCR extraction)
+    │           ├── summary.py    # /api/v1/summary (FHIR Clinical Summary & Doctor RAG)
+    │           └── abdm.py       # /api/v1/abdm (ABHA Sandbox Auth & Linkage)
+    ├── schemas/                  # Pydantic data validation schemas
+    └── ai/                       # Isolated AI package subdirectories
+        ├── asr/                  # 🎧 Member 1: Audio-to-Text & Speech Synthesis
+        ├── translation/          # 🌐 Member 2: Text-to-Text Translation
+        ├── dialogue/             # 🧠 Member 3: Prompt Engineering & SOCRATES Engine
+        ├── ocr/                  # 📄 Member 4: Document OCR & Extraction
+        └── rag/                  # 🔍 Member 5: pgvector Vector Store & Clinical RAG
 ```
 
 ---
 
-## 🛠️ Tech Stack
+## 🔌 API Routes Overview
 
-| Layer | Technology | Rationale |
+| Route Module | Prefix | Description |
 |---|---|---|
-| **Backend Framework** | **FastAPI (Python)** | Native async, WebSocket streaming for audio, Python ML ecosystem integration |
-| **Frontend UI** | **React + Vite + Vanilla CSS** | Responsive touch/voice Kiosk interface & high-density Doctor Dashboard |
-| **Database & Vector Store** | **Supabase Postgres + pgvector** | Unified relational database, encrypted storage, and fast patient-scoped vector search |
-| **ASR (Speech-to-Text)** | **IndicConformer / IndicWhisper** | State-of-the-art open-source ASR for Indian regional languages |
-| **Translation & Speech Synth** | **IndicTrans2 & Bhashini TTS** | Government-aligned multilingual translation and speech synthesis |
-| **OCR & Extraction** | **Cloud Vision / PaddleOCR + LLM** | Printed & handwritten document OCR + structured clinical JSON mapping |
-| **Clinical Coding** | **NAMASTE & WHO ICD-11 (TM2)** | Official AYUSH morbidity coding & ABDM interoperability standards |
+| **Health Check** | `/healthz` | System health check (DB connection, AI model service connectivity) |
+| **Authentication** | `/api/v1/auth` | User login, doctor/staff registration, JWT token generation |
+| **Clinical Interview** | `/api/v1/interview` | Adaptive voice/text intake sessions, SOCRATES branching & CCRAS PAS |
+| **Document OCR** | `/api/v1/ocr` | Upload prescriptions/lab reports, run OCR & extract structured JSON |
+| **Clinical Summary & RAG** | `/api/v1/summary` | Generate 30-second FHIR summaries & doctor Q&A assistant |
+| **ABDM Integration** | `/api/v1/abdm` | ABHA OTP verification, patient health ID link & consent records |
+
+---
+
+## 🚀 Quickstart & Developer Setup Guide
+
+### 📋 Prerequisites
+- **Git**
+- **Python 3.10+**
+
+---
+
+### ⚡ Option A: 1-Command Automated Setup (Recommended Fast-Track)
+
+Run the automated setup script from the root directory:
+
+**Windows (PowerShell):**
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\setup.ps1
+```
+
+**Mac / Linux (Terminal):**
+```bash
+chmod +x ./scripts/setup.sh && ./scripts/setup.sh
+```
+
+*This automatically creates `backend/venv`, installs dependencies, and creates `backend/.env` from `.env.example`.*
+
+#### Launch Development Server:
+- **Windows:** `powershell .\scripts\run_backend.ps1`
+- **Mac / Linux:** `./scripts/run_backend.sh`
+
+---
+
+### 🛠️ Option B: Manual Setup
+
+#### Step 1: Clone the Repository
+```bash
+git clone https://github.com/rohit-h11/medikiosk-sih-26047.git
+cd medikiosk-sih-26047
+```
+
+#### Step 2: Backend Virtual Environment Setup
+```bash
+# Navigate to backend directory
+cd backend
+
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment:
+# Windows (PowerShell):
+.\venv\Scripts\Activate.ps1
+# Windows (CMD):
+.\venv\Scripts\activate.bat
+# Mac / Linux:
+source venv/bin/activate
+
+# Install all backend dependencies
+pip install -r requirements.txt
+```
+
+#### Step 3: Configure Environment Variables
+Copy `.env.example` to create your local `.env` file:
+```bash
+# Windows
+copy .env.example .env
+
+# Mac / Linux
+cp .env.example .env
+```
+*Fill in your Supabase credentials, JWT secret, and API keys in `.env`.*
+
+#### Step 4: Run the Backend Development Server
+From inside the `backend/` directory:
+```bash
+uvicorn app.main:app --reload
+```
+
+---
+
+### 🌐 Access Interactive API Documentation
+Open your browser and navigate to:
+- 📖 **Swagger UI Docs:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- 📑 **ReDoc:** [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+- 🩺 **Health Check:** [http://127.0.0.1:8000/healthz](http://127.0.0.1:8000/healthz)
 
 ---
 
@@ -80,19 +169,6 @@ Patient Speech (Hindi/Tamil/etc.)
 | **ML 4** | Document OCR & Extraction | Prescription OCR pipeline, structured JSON parsing, abnormal lab flagging |
 | **ML 5** | RAG & Clinical Summarizer | pgvector index & doctor Q&A engine, single-visit FHIR summary generator |
 | **Full-Stack Dev** | Platform Infrastructure | FastAPI backend, React (Vite) Kiosk & Doctor UI, Supabase Auth/DB, ABDM wiring |
-
----
-
-## 📅 6-Day Development Roadmap
-
-See the detailed task breakdown and execution tracking in [ROADMAP.md](ROADMAP.md).
-
-- 🟢 **Day 1:** Environment setup, API keys, repository structure & clinical ontology design.
-- 🟡 **Day 2:** Isolated component prototyping (ASR, Translation, Dialogue LLM, OCR, pgvector).
-- 🔵 **Day 3:** Deep integration, AYUSH dual-mode engine, React Kiosk & Dashboard UI skeletons.
-- 🟣 **Day 4:** End-to-end pipeline wiring, ABDM sandbox integration, FHIR JSON export.
-- 🟠 **Day 5:** System integration testing, doctor workspace refinement, NAMASTE coding validation.
-- 🔴 **Day 6:** Live demo rehearsal, UI polish, backup demo video recording & final submission.
 
 ---
 

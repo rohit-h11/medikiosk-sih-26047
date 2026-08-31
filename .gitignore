@@ -36,3 +36,7 @@ build/
 # Operating System
 .DS_Store
 Thumbs.db
+
+# Antigravity & Agent Rules
+GEMINI.md
+.agents/

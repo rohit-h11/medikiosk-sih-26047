@@ -166,3 +166,6 @@ gantt
 | **Ayurvedic Terminology OCR Errors** | Medium | Low-confidence flag triggers doctor review; custom Ayurvedic glossary prompt rules. |
 | **High Translation Latency** | Medium | Per-utterance translation batching & async TTS streaming. |
 | **Time Constraints on Day 4** | Medium | Scope-drop non-critical Doctor RAG Q&A while protecting core Intake → Summary pipeline. |
+
+
+<!-- comment -->

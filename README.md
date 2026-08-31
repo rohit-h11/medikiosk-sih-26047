@@ -163,7 +163,7 @@ Open your browser and navigate to:
 
 | Team Member | Primary Responsibility | Key Deliverables |
 |---|---|---|
-| **ML 1 + Dev** | ASR & Audio Streaming | Browser WebAudio → WebSocket → IndicConformer/Whisper streaming pipeline |
+| **ML 1 + Dev** | ASR & Audio Processing | Browser WebAudio (Push-to-Talk) → HTTP POST → IndicConformer/Whisper ASR pipeline |
 | **ML 2** | Translation & Voice Synth | IndicTrans2 bidirectional translation engine & Bhashini TTS integration |
 | **ML 3** | Clinical Dialogue Manager | Adaptive SOCRATES engine, CCRAS-PAS AYUSH module, Red-flag alert rules |
 | **ML 4** | Document OCR & Extraction | Prescription OCR pipeline, structured JSON parsing, abnormal lab flagging |

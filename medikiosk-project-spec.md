@@ -147,8 +147,8 @@ Rule/keyword-based (not ML classifier) for demo predictability — flags emergen
 
 | Layer | Choice | Why |
 |---|---|---|
-| Backend | **FastAPI** (Python) | ML logic is all Python — one backend, native async + WebSocket support for streaming voice |
-| Frontend | **React (Vite)** | No SSR/SEO need for kiosk or internal dashboard; avoids Next.js API routes being a poor fit for audio streaming |
+| Backend | **FastAPI** (Python) | ML logic is all Python — one backend, native async REST endpoints for Push-to-Talk audio processing |
+| Frontend | **React (Vite)** | No SSR/SEO need for kiosk or internal dashboard; lightweight REST integration for Push-to-Talk audio payloads |
 | Auth (staff) | **Supabase Auth** | Standard, solved problem — don't build custom auth |
 | Auth (patient) | **ABHA sandbox** (OTP/Aadhaar) | Required by the problem itself — this is what links data to the patient's real health record |
 | Main DB | **Postgres (Supabase)** | Encrypted patient/document tables |
@@ -165,7 +165,7 @@ Rule/keyword-based (not ML classifier) for demo predictability — flags emergen
 
 | Person | Owns |
 |---|---|
-| ML1 + Dev (paired) | ASR pipeline (IndicConformer/Whisper) + audio streaming (browser → WebSocket → ASR) |
+| ML1 + Dev (paired) | ASR pipeline (IndicConformer/Whisper) + Push-to-Talk audio capture (browser → HTTP POST → ASR) |
 | ML2 | Translation (IndicTrans2 in/out) + TTS voice-out |
 | ML3 | Adaptive questioning LLM (dialogue manager, clinical ontology/SOCRATES schema, red-flag rules) |
 | ML4 | OCR + document extraction (OCR API → LLM structured JSON, abnormal-value flagging) |
@@ -181,7 +181,7 @@ Rule/keyword-based (not ML classifier) for demo predictability — flags emergen
 - Dev + ML1: get IndicConformer/Whisper running on sample audio
 
 **Day 2 — Individual components, isolated**
-- Dev + ML1: browser audio capture → WebSocket → ASR working for 1–2 languages
+- Dev + ML1: browser Push-to-Talk audio capture → HTTP POST → ASR working for 1–2 languages
 - ML2: IndicTrans2 both directions + basic TTS
 - ML3: prompt engineering, dual-mode (voice/touch) question format
 - ML4: OCR wired, tested on sample prescriptions

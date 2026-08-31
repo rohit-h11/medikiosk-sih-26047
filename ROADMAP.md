@@ -17,7 +17,7 @@ gantt
     Ontology & Schema Design       :active, d1_1, 2026-08-29, 1d
     ABDM Sandbox Request           :active, d1_2, 2026-08-29, 1d
     section Day 2: Components
-    ASR WebSocket Prototype        :d2_1, 2026-08-30, 1d
+    Push-to-Talk ASR Prototype     :d2_1, 2026-08-30, 1d
     IndicTrans2 & TTS Pipeline     :d2_2, 2026-08-30, 1d
     Dialogue & OCR Prototypes      :d2_3, 2026-08-30, 1d
     section Day 3: Dual Intake
@@ -60,8 +60,8 @@ gantt
 **Goal:** Build and validate all standalone ML modules and core backend microservices in isolation.
 
 - [ ] **Module A: Multilingual Audio Pipeline (ML 1 + Dev & ML 2)**
-  - [ ] **ML 1 + Dev:** Implement browser WebAudio streaming over FastAPI WebSockets.
-  - [ ] **ML 1:** Connect WebSocket audio stream to ASR inference engine (Hindi & English baseline).
+  - [ ] **ML 1 + Dev:** Implement Push-to-Talk browser WebAudio capture over HTTP POST endpoints.
+  - [ ] **ML 1:** Connect Push-to-Talk audio endpoint to ASR inference engine (Hindi & English baseline).
   - [ ] **ML 2:** Wire IndicTrans2 for bidirectional translation (Hindi ↔ English).
   - [ ] **ML 2:** Integrate Bhashini TTS / Indic TTS for audio feedback synthesis.
 - [ ] **Module A & D: Dialogue Engine Prototype (ML 3)**
@@ -101,7 +101,7 @@ gantt
 - [ ] **End-to-End Pipeline Wiring**
   - [ ] Complete full voice loop: Patient Audio → ASR → Translate → Dialogue LLM → Translate → TTS Audio.
   - [ ] Complete document loop: Document Photo → OCR → Extraction JSON → DB → pgvector Embeddings.
-  - [ ] Connect React Kiosk UI to live FastAPI WebSocket & REST endpoints.
+  - [ ] Connect React Kiosk UI to live FastAPI REST endpoints (Push-to-Talk & Dialogue API).
 - [ ] **Clinical Summarization & FHIR Export**
   - [ ] Implement single-visit direct context-stuffed clinical summary generator (ML 5).
   - [ ] Export generated summary in FHIR R4 JSON format.
@@ -135,7 +135,7 @@ gantt
 
 - [ ] **Code Freeze & Stabilization**
   - [ ] Resolve all remaining high-priority bugs and visual glitches.
-  - [ ] Optimize WebSocket audio streaming latency.
+  - [ ] Optimize Push-to-Talk audio processing latency.
 - [ ] **Demo Asset Creation**
   - [ ] **RECORD BACKUP DEMO VIDEO:** Capture high-resolution video of complete patient intake and doctor workflow.
   - [ ] Rehearse live demonstration script covering both Allopathic and AYUSH intake scenarios.

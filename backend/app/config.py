@@ -31,6 +31,15 @@ class Settings(BaseSettings):
     ABDM_CLIENT_ID: str = os.getenv("ABDM_CLIENT_ID", "")
     ABDM_CLIENT_SECRET: str = os.getenv("ABDM_CLIENT_SECRET", "")
     
+    # Bhashini AI API Credentials (Indian Languages ASR/TTS/Translation)
+    BHASHINI_USER_ID: str = os.getenv("BHASHINI_USER_ID", "")
+    BHASHINI_API_KEY: str = os.getenv("BHASHINI_API_KEY", "")
+    BHASHINI_PIPELINE_ID: str = os.getenv("BHASHINI_PIPELINE_ID", "64115e4f440356001275d691")
+    BHASHINI_INFERENCE_API_KEY: str = os.getenv("BHASHINI_INFERENCE_API_KEY", "")
+    
+    # Groq API Key (Free Instant Whisper-Large-v3 ASR Fallback)
+    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
+    
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

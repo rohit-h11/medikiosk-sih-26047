@@ -103,65 +103,40 @@ chmod +x ./scripts/setup.sh && ./scripts/setup.sh
 > - Windows: `powershell -ExecutionPolicy Bypass -File .\scripts\setup.ps1 -Clean`
 > - Mac / Linux: `./scripts/setup.sh --clean`
 
-#### Launch Development Server:
-- **Windows:** `powershell .\scripts\run_backend.ps1`
-- **Mac / Linux / Git Bash:** `./scripts/run_backend.sh`
+## 🏃 How to Start the Backend Server
 
+You can start the FastAPI backend server using any of the following methods:
+
+### Method 1: Using Pre-made Scripts (Recommended ⭐)
+From the project root directory (`medikiosk-sih-26047`):
+
+* **Windows (PowerShell):**
+  ```powershell
+  .\scripts\run_backend.ps1
+  ```
+* **Mac / Linux / Git Bash:**
+  ```bash
+  ./scripts/run_backend.sh
+  ```
 
 ---
 
-### 🛠️ Option B: Manual Setup
+### Method 2: Manual Command (From `backend` folder)
+If you prefer running directly from terminal:
 
-#### Step 1: Clone the Repository
-```bash
-git clone https://github.com/rohit-h11/medikiosk-sih-26047.git
-cd medikiosk-sih-26047
-```
-
-#### Step 2: Backend Virtual Environment Setup
-```bash
-# Navigate to backend directory
+```powershell
 cd backend
-
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment:
-# Windows (PowerShell):
-.\venv\Scripts\Activate.ps1
-# Windows (CMD):
-.\venv\Scripts\activate.bat
-# Mac / Linux:
-source venv/bin/activate
-
-# Install all backend dependencies
-pip install -r requirements.txt
+.\venv\Scripts\python.exe -m uvicorn app.main:app --reload
 ```
-
-#### Step 3: Configure Environment Variables
-Copy `.env.example` to create your local `.env` file:
-```bash
-# Windows
-copy .env.example .env
-
-# Mac / Linux
-cp .env.example .env
-```
-*Fill in your Supabase credentials, JWT secret, and API keys in `.env`.*
-
-#### Step 4: Run the Backend Development Server
-From inside the `backend/` directory:
-```bash
-uvicorn app.main:app --reload
-```
+*(Or if your virtual environment is already activated: `uvicorn app.main:app --reload`)*
 
 ---
 
-### 🌐 Access Interactive API Documentation
-Open your browser and navigate to:
-- 📖 **Swagger UI Docs:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- 📑 **ReDoc:** [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
-- 🩺 **Health Check:** [http://127.0.0.1:8000/healthz](http://127.0.0.1:8000/healthz)
+### 🌐 Accessing the Server & Interactive Documentation
+Once started, the backend server runs at `http://127.0.0.1:8000`:
+* 📖 **Interactive Swagger UI:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+* 📑 **ReDoc Documentation:** [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+* 🩺 **Health Check Endpoint:** [http://127.0.0.1:8000/healthz](http://127.0.0.1:8000/healthz)
 
 ---
 

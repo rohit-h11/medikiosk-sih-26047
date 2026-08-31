@@ -91,16 +91,22 @@ Run the automated setup script from the root directory:
 powershell -ExecutionPolicy Bypass -File .\scripts\setup.ps1
 ```
 
-**Mac / Linux (Terminal):**
+**Mac / Linux / Git Bash (Terminal):**
 ```bash
 chmod +x ./scripts/setup.sh && ./scripts/setup.sh
 ```
 
 *This automatically creates `backend/venv`, installs dependencies, and creates `backend/.env` from `.env.example`.*
 
+> 💡 **Troubleshooting / Rebuilding Environment:**
+> If your virtual environment becomes corrupted or missing `python.exe`, force a fresh rebuild using:
+> - Windows: `powershell -ExecutionPolicy Bypass -File .\scripts\setup.ps1 -Clean`
+> - Mac / Linux: `./scripts/setup.sh --clean`
+
 #### Launch Development Server:
 - **Windows:** `powershell .\scripts\run_backend.ps1`
-- **Mac / Linux:** `./scripts/run_backend.sh`
+- **Mac / Linux / Git Bash:** `./scripts/run_backend.sh`
+
 
 ---
 

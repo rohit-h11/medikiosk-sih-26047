@@ -31,6 +31,10 @@ class Settings(BaseSettings):
     ABDM_CLIENT_ID: str = os.getenv("ABDM_CLIENT_ID", "")
     ABDM_CLIENT_SECRET: str = os.getenv("ABDM_CLIENT_SECRET", "")
     
+    # AI & Vision LLM API Keys
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
+    
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

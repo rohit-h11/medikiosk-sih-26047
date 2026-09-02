@@ -37,9 +37,11 @@ class Settings(BaseSettings):
     BHASHINI_PIPELINE_ID: str = os.getenv("BHASHINI_PIPELINE_ID", "64115e4f440356001275d691")
     BHASHINI_INFERENCE_API_KEY: str = os.getenv("BHASHINI_INFERENCE_API_KEY", "")
     
-    # Groq API Key (Free Instant Whisper-Large-v3 ASR Fallback)
-    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
-    
+    # Sarvam AI STT Settings
+    SARVAM_API_KEY: str = os.getenv("SARVAM_API_KEY", "")
+    SARVAM_STT_MODEL: str = os.getenv("SARVAM_STT_MODEL", "saarika:v2.5")
+
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

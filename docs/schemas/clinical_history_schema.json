@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MediKiosk Unified Clinical History Schema",
+  "description": "Standardized FHIR-ready JSON schema for Allopathic SOCRATES and AYUSH CCRAS-PAS intake (Ministry of Ayush / AIIA)",
+  "type": "object",
+  "required": ["patient_id", "visit_id", "history_type", "standard_history"],
+  "properties": {
+    "patient_id": {
+      "type": "string",
+      "description": "Unique patient identifier or ABHA ID"
+    },
+    "visit_id": {
+      "type": "string",
+      "description": "Current OPD visit identifier"
+    },
+    "history_type": {
+      "type": "string",
+      "enum": ["allopathic", "ayurvedic"],
+      "description": "Clinical intake paradigm"
+    },
+    "standard_history": {
+      "type": "object",
+      "properties": {
+        "chief_complaint": { "type": ["string", "null"] },
+        "hpi": { "type": ["string", "null"] },
+        "socrates": {
+          "type": "object",
+          "properties": {
+            "site": { "type": ["string", "null"] },
+            "onset": { "type": ["string", "null"] },
+            "character": { "type": ["string", "null"] },
+            "radiation": { "type": ["string", "null"] },
+            "associations": { "type": "array", "items": { "type": "string" } },
+            "time_course": { "type": ["string", "null"] },
+            "exacerbating_relieving": { "type": ["string", "null"] },
+            "severity_score": { "type": ["integer", "null"], "minimum": 1, "maximum": 10 },
+            "missing_slots": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "past_medical_history": { "type": "array", "items": { "type": "string" } },
+        "current_medications": { "type": "array", "items": { "type": "string" } },
+        "known_allergies": { "type": "array", "items": { "type": "string" } },
+        "family_history": { "type": "array", "items": { "type": "string" } },
+        "review_of_systems": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "ayurvedic_assessment": {
+      "type": ["object", "null"],
+      "properties": {
+        "prakriti": {
+          "type": ["object", "null"],
+          "properties": {
+            "vata_percentage": { "type": "number" },
+            "pitta_percentage": { "type": "number" },
+            "kapha_percentage": { "type": "number" },
+            "dominant_prakriti": { "type": "string" },
+            "phenotype_type": { "type": "string" },
+            "total_answers": { "type": "integer" },
+            "domain_scores": { "type": "object" }
+          }
+        },
+        "vikriti": { "type": ["string", "null"] },
+        "agni": { "type": ["string", "null"] },
+        "koshtha": { "type": ["string", "null"] },
+        "ahara_vihara": { "type": ["string", "null"] },
+        "nidana": { "type": ["string", "null"] },
+        "samprapti": { "type": ["string", "null"] }
+      }
+    },
+    "red_flags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "is_red_flag": { "type": "boolean" },
+          "severity": { "type": "string", "enum": ["CRITICAL", "HIGH", "MODERATE"] },
+          "category": { "type": "string" },
+          "triggers": { "type": "array", "items": { "type": "string" } },
+          "emergency_message": { "type": "string" },
+          "triage_destination": { "type": "string" },
+          "detected_at": { "type": "string" }
+        }
+      }
+    },
+    "created_at": { "type": "string" },
+    "completed_at": { "type": ["string", "null"] }
+  }
+}

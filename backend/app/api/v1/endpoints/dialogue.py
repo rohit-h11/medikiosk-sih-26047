@@ -1,69 +1,194 @@
-from typing import Dict, Any, List
+"""
+MediKiosk — Clinical Dialogue API Endpoints
+Provides REST API endpoints for hospital kiosk touchscreens:
+- /start: Initialize patient interview session and retrieve first SOCRATES question
+- /turn: Submit patient response or touchscreen choice and receive next turn
+- /session/{session_id}: View active session state and SOCRATES slot status
+- /red-flag-check: Fast emergency screening
+"""
+
+from typing import Dict, Any, List, Optional
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel, Field
 
-from app.schemas.dialogue import (
-    DialogueStartRequest,
-    DialogueTurnInput,
-    DialogueTurnResponse,
-    DialogueSessionState,
-    RedFlagAlert
-)
 from app.ai.dialogue import (
-    DialogueController,
-    get_session,
+    get_next_dialogue_turn,
+    PatientContext,
+    ConversationMessage,
+    DialogueTurnResult,
+    RedFlagAlert,
     scan_text_for_red_flags,
-    load_ccras_battery,
-    search_namaste_codes,
-    get_namaste_item_by_code,
-    NamasteDiagnosisItem
+    create_session,
+    get_session,
+    save_session,
+    DialogueSession
 )
 
 router = APIRouter(prefix="/dialogue", tags=["Dialogue Management & Clinical Intake"])
+
+class StartSessionRequest(BaseModel):
+    patient_id: Optional[str] = None
+    name: Optional[str] = None
+    age: Optional[int] = None
+    gender: Optional[str] = None
+    chief_complaint: Optional[str] = None
+    chief_complaint_hint: Optional[str] = None
+    symptoms: List[str] = Field(default_factory=list)
+    past_medical_history: List[str] = Field(default_factory=list)
+    current_medications: List[str] = Field(default_factory=list)
+    allergies: List[str] = Field(default_factory=list)
+    vitals: Dict[str, Any] = Field(default_factory=dict)
+    extracted_document_context: Optional[Dict[str, Any]] = None
+    language: str = "en"
+    max_turns: int = 6
+
+class DialogueTurnRequest(BaseModel):
+    session_id: str
+    patient_response: str
+    selected_option_id: Optional[str] = None
+
+class SessionTurnResponse(BaseModel):
+    session_id: str
+    turn_number: int
+    result: DialogueTurnResult
 
 class RedFlagCheckRequest(BaseModel):
     text: str = Field(..., description="Patient utterance or symptom description to evaluate for emergencies")
 
 class RedFlagCheckResponse(BaseModel):
     is_red_flag: bool
-    alert: RedFlagAlert = None
+    alert: Optional[RedFlagAlert] = None
 
-@router.post("/start", response_model=DialogueTurnResponse, status_code=status.HTTP_201_CREATED)
-async def start_dialogue_session(request: DialogueStartRequest):
+@router.post("/start", response_model=SessionTurnResponse, status_code=status.HTTP_201_CREATED)
+async def start_dialogue_session(request: StartSessionRequest):
     """
     Initialize a new clinical dialogue interview session.
-    Supports both Allopathic SOCRATES intake and Ayurvedic CCRAS-PAS intake.
+    Takes patient context (demographics, complaint, medical history) and calls the LLM
+    to generate the initial question with touch-screen options according to SOCRATES.
     """
     try:
-        response = await DialogueController.start_session(request)
-        return response
+        complaint = request.chief_complaint or request.chief_complaint_hint
+        ctx = PatientContext(
+            patient_id=request.patient_id,
+            name=request.name,
+            age=request.age,
+            gender=request.gender,
+            chief_complaint=complaint,
+            symptoms=request.symptoms,
+            past_medical_history=request.past_medical_history,
+            current_medications=request.current_medications,
+            allergies=request.allergies,
+            vitals=request.vitals,
+            extracted_docs=request.extracted_document_context,
+            language=request.language
+        )
+
+        session = create_session(patient_context=ctx, max_turns=request.max_turns)
+
+        # Call the LLM with empty history to get the initial question
+        turn_result = await get_next_dialogue_turn(
+            patient_context=ctx,
+            conversation_history=[],
+            max_turns=request.max_turns
+        )
+
+        session.last_result = turn_result
+        session.socrates_state = turn_result.socrates_state
+        session.turn_count = 1
+        if turn_result.should_stop:
+            session.is_completed = True
+
+        if turn_result.next_question:
+            session.history.append(ConversationMessage(
+                role="assistant",
+                content=turn_result.next_question
+            ))
+
+        save_session(session)
+
+        return SessionTurnResponse(
+            session_id=session.session_id,
+            turn_number=session.turn_count,
+            result=turn_result
+        )
+
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to start dialogue session: {str(e)}"
         )
 
-@router.post("/turn", response_model=DialogueTurnResponse)
-async def submit_dialogue_turn(request: DialogueTurnInput):
+@router.post("/turn", response_model=SessionTurnResponse)
+async def submit_dialogue_turn(request: DialogueTurnRequest):
     """
     Submit a patient utterance or touchscreen choice selection.
-    Evaluates red-flags in real-time (<5ms), updates clinical slots, and generates next follow-up.
+    Appends the response to conversation history, invokes the LLM to assess SOCRATES progress,
+    and returns the next relevant clinical question or decides to stop.
     """
+    session = get_session(request.session_id)
+    if not session:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Dialogue session '{request.session_id}' not found."
+        )
+
+    if session.is_completed:
+        return SessionTurnResponse(
+            session_id=session.session_id,
+            turn_number=session.turn_count,
+            result=session.last_result or DialogueTurnResult(
+                should_stop=True,
+                closing_message="This clinical intake session has already concluded.",
+                socrates_state=session.socrates_state
+            )
+        )
+
     try:
-        response = await DialogueController.process_turn(request)
-        return response
-    except ValueError as ve:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(ve))
+        # Record patient utterance into conversation history
+        session.history.append(ConversationMessage(
+            role="patient",
+            content=request.patient_response,
+            slot_tag=request.selected_option_id
+        ))
+
+        # Call LLM with full conversation history & patient context
+        turn_result = await get_next_dialogue_turn(
+            patient_context=session.patient_context,
+            conversation_history=session.history,
+            max_turns=session.max_turns,
+            current_socrates_state=session.socrates_state
+        )
+
+        session.turn_count += 1
+        session.last_result = turn_result
+        session.socrates_state = turn_result.socrates_state
+
+        if turn_result.should_stop:
+            session.is_completed = True
+        elif turn_result.next_question:
+            session.history.append(ConversationMessage(
+                role="assistant",
+                content=turn_result.next_question
+            ))
+
+        save_session(session)
+
+        return SessionTurnResponse(
+            session_id=session.session_id,
+            turn_number=session.turn_count,
+            result=turn_result
+        )
+
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to process dialogue turn: {str(e)}"
         )
 
-@router.get("/session/{session_id}", response_model=DialogueSessionState)
-async def get_dialogue_session(session_id: str):
+@router.get("/session/{session_id}", response_model=DialogueSession)
+async def get_dialogue_session_endpoint(session_id: str):
     """
-    Retrieve full session state, transcript history, SOCRATES slots, and CCRAS scores.
+    Retrieve full session details, conversation history, and accumulated SOCRATES state.
     """
     session = get_session(session_id)
     if not session:
@@ -76,39 +201,10 @@ async def get_dialogue_session(session_id: str):
 @router.post("/red-flag-check", response_model=RedFlagCheckResponse)
 async def check_red_flags(request: RedFlagCheckRequest):
     """
-    Standalone sub-50ms rule-based check for acute emergency medical symptoms.
+    Standalone sub-5ms rule-based check for acute emergency medical symptoms.
     """
     alert = scan_text_for_red_flags(request.text)
     return RedFlagCheckResponse(
         is_red_flag=bool(alert and alert.is_red_flag),
         alert=alert
     )
-
-@router.get("/ccras-pas/battery")
-async def get_ccras_pas_battery() -> Dict[str, Any]:
-    """
-    Retrieve the official CCRAS Prakriti Assessment Scale (PAS) standardized question battery.
-    """
-    return load_ccras_battery()
-
-@router.get("/namaste-lookup", response_model=List[NamasteDiagnosisItem])
-async def search_namaste(query: str = "", limit: int = 5):
-    """
-    Search standardized AYUSH diagnoses mapped to NAMASTE codes and WHO ICD-11 (TM2).
-    Search by Sanskrit condition (e.g. 'Sandhivata'), English translation (e.g. 'Osteoarthritis'),
-    or symptom keyword.
-    """
-    return search_namaste_codes(query=query, limit=limit)
-
-@router.get("/namaste-lookup/{code}", response_model=NamasteDiagnosisItem)
-async def get_namaste_by_code(code: str):
-    """
-    Retrieve full NAMASTE & ICD-11 TM2 coding entry and recommended Ayurvedic formulations by code.
-    """
-    item = get_namaste_item_by_code(code)
-    if not item:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"NAMASTE / ICD-11 code '{code}' not found in standardized registry."
-        )
-    return item

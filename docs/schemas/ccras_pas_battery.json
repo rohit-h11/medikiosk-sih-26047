@@ -1,0 +1,170 @@
+{
+  "instrument_name": "CCRAS Prakriti Assessment Scale (PAS)",
+  "source": "Central Council for Research in Ayurvedic Sciences (CCRAS), Ministry of Ayush, Govt of India",
+  "domains": [
+    {
+      "domain_id": "physical",
+      "domain_name": "Physical Characteristics",
+      "questions": [
+        {
+          "id": "phys_01_frame",
+          "text": "What best describes your general body frame and bone structure?",
+          "clinical_target": "prakriti_body_frame",
+          "options": [
+            { "id": "opt_v", "label": "Lean / Slender / Hard to gain weight", "dosha": "vata", "weight": 1.0 },
+            { "id": "opt_p", "label": "Medium build / Athletic / Well-proportioned", "dosha": "pitta", "weight": 1.0 },
+            { "id": "opt_k", "label": "Broad / Heavy / Tendency to gain weight easily", "dosha": "kapha", "weight": 1.0 }
+          ]
+        },
+        {
+          "id": "phys_02_skin",
+          "text": "How would you describe your natural skin texture and feel?",
+          "clinical_target": "prakriti_skin",
+          "options": [
+            { "id": "opt_v", "label": "Dry / Rough / Chapped / Cool to touch", "dosha": "vata", "weight": 1.0 },
+            { "id": "opt_p", "label": "Warm / Sensitive / Prone to redness or moles", "dosha": "pitta", "weight": 1.0 },
+            { "id": "opt_k", "label": "Soft / Smooth / Oily / Cool & Lustrous", "dosha": "kapha", "weight": 1.0 }
+          ]
+        },
+        {
+          "id": "phys_03_hair",
+          "text": "What is the natural texture and quality of your hair?",
+          "clinical_target": "prakriti_hair",
+          "options": [
+            { "id": "opt_v", "label": "Dry / Brittle / Frizzy / Thin", "dosha": "vata", "weight": 1.0 },
+            { "id": "opt_p", "label": "Fine / Straight / Early graying or thinning", "dosha": "pitta", "weight": 1.0 },
+            { "id": "opt_k", "label": "Thick / Wavy / Dense / Lustrous dark", "dosha": "kapha", "weight": 1.0 }
+          ]
+        },
+        {
+          "id": "phys_04_joints",
+          "text": "How are your joints and bodily movement?",
+          "clinical_target": "prakriti_joints",
+          "options": [
+            { "id": "opt_v", "label": "Prominent / Cracking or clicking sounds", "dosha": "vata", "weight": 1.0 },
+            { "id": "opt_p", "label": "Moderate / Flexible / Warm", "dosha": "pitta", "weight": 1.0 },
+            { "id": "opt_k", "label": "Well-padded / Strong / Hidden bone joints", "dosha": "kapha", "weight": 1.0 }
+          ]
+        }
+      ]
+    },
+    {
+      "domain_id": "physiological",
+      "domain_name": "Physiological Functions (Agni & Koshtha)",
+      "questions": [
+        {
+          "id": "physio_01_appetite",
+          "text": "How is your regular appetite and digestion (Agni)?",
+          "clinical_target": "agni_type",
+          "options": [
+            { "id": "opt_v", "label": "Variable & Irregular (Vishama Agni) - hungry some days, not others", "dosha": "vata", "weight": 1.0 },
+            { "id": "opt_p", "label": "Strong & Sharp (Tikshna Agni) - cannot skip meals without irritation", "dosha": "pitta", "weight": 1.0 },
+            { "id": "opt_k", "label": "Slow & Steady (Manda Agni) - low hunger, can easily skip meals", "dosha": "kapha", "weight": 1.0 }
+          ]
+        },
+        {
+          "id": "physio_02_bowel",
+          "text": "How are your typical bowel movements (Koshtha)?",
+          "clinical_target": "koshtha_type",
+          "options": [
+            { "id": "opt_v", "label": "Hard / Dry / Prone to constipation / Irregular (Krura)", "dosha": "vata", "weight": 1.0 },
+            { "id": "opt_p", "label": "Soft / Loose / Frequent / Sensitive to spice (Mridu)", "dosha": "pitta", "weight": 1.0 },
+            { "id": "opt_k", "label": "Regular / Heavy / Formed / Once daily (Madhyama)", "dosha": "kapha", "weight": 1.0 }
+          ]
+        },
+        {
+          "id": "physio_03_sleep",
+          "text": "How is your usual sleep pattern?",
+          "clinical_target": "prakriti_sleep",
+          "options": [
+            { "id": "opt_v", "label": "Light / Easily awakened / Restless (4-6 hours)", "dosha": "vata", "weight": 1.0 },
+            { "id": "opt_p", "label": "Moderate / Sound / Vivid dreams (6-7 hours)", "dosha": "pitta", "weight": 1.0 },
+            { "id": "opt_k", "label": "Deep / Heavy / Hard to wake up in morning (8+ hours)", "dosha": "kapha", "weight": 1.0 }
+          ]
+        },
+        {
+          "id": "physio_04_weather",
+          "text": "Which climate or weather do you find most uncomfortable?",
+          "clinical_target": "prakriti_weather_intolerance",
+          "options": [
+            { "id": "opt_v", "label": "Cold / Windy / Dry weather", "dosha": "vata", "weight": 1.0 },
+            { "id": "opt_p", "label": "Hot / Humid / Direct sun exposure", "dosha": "pitta", "weight": 1.0 },
+            { "id": "opt_k", "label": "Damp / Chilly / Rainy overcast weather", "dosha": "kapha", "weight": 1.0 }
+          ]
+        }
+      ]
+    },
+    {
+      "domain_id": "psychological",
+      "domain_name": "Psychological & Mental Disposition",
+      "questions": [
+        {
+          "id": "psych_01_memory",
+          "text": "How do you learn, understand, and retain new information?",
+          "clinical_target": "prakriti_memory",
+          "options": [
+            { "id": "opt_v", "label": "Grasp quickly but forget quickly", "dosha": "vata", "weight": 1.0 },
+            { "id": "opt_p", "label": "Sharp intellect / Methodical & organized recall", "dosha": "pitta", "weight": 1.0 },
+            { "id": "opt_k", "label": "Takes time to learn but retains permanently", "dosha": "kapha", "weight": 1.0 }
+          ]
+        },
+        {
+          "id": "psych_02_temperament",
+          "text": "How do you typically react under emotional stress or conflict?",
+          "clinical_target": "prakriti_temperament",
+          "options": [
+            { "id": "opt_v", "label": "Anxious / Worry-prone / Fearful / Restless", "dosha": "vata", "weight": 1.0 },
+            { "id": "opt_p", "label": "Irritable / Impatient / Critical / Anger easily", "dosha": "pitta", "weight": 1.0 },
+            { "id": "opt_k", "label": "Calm / Patient / Forgiving / Unruffled", "dosha": "kapha", "weight": 1.0 }
+          ]
+        },
+        {
+          "id": "psych_03_decision",
+          "text": "How do you approach making important decisions?",
+          "clinical_target": "prakriti_decision",
+          "options": [
+            { "id": "opt_v", "label": "Hesitant / Often change mind / Second-guess", "dosha": "vata", "weight": 1.0 },
+            { "id": "opt_p", "label": "Decisive / Quick / Confident / Goal-oriented", "dosha": "pitta", "weight": 1.0 },
+            { "id": "opt_k", "label": "Slow & Deliberate / Consult others / Steady", "dosha": "kapha", "weight": 1.0 }
+          ]
+        }
+      ]
+    },
+    {
+      "domain_id": "behavioral",
+      "domain_name": "Behavioral & Lifestyle Traits",
+      "questions": [
+        {
+          "id": "behav_01_activity",
+          "text": "What is the typical pace of your physical movement and walking?",
+          "clinical_target": "prakriti_movement",
+          "options": [
+            { "id": "opt_v", "label": "Fast / Hurried / Restless / Always active", "dosha": "vata", "weight": 1.0 },
+            { "id": "opt_p", "label": "Moderate / Purposeful / Energetic / Focused", "dosha": "pitta", "weight": 1.0 },
+            { "id": "opt_k", "label": "Slow / Graceful / Relaxed / Avoids hurry", "dosha": "kapha", "weight": 1.0 }
+          ]
+        },
+        {
+          "id": "behav_02_speech",
+          "text": "How would you describe your natural speech pattern?",
+          "clinical_target": "prakriti_speech",
+          "options": [
+            { "id": "opt_v", "label": "Rapid / Talkative / High pitch or variable", "dosha": "vata", "weight": 1.0 },
+            { "id": "opt_p", "label": "Sharp / Articulate / Convincing / Direct", "dosha": "pitta", "weight": 1.0 },
+            { "id": "opt_k", "label": "Slow / Deep / Melodious / Speaks sparingly", "dosha": "kapha", "weight": 1.0 }
+          ]
+        },
+        {
+          "id": "behav_03_cravings",
+          "text": "Which tastes (Rasa) and food temperatures do you naturally crave most?",
+          "clinical_target": "prakriti_cravings",
+          "options": [
+            { "id": "opt_v", "label": "Sweet, Sour, Salty & warm cooked foods", "dosha": "vata", "weight": 1.0 },
+            { "id": "opt_p", "label": "Sweet, Bitter, Astringent & cool drinks/foods", "dosha": "pitta", "weight": 1.0 },
+            { "id": "opt_k", "label": "Pungent (spicy), Bitter, Astringent & warm light foods", "dosha": "kapha", "weight": 1.0 }
+          ]
+        }
+      ]
+    }
+  ]
+}

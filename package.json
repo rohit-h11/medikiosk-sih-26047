@@ -1,0 +1,15 @@
+{
+  "name": "medikiosk",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MediKiosk — AI Voice & Touch Clinical Intake Kiosk",
+  "scripts": {
+    "dev": "concurrently -n \"backend,frontend\" -c \"cyan,magenta\" --kill-others \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && (venv\\Scripts\\python.exe -m uvicorn app.main:app --reload || python -m uvicorn app.main:app --reload)",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

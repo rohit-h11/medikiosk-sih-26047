@@ -82,7 +82,7 @@ def _normalize_socrates_state(state_dict: Optional[Dict[str, Any]]) -> SocratesS
 async def get_next_dialogue_turn(
     patient_context: Union[PatientContext, Dict[str, Any]],
     conversation_history: List[Union[ConversationMessage, Dict[str, Any]]],
-    max_turns: int = 6,
+    max_turns: int = 10,
     current_socrates_state: Optional[Union[SocratesState, Dict[str, Any]]] = None
 ) -> DialogueTurnResult:
     """

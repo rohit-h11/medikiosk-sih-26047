@@ -79,6 +79,7 @@ backend/
 ### 📋 Prerequisites
 - **Git**
 - **Python 3.10+**
+- **Node.js 18+ (LTS)** & **npm** (for Frontend)
 
 ---
 
@@ -103,40 +104,132 @@ chmod +x ./scripts/setup.sh && ./scripts/setup.sh
 > - Windows: `powershell -ExecutionPolicy Bypass -File .\scripts\setup.ps1 -Clean`
 > - Mac / Linux: `./scripts/setup.sh --clean`
 
-## 🏃 How to Start the Backend Server
+---
 
-You can start the FastAPI backend server using any of the following methods:
+## 📦 Managing Python Packages in `venv`
 
-### Method 1: Using Pre-made Scripts (Recommended ⭐)
-From the project root directory (`medikiosk-sih-26047`):
+When adding new libraries or dependencies to the backend, follow these steps so the entire team stays in sync:
 
+### 1. Activating the Virtual Environment
+Always activate your virtual environment before installing packages:
 * **Windows (PowerShell):**
   ```powershell
-  .\scripts\run_backend.ps1
+  cd backend
+  .\venv\Scripts\Activate.ps1
+  ```
+* **Windows (CMD):**
+  ```cmd
+  cd backend
+  .\venv\Scripts\activate.bat
   ```
 * **Mac / Linux / Git Bash:**
   ```bash
-  ./scripts/run_backend.sh
+  cd backend
+  source venv/bin/activate
   ```
 
+### 2. Installing a New Package & Updating `requirements.txt`
+After installing a new package into your venv:
+```bash
+# Example: installing a new package
+pip install package-name
+
+# Freeze and update requirements.txt
+pip freeze > requirements.txt
+```
+*(Or manually add `package-name>=version` into `backend/requirements.txt` to keep the file clean).*
+
+### 3. Syncing `venv` when Teammates Add New Packages
+Whenever you pull new changes from git that update `requirements.txt`:
+```bash
+cd backend
+pip install -r requirements.txt
+```
+
 ---
 
-### Method 2: Manual Command (From `backend` folder)
-If you prefer running directly from terminal:
+## 💻 Frontend Setup Guide (React)
 
+The MediKiosk frontend is structured as a modular React application designed for high-contrast kiosk touchscreens and doctor dashboards.
+
+### 1. Setup & Install Dependencies
+Navigate into the `frontend` folder from the root directory:
+```bash
+cd frontend
+npm install
+```
+
+### 2. Configure Environment Variables
+Create a `.env` file in the `frontend/` directory (or copy from `.env.example`):
+```env
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+### 3. Start Frontend Development Server
+```bash
+npm run dev
+```
+Once started, the React app will be live at `http://localhost:5173` (or the port displayed in your terminal).
+
+### 4. Build for Production
+```bash
+npm run build
+```
+
+---
+
+## 🏃 How to Start Frontend & Backend for Live Testing
+
+### ⚡ Option A: Start Both with a Single Command (Recommended)
+From the root project directory, run:
+```bash
+npm run dev
+```
+*(Or on Windows PowerShell: `.\scripts\dev.ps1` or double-click `dev.bat`)*
+
+This concurrently starts:
+* **FastAPI Backend (Port 8000):** [http://localhost:8000/docs](http://localhost:8000/docs) (Cyan logs)
+* **React Frontend (Port 5173 / 3000):** [http://localhost:5173](http://localhost:5173) (Magenta logs)
+* Press `Ctrl + C` once to stop both servers simultaneously.
+
+---
+
+### 🖥️ Option B: Start in Separate Terminals
+If you prefer dedicated terminal windows:
+
+#### 1️⃣ Terminal 1: Backend
 ```powershell
 cd backend
-.\venv\Scripts\python.exe -m uvicorn app.main:app --reload
+.\venv\Scripts\activate
+uvicorn app.main:app --reload --port 8000
 ```
-*(Or if your virtual environment is already activated: `uvicorn app.main:app --reload`)*
+- **Backend API:** [http://localhost:8000](http://localhost:8000)
+- **Interactive Swagger UI:** [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Unified Interview Route:** `POST /api/v1/interview/turn`
+
+#### 2️⃣ Terminal 2: Frontend
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+- **Frontend Kiosk UI:** [http://localhost:5173](http://localhost:5173)
 
 ---
 
-### 🌐 Accessing the Server & Interactive Documentation
-Once started, the backend server runs at `http://127.0.0.1:8000`:
-* 📖 **Interactive Swagger UI:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-* 📑 **ReDoc Documentation:** [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
-* 🩺 **Health Check Endpoint:** [http://127.0.0.1:8000/healthz](http://127.0.0.1:8000/healthz)
+### 🧪 Live Testing Walkthrough:
+1. Open [http://localhost:3000](http://localhost:3000) in Chrome/Edge.
+2. Choose your language from the top-right dropdown (**Hindi, Tamil, Telugu, Marathi, Bengali, or English**).
+3. **Press & hold the large microphone button (or Spacebar)** and describe your symptoms:
+   * *Example:* *"मुझे 2 दिन से पेट में बहुत तेज जलन और दर्द है"*
+4. **Release the button**:
+   * Client-side Web Audio DSP removes fan noise & AC rumble.
+   * **Sarvam AI (Saaras ASR)** transcribes it into English.
+   * **Supabase pgvector** retrieves prior medical records for that patient.
+   * **Groq Llama-3.3-70b (SOCRATES Engine)** evaluates the clinical turn.
+   * **Sarvam Bulbul:v3 TTS** synthesizes and **speaks the next question back to you out loud**!
+   * 4 dynamic touch options appear on screen for one-tap answering.
+5. Tap an option or speak again to continue the intake until the final clinical summary is generated!
 
 ---
 

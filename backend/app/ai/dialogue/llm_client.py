@@ -92,7 +92,7 @@ async def call_groq_llm(system_prompt: str, user_prompt: str) -> Optional[Dict[s
             ],
             "response_format": {"type": "json_object"},
             "temperature": 0.2,
-            "max_tokens": 1024
+            "max_tokens": 2048
         }
         try:
             async with httpx.AsyncClient(timeout=10.0) as client:
@@ -132,7 +132,8 @@ async def call_openai_llm(system_prompt: str, user_prompt: str) -> Optional[Dict
                         {"role": "user", "content": user_prompt}
                     ],
                     "response_format": {"type": "json_object"},
-                    "temperature": 0.2
+                    "temperature": 0.2,
+                    "max_tokens": 2048
                 }
             )
             if res.status_code == 200:
@@ -239,7 +240,7 @@ def generate_heuristic_turn(
     patient_context: PatientContext,
     conversation_history: List[Dict[str, Any]],
     current_state: SocratesState,
-    max_turns: int = 6
+    max_turns: int = 10
 ) -> DialogueTurnResult:
     """
     Zero-latency heuristic fallback when offline or LLM is unreachable.
@@ -272,13 +273,38 @@ def generate_heuristic_turn(
     # Stop conditions: 4 or more key slots covered, or reached turn limit
     turn_count = len([m for m in conversation_history if m.get("role") in ["patient", "user"]])
     if len(updated_socrates.covered_slots) >= 4 or turn_count >= max_turns:
-        complaint = patient_context.chief_complaint or "reported symptoms"
+        complaint = patient_context.chief_complaint or "Reported symptoms"
+        meds_str = ", ".join(patient_context.current_medications) if patient_context.current_medications else "None reported"
+        alg_str = ", ".join(patient_context.allergies) if patient_context.allergies else "No known drug allergies (NKDA)"
+        pmh_str = ", ".join(patient_context.past_medical_history) if patient_context.past_medical_history else "No chronic illnesses noted"
+        assoc_str = ", ".join(updated_socrates.associations) if updated_socrates.associations else "None reported"
+
         summary = (
-            f"Patient presented with {complaint}. "
-            f"Location: {updated_socrates.site or 'General'}. "
-            f"Duration: {updated_socrates.onset or 'Unspecified'}. "
-            f"Character: {updated_socrates.character or 'Unspecified'}. "
-            f"Severity: {updated_socrates.severity or 'Unspecified'}."
+            f"### 📋 Clinical History Summary for Attending Physician\n"
+            f"1. **Chief Complaint (CC):**\n"
+            f"   * {complaint} (Onset: {updated_socrates.onset or 'Reported duration'})\n"
+            f"2. **History of Present Illness (HPI):**\n"
+            f"   * Location: {updated_socrates.site or 'General / Unspecified'}\n"
+            f"   * Character: {updated_socrates.character or 'Unspecified'}\n"
+            f"   * Radiation: {updated_socrates.radiation or 'No radiation reported'}\n"
+            f"   * Severity: {updated_socrates.severity or 'Unspecified'}\n"
+            f"   * Timing & Course: {updated_socrates.time_course or 'Reported progression'}\n"
+            f"   * Triggers & Relievers: {updated_socrates.exacerbating_relieving or 'None identified'}\n"
+            f"   * Associated Symptoms: {assoc_str}\n"
+            f"3. **Past Medical & Surgical History:**\n"
+            f"   * {pmh_str}\n"
+            f"4. **Drug History & Known Allergies:**\n"
+            f"   * Current Medications: {meds_str}\n"
+            f"   * Known Allergies: {alg_str}\n"
+            f"5. **Family & Personal / Social History:**\n"
+            f"   * Standard intake / non-contributory\n"
+            f"6. **Review of Systems (ROS):**\n"
+            f"   * Pertinent positive/negative findings as documented above\n"
+            f"7. **Prior Investigations & Documents (RAG):**\n"
+            f"   * Cross-referenced with patient records\n"
+            f"8. **Triage Assessment & Red-Flag Screening:**\n"
+            f"   * Triage Urgency: Routine / OPD Evaluation\n"
+            f"   * Clinical Impression: Patient presenting with {complaint.lower()} for physician assessment."
         )
         return DialogueTurnResult(
             should_stop=True,

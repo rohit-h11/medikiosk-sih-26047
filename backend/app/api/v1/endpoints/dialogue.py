@@ -40,7 +40,7 @@ class StartSessionRequest(BaseModel):
     vitals: Dict[str, Any] = Field(default_factory=dict)
     extracted_document_context: Optional[Dict[str, Any]] = None
     language: str = "en"
-    max_turns: int = 6
+    max_turns: int = 10
 
 class DialogueTurnRequest(BaseModel):
     session_id: str

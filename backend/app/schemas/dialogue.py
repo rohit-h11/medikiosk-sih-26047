@@ -146,7 +146,7 @@ class DialogueTurnInput(BaseModel):
 class DialogueTurnResponse(BaseModel):
     session_id: str
     turn_number: int
-    max_turns: int = 8
+    max_turns: int = 10
     phase: InterviewPhase
     question_text: str
     touch_options: List[TouchOption] = Field(default_factory=list)
@@ -165,7 +165,7 @@ class DialogueSessionState(BaseModel):
     age: Optional[int] = None
     phase: InterviewPhase = InterviewPhase.CHIEF_COMPLAINT
     turn_count: int = 0
-    max_turns: int = 8
+    max_turns: int = 10
     turns: List[DialogueTurn] = Field(default_factory=list)
     clinical_history: UnifiedClinicalHistory
     extracted_document_context: Dict[str, Any] = Field(default_factory=dict)

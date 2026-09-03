@@ -24,14 +24,14 @@ class DialogueSession(BaseModel):
     socrates_state: SocratesState = Field(default_factory=SocratesState)
     last_result: Optional[DialogueTurnResult] = None
     turn_count: int = 0
-    max_turns: int = 6
+    max_turns: int = 10
     is_completed: bool = False
     created_at: str = Field(default_factory=_utc_now_iso)
     updated_at: str = Field(default_factory=_utc_now_iso)
 
 _SESSIONS: Dict[str, DialogueSession] = {}
 
-def create_session(patient_context: PatientContext, max_turns: int = 6) -> DialogueSession:
+def create_session(patient_context: PatientContext, max_turns: int = 10) -> DialogueSession:
     session = DialogueSession(
         patient_context=patient_context,
         max_turns=max_turns

@@ -18,7 +18,8 @@ from app.ai.dialogue import (
     SocratesState,
     TouchOption,
     RedFlagAlert,
-    scan_text_for_red_flags
+    scan_text_for_red_flags,
+    store_full_dialogue_session_async
 )
 from app.db import get_supabase_client
 
@@ -304,17 +305,35 @@ async def process_interview_turn(
     # --------------------------------------------------------------------------
     is_completed = bool(turn_result.should_stop)
 
-    if is_completed and turn_result.clinical_summary:
-        # Store finished interview summary into Supabase RAG table for future visits!
+    if is_completed:
+        # 1. Batch store the entire conversation (all turns + closing) in Supabase
         try:
-            await store_dialogue_summary_in_rag_async(
+            await store_full_dialogue_session_async(
                 patient_id=patient_id,
                 session_id=active_session_id,
-                clinical_summary=turn_result.clinical_summary,
-                socrates_state=turn_result.socrates_state.model_dump() if turn_result.socrates_state else {}
+                history=history_list,
+                language=language,
+                chief_complaint=chief_complaint_hint or (history_list[0].get("content") if history_list else None),
+                socrates_state=turn_result.socrates_state.model_dump() if turn_result.socrates_state else {},
+                red_flag_alert=turn_result.red_flag_alert.model_dump() if turn_result.red_flag_alert else None,
+                last_question=turn_result.next_question,
+                closing_message_english=closing_message_english,
+                closing_message_native=closing_message_native
             )
         except Exception as e:
-            logger.error(f"Failed to store completed dialogue in RAG: {e}")
+            logger.error(f"Failed to batch-store full conversation in Supabase: {e}")
+
+        # 2. Store finished interview summary into Supabase RAG table for future encounters
+        if turn_result.clinical_summary:
+            try:
+                await store_dialogue_summary_in_rag_async(
+                    patient_id=patient_id,
+                    session_id=active_session_id,
+                    clinical_summary=turn_result.clinical_summary,
+                    socrates_state=turn_result.socrates_state.model_dump() if turn_result.socrates_state else {}
+                )
+            except Exception as e:
+                logger.error(f"Failed to store completed dialogue in RAG: {e}")
 
     # --------------------------------------------------------------------------
     # Step 7: Build & Return Unified Response Payload

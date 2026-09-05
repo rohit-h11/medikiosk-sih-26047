@@ -2,7 +2,6 @@ import os
 import tempfile
 import logging
 from typing import Dict, Any, Optional
-from faster_whisper import WhisperModel
 
 logger = logging.getLogger(__name__)
 
@@ -15,13 +14,17 @@ class LocalWhisperASRService:
         self.model_size = model_size
         self.device = device
         self.compute_type = compute_type
-        self._model: Optional[WhisperModel] = None
+        self._model: Optional[Any] = None
 
-    def _get_model(self) -> WhisperModel:
+    def _get_model(self) -> Any:
         if self._model is None:
-            logger.info(f"Loading local faster-whisper model '{self.model_size}' on {self.device} ({self.compute_type})...")
-            self._model = WhisperModel(self.model_size, device=self.device, compute_type=self.compute_type)
-            logger.info("faster-whisper model loaded successfully!")
+            try:
+                from faster_whisper import WhisperModel
+                logger.info(f"Loading local faster-whisper model '{self.model_size}' on {self.device} ({self.compute_type})...")
+                self._model = WhisperModel(self.model_size, device=self.device, compute_type=self.compute_type)
+                logger.info("faster-whisper model loaded successfully!")
+            except ImportError:
+                raise RuntimeError("faster-whisper is not installed. Please install faster-whisper or use Sarvam AI / Groq Whisper.")
         return self._model
 
     def transcribe_audio(

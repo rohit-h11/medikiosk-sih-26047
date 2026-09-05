@@ -4,6 +4,7 @@ from app.ai.asr.local_whisper import local_whisper_service, LocalWhisperASRServi
 from app.ai.asr.groq_whisper import groq_whisper_service, GroqWhisperASRService
 from app.ai.asr.sarvam_asr_client import SarvamASRClient
 from app.ai.asr.sarvam_tts_client import sarvam_tts_service, SarvamTTSClient
+from app.ai.asr.safety import ASRSafetyEvaluator, ASRSafetyResult, SPEAK_AGAIN_PROMPTS
 
 __all__ = [
     "bhashini_asr_service", 
@@ -14,5 +15,9 @@ __all__ = [
     "GroqWhisperASRService",
     "SarvamASRClient",
     "sarvam_tts_service",
-    "SarvamTTSClient"
+    "SarvamTTSClient",
+    "ASRSafetyEvaluator",
+    "ASRSafetyResult",
+    "SPEAK_AGAIN_PROMPTS"
 ]
+

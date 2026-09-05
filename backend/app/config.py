@@ -44,9 +44,10 @@ class Settings(BaseSettings):
     STORAGE_BUCKET_DOCUMENTS: str = os.getenv("STORAGE_BUCKET_DOCUMENTS", "patient-medical-records")
     STORE_RAW_ORIGINAL: bool = os.getenv("STORE_RAW_ORIGINAL", "true").lower() in ("true", "1", "yes")
 
-    # Sarvam AI STT Settings
+    # Sarvam AI STT & ASR Safety Settings
     SARVAM_API_KEY: str = os.getenv("SARVAM_API_KEY", "")
-    SARVAM_STT_MODEL: str = os.getenv("SARVAM_STT_MODEL", "saarika:v2.5")
+    SARVAM_STT_MODEL: str = os.getenv("SARVAM_STT_MODEL", "saaras:v3")
+    ASR_CONFIDENCE_THRESHOLD: float = float(os.getenv("ASR_CONFIDENCE_THRESHOLD", "0.65"))
 
 
     model_config = SettingsConfigDict(

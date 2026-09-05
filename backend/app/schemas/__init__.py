@@ -30,3 +30,10 @@ from app.schemas.dialogue import (
     DialogueTurnResponse,
     DialogueSessionState
 )
+from app.schemas.document import (
+    DocumentType,
+    OCRStatus,
+    PreIngestionCheckResult,
+    DocumentUploadMetadata,
+    StoredDocumentResult
+)

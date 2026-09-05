@@ -181,3 +181,68 @@ $$;
 INSERT INTO patients (id, name, age, gender, phone, abha_address)
 VALUES ('PAT-DEMO-01', 'Ramesh Kumar', 52, 'male', '+919876543210', 'ramesh.kumar@abdm')
 ON CONFLICT (id) DO NOTHING;
+
+-- ------------------------------------------------------------------------------
+-- 10. Patient Medical Documents Table (Storage Pointers & Pre-Ingestion Metadata)
+-- ------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS patient_medical_documents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    patient_id TEXT NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    session_id TEXT REFERENCES dialogue_sessions(id) ON DELETE SET NULL,
+    
+    -- Categorization
+    document_type TEXT NOT NULL DEFAULT 'prescription',
+    -- Options: 'prescription', 'lab_report', 'discharge_summary', 'ayurvedic_record', 'other'
+    
+    -- Private Storage Bucket Paths
+    storage_bucket TEXT NOT NULL DEFAULT 'patient-medical-records',
+    file_path_raw TEXT,                  -- Untouched original upload (_raw.jpg/.pdf)
+    file_path_processed TEXT NOT NULL,   -- Normalized, contrast-boosted WebP (_processed.webp)
+    file_path_thumbnail TEXT NOT NULL,   -- 300px lightweight preview (_thumb.webp)
+    
+    -- Forensic Hashes & Technical Attributes
+    file_hash_sha256 TEXT NOT NULL,      -- Exact byte-level cryptographic checksum
+    perceptual_hash_dhash TEXT,          -- 64-bit structural visual fingerprint
+    mime_type TEXT NOT NULL,             -- 'image/jpeg', 'image/png', 'image/webp', 'application/pdf'
+    file_size_bytes BIGINT NOT NULL,
+    page_count INT NOT NULL DEFAULT 1,
+    
+    -- Pre-Ingestion Quality Assessment Scores
+    quality_score REAL DEFAULT 100.0,    -- Composite 0-100 score
+    sharpness_score REAL DEFAULT 0.0,    -- Laplacian variance
+    contrast_std REAL DEFAULT 0.0,
+    glare_ratio REAL DEFAULT 0.0,
+    
+    -- Pipeline Lifecycle & Review
+    ocr_status TEXT NOT NULL DEFAULT 'pending', -- 'pending', 'processing', 'completed', 'failed', 'quality_rejected'
+    is_reviewed_by_doctor BOOLEAN NOT NULL DEFAULT FALSE,
+    reviewed_by_doctor_id TEXT,
+    doctor_notes TEXT,
+    
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- ------------------------------------------------------------------------------
+-- 11. Document OCR Extracted Clinical Entities Table
+-- ------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS document_ocr_extractions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    document_id UUID NOT NULL REFERENCES patient_medical_documents(id) ON DELETE CASCADE,
+    patient_id TEXT NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
+    
+    raw_extracted_text TEXT NOT NULL,
+    structured_data JSONB NOT NULL DEFAULT '{}'::jsonb,
+    confidence_score REAL DEFAULT 0.95,
+    abnormal_flags_detected JSONB DEFAULT '[]'::jsonb,
+    
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Performance & Deduplication Query Indexes
+CREATE INDEX IF NOT EXISTS idx_med_docs_patient ON patient_medical_documents (patient_id);
+CREATE INDEX IF NOT EXISTS idx_med_docs_sha256 ON patient_medical_documents (patient_id, file_hash_sha256);
+CREATE INDEX IF NOT EXISTS idx_med_docs_dhash ON patient_medical_documents (patient_id, perceptual_hash_dhash);
+CREATE INDEX IF NOT EXISTS idx_med_docs_status ON patient_medical_documents (ocr_status);
+CREATE INDEX IF NOT EXISTS idx_ocr_extract_doc ON document_ocr_extractions (document_id);
+CREATE INDEX IF NOT EXISTS idx_ocr_extract_patient ON document_ocr_extractions (patient_id);

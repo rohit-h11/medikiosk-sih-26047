@@ -40,6 +40,10 @@ class Settings(BaseSettings):
     BHASHINI_PIPELINE_ID: str = os.getenv("BHASHINI_PIPELINE_ID", "64115e4f440356001275d691")
     BHASHINI_INFERENCE_API_KEY: str = os.getenv("BHASHINI_INFERENCE_API_KEY", "")
     
+    # Document Storage Settings
+    STORAGE_BUCKET_DOCUMENTS: str = os.getenv("STORAGE_BUCKET_DOCUMENTS", "patient-medical-records")
+    STORE_RAW_ORIGINAL: bool = os.getenv("STORE_RAW_ORIGINAL", "true").lower() in ("true", "1", "yes")
+
     # Sarvam AI STT Settings
     SARVAM_API_KEY: str = os.getenv("SARVAM_API_KEY", "")
     SARVAM_STT_MODEL: str = os.getenv("SARVAM_STT_MODEL", "saarika:v2.5")

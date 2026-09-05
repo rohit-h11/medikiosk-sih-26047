@@ -108,3 +108,40 @@ async def store_dialogue_summary_in_rag_async(
     except Exception as e:
         logger.error(f"Failed to store interview summary in RAG: {e}")
         return False
+
+async def retrieve_clinical_guidelines_async(
+    query_text: str,
+    top_k: int = 4,
+    similarity_threshold: float = 0.35,
+    domain: Optional[str] = None,
+    category: Optional[str] = None,
+    urgency_level: Optional[str] = None
+) -> List[Dict[str, Any]]:
+    """
+    Performs vector similarity search against static clinical guidelines (Collection 1)
+    via Supabase match_clinical_guidelines RPC.
+    """
+    if not query_text or not query_text.strip():
+        return []
+
+    try:
+        supabase = get_supabase_client()
+        query_vector = generate_embedding(query_text)
+
+        rpc_params = {
+            "p_query_embedding": query_vector,
+            "p_top_k": top_k,
+            "p_similarity_threshold": similarity_threshold,
+            "p_domain": domain,
+            "p_category": category,
+            "p_urgency_level": urgency_level
+        }
+
+        response = supabase.rpc("match_clinical_guidelines", rpc_params).execute()
+        results = response.data or []
+        logger.info(f"Retrieved {len(results)} clinical guideline chunks for query: '{query_text[:40]}...'")
+        return results
+    except Exception as e:
+        logger.warning(f"Clinical guidelines RAG retrieval error: {e}")
+        return []
+

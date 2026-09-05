@@ -33,11 +33,24 @@ Never scrape unstructured medical blogs or generic websites. Use only official g
 
 ### 🌿 B. Ayurveda & AYUSH Guidelines (Ministry of Ayush / CCRAS)
 
-| # | Document Title | Source Authority | Direct Portal / Link | What It Contains |
+> [!NOTE]
+> **Important Note on Document Titles:**  
+> On official government portals (CCRAS & Ministry of Ayush), standard treatment guidelines for Kayachikitsa are cataloged under the official title:  
+> **"Ayurvedic Management of Common Disease Conditions: Treatment Protocols & Costing Guidelines (Vol. 1)"** (CCRAS Publication).  
+> In academic and clinical settings, this is also referenced as *Standard Treatment Guidelines (STG) — Kayachikitsa*.
+
+| # | Official Government Title / Dataset | Source Authority | Direct Portal / Access Path | What It Contains |
 |---|---|---|---|---|
-| **1** | **Standard Treatment Guidelines in Ayurveda (STG) — Vol. 1 (Kayachikitsa)** | Ministry of Ayush / CCRAS | [Ministry of Ayush Guidelines](https://www.ayush.gov.in/) & [CCRAS Publications](https://ccras.nic.in/) | Top 35 general medicine conditions (*Sandhivata, Amlapitta, Grahani, Tamaka Shwasa, Jwara, Prameha*). |
-| **2** | **CCRAS Prakriti Assessment Scale (PAS) Manual** | CCRAS | [CCRAS Ayur Prakriti Portal](http://ccras.res.in/ccras_pas/) | Validated 4-domain scoring criteria for baseline Vata/Pitta/Kapha assessment. |
-| **3** | **e-Samhita Digital Classical Corpus** | NIIMH / CCRAS | [CCRAS e-Samhita](http://niimh.nic.in/ebooks/esamhiti/) | Digital Sanskrit/English references from Charaka Samhita, Sushruta Samhita, and Ashtanga Hridaya. |
+| **1** | **Ayurvedic Management of Common Disease Conditions (Treatment Protocols Vol. 1)** | CCRAS / Ministry of Ayush | [CCRAS E-Books Portal](https://ccras.nic.in/) → *Publications > E-Books > Handbooks & Protocols* | Standardized clinical treatment protocols for top general medicine conditions (*Sandhivata, Amlapitta, Grahani, Tamaka Shwasa, Jwara, Prameha*). |
+| **2** | **CCRAS Disease-Specific Clinical Handbooks** | CCRAS | [CCRAS Publications](https://ccras.nic.in/content/publications) | Specific management protocols for Cardiac, Skin, Respiratory, and Metabolic conditions. |
+| **3** | **e-Samhita Digital Classical Corpus** | NIIMH / CCRAS | [NIIMH e-Samhita](http://niimh.nic.in/ebooks/esamhiti/) | Digitized Charaka Samhita (Chikitsasthana), Sushruta Samhita, and Ashtanga Hridaya. |
+| **4** | **CCRAS Prakriti Assessment Scale (PAS) Manual** | CCRAS | [CCRAS Ayur Prakriti Portal](http://ccras.res.in/ccras_pas/) | Validated scoring rubrics for baseline Dosha assessment. |
+
+#### 📥 How to locate & download from CCRAS Portal:
+1. Visit **[ccras.nic.in](https://ccras.nic.in/)**.
+2. Hover over the **"Publications"** or **"E-Books"** menu in the top navigation bar.
+3. Select **"Handbooks / Clinical Protocols"** or search for *"Ayurvedic Management of Common Disease Conditions"*.
+4. Alternatively, search digital academic repositories (such as **ResearchGate** or **National Digital Library of India - NDLI**) for *"Ayurvedic Management of Common Disease Conditions Treatment Protocols Vol 1 CCRAS"*.
 
 ---
 

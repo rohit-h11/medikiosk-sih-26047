@@ -42,8 +42,8 @@ def get_openai_api_key() -> str:
 def get_gemini_api_key() -> str:
     return os.getenv("GEMINI_API_KEY") or _DEFAULT_GEMINI
 
-# Preferred Groq models in order of priority
-GROQ_MODELS = ["qwen/qwen3.8-27b", "openai/gpt-oss-20b", "openai/gpt-oss-120b"]
+# Preferred Groq models in order of priority (20b has higher TPM quota and faster inference)
+GROQ_MODELS = ["openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.6-27b", "qwen/qwen3.8-27b"]
 
 def _clean_json_text(raw_text: str) -> str:
     """Strip markdown code fence if LLM wraps output in ```json ... ```"""
@@ -59,6 +59,8 @@ def _clean_json_text(raw_text: str) -> str:
 
 def parse_llm_json_response(raw_text: str) -> Optional[Dict[str, Any]]:
     """Parse JSON string safely, handling edge cases."""
+    if not raw_text:
+        return None
     cleaned = _clean_json_text(raw_text)
     try:
         return json.loads(cleaned)
@@ -90,9 +92,8 @@ async def call_groq_llm(system_prompt: str, user_prompt: str) -> Optional[Dict[s
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
-            "response_format": {"type": "json_object"},
             "temperature": 0.2,
-            "max_tokens": 2048
+            "max_tokens": 512
         }
         try:
             async with httpx.AsyncClient(timeout=10.0) as client:
@@ -111,6 +112,45 @@ async def call_groq_llm(system_prompt: str, user_prompt: str) -> Optional[Dict[s
                     logger.warning(f"Groq {model_name} failed with status {res.status_code}: {res.text}")
         except Exception as e:
             logger.warning(f"Groq API error with {model_name}: {e}")
+
+    return None
+
+async def call_gemini_llm(system_prompt: str, user_prompt: str) -> Optional[Dict[str, Any]]:
+    """Call Gemini API for fast JSON inference."""
+    api_key = get_gemini_api_key()
+    if not api_key or api_key.startswith("your-"):
+        return None
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={api_key}"
+    payload = {
+        "contents": [
+            {
+                "role": "user",
+                "parts": [{"text": f"{system_prompt}\n\n{user_prompt}"}]
+            }
+        ],
+        "generationConfig": {
+            "responseMimeType": "application/json",
+            "temperature": 0.2,
+            "maxOutputTokens": 2048
+        }
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            res = await client.post(url, json=payload)
+            if res.status_code == 200:
+                data = res.json()
+                candidates = data.get("candidates", [])
+                if candidates:
+                    parts = candidates[0].get("content", {}).get("parts", [])
+                    if parts:
+                        text = parts[0].get("text", "")
+                        return parse_llm_json_response(text)
+            else:
+                logger.warning(f"Gemini API returned {res.status_code}: {res.text}")
+    except Exception as e:
+        logger.warning(f"Gemini API error: {e}")
 
     return None
 
@@ -150,10 +190,34 @@ async def call_openai_llm(system_prompt: str, user_prompt: str) -> Optional[Dict
 # ----------------------------------------------------------------------
 
 RED_FLAG_PATTERNS = [
-    (r"\b(crushing|radiating\s+to\s+(?:left\s+arm|jaw)|chest\s+pressure.*sweat|heart\s+attack)\b", "CRITICAL", "Cardiovascular Emergency", "Crushing chest pain radiating to arm/jaw suggests acute coronary syndrome."),
-    (r"\b(facial\s+droop|slurred\s+speech|one\s+sided\s+weakness|paralysis|stroke)\b", "CRITICAL", "Cerebrovascular Emergency", "Acute focal neurological deficit suggests acute stroke."),
-    (r"\b(cannot\s+breathe|gasping|severe\s+shortness\s+of\s+breath|stridor)\b", "CRITICAL", "Respiratory Emergency", "Severe respiratory distress requiring immediate airway evaluation."),
-    (r"\b(vomiting\s+blood|coughing\s+blood|hemoptysis|hematemesis|black\s+tarry\s+stool)\b", "HIGH", "Severe Hemorrhage", "Upper gastrointestinal or pulmonary hemorrhage.")
+    # Cardiovascular Emergencies (STEMI, Acute Coronary, Aortic Dissection, Malignant Arrhythmia)
+    (
+        r"\b(crushing|substernal|radiat(?:es|ing)\s+to\s+(?:left\s+arm|jaw|back|shoulder)|chest\s+(?:pressure|tightness|pain).*(?:sweat|diaphoresis|dizziness|faint|vomit|pallor|cold)|heart\s+attack|retrosternal|elephant\s+sitting|syncope.*loss\s+of\s+consciousness|systolic\s+bp\s+80|cad.*chest\s+tightness|pink\s+frothy\s+sputum)\b",
+        "CRITICAL",
+        "Cardiovascular Emergency",
+        "Acute coronary syndrome, STEMI, or cardiogenic shock suspected. Immediate ECG & resuscitation."
+    ),
+    # Cerebrovascular & Neurological (Stroke FAST, Subarachnoid Hemorrhage, Status Epilepticus)
+    (
+        r"\b(facial\s+droop|slurred\s+speech|one\s+sided\s+weakness|paralysis|stroke|thunderclap\s+headache|worst\s+headache\s+of\s+my\s+life|tonic\s+clonic\s+seizure|asymmetric\s+pupil|unresponsive|ataxia.*inability\s+to\s+move|sudden\s+loss\s+of\s+vision.*facial\s+numbness)\b",
+        "CRITICAL",
+        "Cerebrovascular / Neurological Emergency",
+        "Acute stroke (FAST criteria), acute intracranial hemorrhage, or active seizure. Immediate neuro triage."
+    ),
+    # Respiratory & Airway (Stridor, Foreign Body, Silent Chest, Severe Hypoxemia)
+    (
+        r"\b(cannot\s+breathe|gasping|severe\s+shortness\s+of\s+breath|stridor|cyanosis|lips\s+turning\s+blue|silent\s+chest|respiratory\s+distress|choking\s+on\s+foreign\s+body|respiratory\s+arrest|intercostal\s+retractions|tracheal\s+tug)\b",
+        "CRITICAL",
+        "Respiratory Emergency",
+        "Critical airway compromise or impending respiratory failure. Immediate oxygen & airway support."
+    ),
+    # Hemorrhage, Shock, Anaphylaxis & Ayurvedic Arishta Lakshana (Severe Dehydration / Dhatukshaya)
+    (
+        r"\b(vomiting.*(?:blood|clots)|coughing.*blood|hemoptysis|hematemesis|black\s+tarry|profuse\s+watery\s+diarrhea.*(?:cold|faint|sunken)|delirium.*rigid\s+neck|arishta\s+lakshana|clammy\s+extremities.*thready\s+pulse|anaphylaxis|septic\s+shock|postpartum.*heavy.*hemorrhage|penetrating\s+abdominal\s+trauma)\b",
+        "HIGH",
+        "Severe Hemorrhage / Shock / Arishta Lakshana",
+        "Severe active internal hemorrhage, anaphylaxis, severe shock, or Ayurvedic Arishta Lakshana. Immediate ICU / Emergency triage."
+    )
 ]
 
 def scan_text_for_red_flags(text: str) -> Optional[RedFlagAlert]:
@@ -253,8 +317,10 @@ def generate_heuristic_turn(
         full_text += " " + " ".join(patient_context.symptoms)
 
     updated_socrates = heuristic_socrates_extraction(full_text, current_state)
+    prim_imp = f"Clinical Presentation: {patient_context.chief_complaint or 'General Intake'}"
+    prov_diffs = []
 
-    # Check for red flags
+    # Safety check: red flag scan
     red_flag = scan_text_for_red_flags(full_text)
     if red_flag:
         return DialogueTurnResult(
@@ -264,15 +330,15 @@ def generate_heuristic_turn(
             socrates_state=updated_socrates,
             covered_slots=updated_socrates.covered_slots,
             missing_slots=updated_socrates.missing_slots,
-            clinical_summary=f"RED FLAG DETECTED: {red_flag.emergency_message}",
-            closing_message="We have flagged an urgent health condition. Please proceed immediately to Emergency Triage.",
             red_flag_alert=red_flag,
-            reasoning="Red flag symptom detected in heuristic safety scan."
+            closing_message="🚨 EMERGENCY ALERT: Critical clinical red flag detected. Please seek immediate emergency medical care.",
+            clinical_summary=f"### 🚨 EMERGENCY CLINICAL ESCALATION\n- Category: {red_flag.category}\n- Severity: {red_flag.severity}\n- Clinical Guidance: {red_flag.emergency_message}",
+            reasoning=f"Emergency red flag triggered under offline heuristic fallback: {red_flag.category}"
         )
 
-    # Stop conditions: 4 or more key slots covered, or reached turn limit
+    # Stop conditions: 6 or more slots covered, or reached max turns
     turn_count = len([m for m in conversation_history if m.get("role") in ["patient", "user"]])
-    if len(updated_socrates.covered_slots) >= 4 or turn_count >= max_turns:
+    if (len(updated_socrates.covered_slots) >= 6 and turn_count >= 2) or turn_count >= max_turns:
         complaint = patient_context.chief_complaint or "Reported symptoms"
         meds_str = ", ".join(patient_context.current_medications) if patient_context.current_medications else "None reported"
         alg_str = ", ".join(patient_context.allergies) if patient_context.allergies else "No known drug allergies (NKDA)"
@@ -315,7 +381,9 @@ def generate_heuristic_turn(
             missing_slots=updated_socrates.missing_slots,
             clinical_summary=summary,
             closing_message="Thank you. We have collected the necessary details about your symptoms for your doctor.",
-            reasoning="Sufficient clinical slots gathered under offline heuristic mode."
+            reasoning="Sufficient clinical slots gathered under offline heuristic mode.",
+            primary_impression=prim_imp,
+            provisional_differentials=prov_diffs
         )
 
     # Choose next missing slot in priority order
@@ -333,7 +401,9 @@ def generate_heuristic_turn(
             socrates_state=updated_socrates,
             covered_slots=updated_socrates.covered_slots,
             missing_slots=missing,
-            reasoning="Site slot missing; inquiring anatomical location."
+            reasoning="Site slot missing; inquiring anatomical location.",
+            primary_impression=prim_imp,
+            provisional_differentials=prov_diffs
         )
     elif "onset" in missing:
         return DialogueTurnResult(
@@ -348,7 +418,9 @@ def generate_heuristic_turn(
             socrates_state=updated_socrates,
             covered_slots=updated_socrates.covered_slots,
             missing_slots=missing,
-            reasoning="Onset slot missing; inquiring start and progression."
+            reasoning="Onset slot missing; inquiring start and progression.",
+            primary_impression=prim_imp,
+            provisional_differentials=prov_diffs
         )
     elif "character" in missing:
         return DialogueTurnResult(
@@ -363,7 +435,9 @@ def generate_heuristic_turn(
             socrates_state=updated_socrates,
             covered_slots=updated_socrates.covered_slots,
             missing_slots=missing,
-            reasoning="Character slot missing; inquiring symptom sensation."
+            reasoning="Character slot missing; inquiring symptom sensation.",
+            primary_impression=prim_imp,
+            provisional_differentials=prov_diffs
         )
     elif "severity" in missing:
         return DialogueTurnResult(
@@ -378,7 +452,9 @@ def generate_heuristic_turn(
             socrates_state=updated_socrates,
             covered_slots=updated_socrates.covered_slots,
             missing_slots=missing,
-            reasoning="Severity slot missing; inquiring intensity score."
+            reasoning="Severity slot missing; inquiring intensity score.",
+            primary_impression=prim_imp,
+            provisional_differentials=prov_diffs
         )
     else:
         # Ask about exacerbating/relieving factors or associated symptoms
@@ -388,11 +464,13 @@ def generate_heuristic_turn(
             touch_options=[
                 TouchOption(id="opt_worse_movement", label="Worse with movement", value="It gets worse when I move or exercise", slot_tag="exacerbating_relieving"),
                 TouchOption(id="opt_better_rest", label="Better with rest", value="Resting makes it feel better", slot_tag="exacerbating_relieving"),
-                TouchOption(id="opt_worse_eating", label="Related to meals/food", value="It changes after eating food", slot_tag="exacerbating_relieving"),
+                TouchOption(id="opt_worse_food", label="Worse with food / meals", value="Eating makes it worse", slot_tag="exacerbating_relieving"),
                 TouchOption(id="opt_no_factor", label="No clear trigger", value="Nothing specific seems to change it", slot_tag="exacerbating_relieving")
             ],
             socrates_state=updated_socrates,
             covered_slots=updated_socrates.covered_slots,
             missing_slots=missing,
-            reasoning="Inquiring exacerbating or relieving factors."
+            reasoning="Inquiring about aggravating and relieving factors to complete SOCRATES profile.",
+            primary_impression=prim_imp,
+            provisional_differentials=prov_diffs
         )

@@ -1,10 +1,11 @@
+# backend/app/ai/dialogue/dialogue_manager.py
 """
-MediKiosk — SOCRATES Clinical Dialogue Manager
-Primary deliverable: `get_next_dialogue_turn` takes patient context and conversation
-history, passes them to the LLM with SOCRATES instructions, avoids repetition,
-and returns the next relevant clinical question or decides to stop.
+MediKiosk — Multi-Paradigm Clinical Dialogue Manager
+Orchestrates clinical interview turns across Allopathy (SOCRATES) and
+Ayurveda (Vikriti / Agni / Ama) using clean, plug-and-play protocol strategies.
 """
 
+import json
 import logging
 from typing import Dict, Any, List, Optional, Union
 
@@ -16,9 +17,10 @@ from app.ai.dialogue.models import (
     TouchOption,
     RedFlagAlert
 )
-from app.ai.dialogue.prompts import build_dialogue_prompt
+from app.ai.dialogue.protocols.registry import get_protocol
 from app.ai.dialogue.llm_client import (
     call_groq_llm,
+    call_gemini_llm,
     call_openai_llm,
     generate_heuristic_turn,
     scan_text_for_red_flags
@@ -47,128 +49,125 @@ def _normalize_history(
             })
     return normalized
 
-def _normalize_socrates_state(state_dict: Optional[Dict[str, Any]]) -> SocratesState:
-    if not state_dict:
-        return SocratesState()
-    
-    all_slots = [
-        "site", "onset", "character", "radiation", "associations",
-        "time_course", "exacerbating_relieving", "severity"
-    ]
-    covered = []
-    for s in all_slots:
-        val = state_dict.get(s)
-        if val:
-            if isinstance(val, list) and len(val) > 0:
-                covered.append(s)
-            elif isinstance(val, str) and val.strip():
-                covered.append(s)
-
-    missing = [s for s in all_slots if s not in covered]
-
-    return SocratesState(
-        site=state_dict.get("site"),
-        onset=state_dict.get("onset"),
-        character=state_dict.get("character"),
-        radiation=state_dict.get("radiation"),
-        associations=state_dict.get("associations") or [],
-        time_course=state_dict.get("time_course"),
-        exacerbating_relieving=state_dict.get("exacerbating_relieving"),
-        severity=state_dict.get("severity"),
-        covered_slots=covered,
-        missing_slots=missing
-    )
+def _format_conversation_history_text(history: List[Dict[str, Any]]) -> str:
+    if not history:
+        return "No previous dialogue turns (First turn)."
+    lines = []
+    for idx, turn in enumerate(history, start=1):
+        role = turn.get("role", "speaker").capitalize()
+        content = turn.get("content", turn.get("text", "")).strip()
+        lines.append(f"Turn {idx} [{role}]: {content}")
+    return "\n".join(lines)
 
 async def get_next_dialogue_turn(
     patient_context: Union[PatientContext, Dict[str, Any]],
     conversation_history: List[Union[ConversationMessage, Dict[str, Any]]],
     max_turns: int = 10,
-    current_socrates_state: Optional[Union[SocratesState, Dict[str, Any]]] = None
+    current_state: Optional[Dict[str, Any]] = None,
+    rag_context_snippets: Optional[List[str]] = None
 ) -> DialogueTurnResult:
     """
-    Main deliverable function for MediKiosk clinical dialogue.
-
-    Parameters:
-    - patient_context: Patient demographics, chief complaint, initial symptoms, medical history, vitals, docs.
-    - conversation_history: Chronological list of previous dialogue turns between AI and Patient.
-    - max_turns: Target maximum questions before summarizing.
-    - current_socrates_state: Optional prior state of filled SOCRATES slots.
-
-    Returns:
-    - DialogueTurnResult:
-      - should_stop: True if all necessary information is collected or emergency detected; False to continue.
-      - next_question: The next tailored clinical question (None if should_stop is True).
-      - touch_options: 3-4 clickable options for touchscreen input.
-      - socrates_state: Updated SOCRATES state.
-      - clinical_summary: Summary of collected findings.
-      - closing_message: Patient-facing closing text when complete.
-      - red_flag_alert: Alert details if an acute emergency is detected.
+    Unified Multi-Paradigm Dialogue Engine:
+    1. Resolves ClinicalProtocol strategy (Allopathy vs. Ayurveda).
+    2. Builds paradigm-specific system prompt with RAG grounding.
+    3. Invokes fast LLM reasoning (Groq -> OpenAI -> Heuristic).
+    4. Normalizes state & generates standardized physician/vaidya clinical summaries.
     """
     ctx = _normalize_context(patient_context)
     history = _normalize_history(conversation_history)
+    protocol = get_protocol(ctx.hospital_type)
+    rag_snippets = rag_context_snippets or []
 
-    # Fast sub-millisecond red flag triage on latest patient utterances
-    if history:
-        latest_patient_utterances = " ".join([
-            m.get("content", "") for m in history[-2:] if m.get("role") in ["patient", "user"]
-        ])
-        red_flag = scan_text_for_red_flags(latest_patient_utterances)
-        if red_flag:
-            state = current_socrates_state if isinstance(current_socrates_state, SocratesState) else SocratesState()
+    # If opening turn with empty history and no complaint, return specialized opening question
+    if not history and not ctx.chief_complaint and not ctx.symptoms:
+        if ctx.hospital_type == "ayurveda":
             return DialogueTurnResult(
-                should_stop=True,
-                next_question=None,
-                touch_options=[],
-                socrates_state=state,
-                covered_slots=state.covered_slots,
-                missing_slots=state.missing_slots,
-                clinical_summary=f"EMERGENCY RED FLAG DETECTED: {red_flag.emergency_message}",
-                closing_message="A critical medical symptom has been detected. Please proceed immediately to the Emergency Room / Triage Desk.",
-                red_flag_alert=red_flag,
-                reasoning="Immediate red flag detected via safety screening."
+                should_stop=False,
+                next_question="Hello, welcome to the Ayush OPD. What main health issue or discomfort brings you to the hospital today?",
+                touch_options=[
+                    TouchOption(id="opt_acidity", label="Acidity / Burning", value="I have severe acidity and burning in stomach", slot_tag="vikriti_dosha"),
+                    TouchOption(id="opt_joint", label="Joint Pain / Stiffness", value="I have joint pain and morning stiffness", slot_tag="vikriti_dosha"),
+                    TouchOption(id="opt_indigestion", label="Gas / Indigestion", value="I have gas, bloating and sluggish digestion", slot_tag="agni_state"),
+                    TouchOption(id="opt_cough", label="Cough / Breathing issue", value="I have persistent cough and chest congestion", slot_tag="vikriti_dosha"),
+                    TouchOption(id="opt_other_ayu", label="Other Health Issue", value="I have a different health problem", slot_tag="vikriti_dosha")
+                ],
+                state={},
+                covered_slots=[],
+                missing_slots=protocol.target_slots,
+                reasoning="Initial Ayush interview turn: collecting primary chief complaint."
+            )
+        else:
+            return DialogueTurnResult(
+                should_stop=False,
+                next_question="Hello, welcome to MediKiosk. Please tell me what main symptoms or health concern brings you in today?",
+                touch_options=[
+                    TouchOption(id="opt_fever", label="Fever & Cough", value="I have fever and cough", slot_tag="onset"),
+                    TouchOption(id="opt_stomach", label="Stomach Pain", value="I have stomach discomfort and pain", slot_tag="site"),
+                    TouchOption(id="opt_headache", label="Headache", value="I have a severe headache", slot_tag="site"),
+                    TouchOption(id="opt_chest", label="Chest Discomfort", value="I have chest pain or tightness", slot_tag="site"),
+                    TouchOption(id="opt_other", label="Other Health Issue", value="I have a different health concern", slot_tag="site")
+                ],
+                state={},
+                covered_slots=[],
+                missing_slots=protocol.target_slots,
+                reasoning="Initial Allopathic interview turn: collecting primary chief complaint."
             )
 
-    # If no conversation history yet and no chief complaint provided, ask initial symptom question
-    if not history and not ctx.chief_complaint and not ctx.symptoms:
-        return DialogueTurnResult(
-            should_stop=False,
-            next_question="Hello, welcome to MediKiosk. Please tell me what main symptoms or health concern brings you in today?",
-            touch_options=[
-                TouchOption(id="opt_fever", label="Fever & Cough", value="I have fever and cough", slot_tag="onset"),
-                TouchOption(id="opt_stomach", label="Stomach Pain", value="I have stomach discomfort and pain", slot_tag="site"),
-                TouchOption(id="opt_headache", label="Headache", value="I have a severe headache", slot_tag="site"),
-                TouchOption(id="opt_chest", label="Chest Discomfort", value="I have chest pain or tightness", slot_tag="site"),
-                TouchOption(id="opt_other", label="Other Health Issue", value="I have a different health concern", slot_tag="site")
-            ],
-            socrates_state=SocratesState(),
-            covered_slots=[],
-            missing_slots=[
-                "site", "onset", "character", "radiation", "associations",
-                "time_course", "exacerbating_relieving", "severity"
-            ],
-            reasoning="Initial interview turn: collecting primary chief complaint."
-        )
+    # Build system prompt using resolved ClinicalProtocol strategy
+    system_prompt = protocol.build_system_prompt(ctx, rag_snippets)
+    
+    # Construct user prompt
+    history_text = _format_conversation_history_text(history)
+    user_prompt = f"""PATIENT CONTEXT:
+- Name: {ctx.name or 'Patient'} | Age: {ctx.age or 'Unspecified'} | Gender: {ctx.gender or 'Unspecified'}
+- Chief Complaint: {ctx.chief_complaint or 'Under investigation'}
+- Target Maximum Turns: {max_turns}
 
-    # Build prompts containing patient context + conversation history
-    prompts = build_dialogue_prompt(ctx, history, max_turns=max_turns)
+CONVERSATION HISTORY TO DATE:
+{history_text}
 
-    # Call LLM (Groq -> OpenAI -> Fallback)
-    llm_output = await call_groq_llm(prompts["system"], prompts["user"])
+INSTRUCTIONS:
+Evaluate whether all target clinical slots ({', '.join(protocol.target_slots)}) are covered.
+If missing slots remain and turns < {max_turns}, formulate the next single targeted question and 3-4 touch options.
+If complete, set should_stop = true and generate the comprehensive clinical summary.
+Respond strictly in JSON format."""
+
+    # Call LLM (Groq -> Gemini -> OpenAI -> Fallback Heuristic)
+    llm_output = await call_groq_llm(system_prompt, user_prompt)
     if not llm_output:
-        llm_output = await call_openai_llm(prompts["system"], prompts["user"])
-
-    # Fall back to heuristic engine if no LLM response
+        llm_output = await call_gemini_llm(system_prompt, user_prompt)
     if not llm_output:
-        logger.info("External LLM unavailable. Utilizing intelligent clinical heuristic fallback.")
-        base_state = current_socrates_state if isinstance(current_socrates_state, SocratesState) else SocratesState()
-        return generate_heuristic_turn(ctx, history, base_state, max_turns=max_turns)
+        llm_output = await call_openai_llm(system_prompt, user_prompt)
 
-    # Process and validate LLM output
+    # Fallback if external LLM is offline
+    if not llm_output:
+        logger.info(f"External LLM unavailable. Utilizing intelligent clinical heuristic fallback for {ctx.hospital_type}.")
+        if ctx.hospital_type.lower() == "ayurveda":
+            norm = protocol.normalize_state({})
+            return DialogueTurnResult(
+                should_stop=(len(history) >= max_turns * 2),
+                next_question="Could you please describe how your digestion, appetite, and sleep are affected?",
+                touch_options=[
+                    TouchOption(id="opt1", label="Digestion is poor/heavy", value="Poor digestion"),
+                    TouchOption(id="opt2", label="Sharp appetite & acid reflux", value="Acid reflux"),
+                    TouchOption(id="opt3", label="Irregular appetite & constipation", value="Irregular digestion"),
+                    TouchOption(id="opt4", label="Sleep is disturbed", value="Disturbed sleep")
+                ],
+                state=norm["state"],
+                covered_slots=norm["covered_slots"],
+                missing_slots=norm["missing_slots"],
+                clinical_summary=protocol.format_doctor_summary(norm["state"], ctx) if len(history) >= max_turns * 2 else None,
+                closing_message="Thank you. Your Ayurvedic consultation details have been recorded." if len(history) >= max_turns * 2 else None
+            )
+        base_socrates = SocratesState()
+        return generate_heuristic_turn(ctx, history, base_socrates, max_turns=max_turns)
+
+    # Parse and normalize LLM response
     try:
         should_stop = bool(llm_output.get("should_stop", False))
         next_q = llm_output.get("next_question") if not should_stop else None
         
-        # Format touch options
+        # Touch options
         raw_options = llm_output.get("touch_options", [])
         touch_options = []
         if not should_stop and raw_options:
@@ -181,11 +180,11 @@ async def get_next_dialogue_turn(
                         slot_tag=opt.get("slot_tag")
                     ))
 
-        # Format SOCRATES state
-        raw_socrates = llm_output.get("socrates_state", {})
-        socrates_state = _normalize_socrates_state(raw_socrates)
+        # State normalization via protocol
+        raw_state = llm_output.get("state", llm_output.get("socrates_state", {}))
+        normalized = protocol.normalize_state(raw_state)
 
-        # Red flag check from LLM
+        # Red flag check
         is_red_flag = bool(llm_output.get("is_red_flag", False))
         red_flag_alert = None
         if is_red_flag:
@@ -195,22 +194,35 @@ async def get_next_dialogue_turn(
             red_flag_alert = RedFlagAlert(
                 is_red_flag=True,
                 severity="CRITICAL",
-                category="LLM Detected Red Flag",
-                emergency_message=llm_output.get("red_flag_details", "Urgent medical attention required.")
+                category="Clinical Red Flag Alert",
+                emergency_message=llm_output.get("red_flag_details", "Urgent emergency medical evaluation required.")
             )
 
+        # Force stopping if patient turns reach safety ceiling
+        patient_turns_count = len([m for m in history if m.get("role") in ["patient", "user"]])
+        if patient_turns_count >= max_turns:
+            should_stop = True
+            next_q = None
+            touch_options = []
+
+        # Generate summary if stopping
         clinical_summary = llm_output.get("clinical_summary")
+        if should_stop and not clinical_summary:
+            clinical_summary = protocol.format_doctor_summary(normalized["state"], ctx)
+
         closing_msg = llm_output.get("closing_message")
         if should_stop and not closing_msg:
-            closing_msg = "Thank you for answering these questions. Your clinical details have been recorded for your doctor."
+            closing_msg = "Thank you. Your clinical intake details have been recorded for the attending doctor."
 
         return DialogueTurnResult(
             should_stop=should_stop,
             next_question=next_q,
             touch_options=touch_options,
-            socrates_state=socrates_state,
-            covered_slots=socrates_state.covered_slots,
-            missing_slots=socrates_state.missing_slots,
+            state=normalized["state"],
+            covered_slots=normalized["covered_slots"],
+            missing_slots=normalized["missing_slots"],
+            primary_impression=llm_output.get("primary_impression"),
+            provisional_differentials=llm_output.get("provisional_differentials", []),
             clinical_summary=clinical_summary,
             closing_message=closing_msg,
             red_flag_alert=red_flag_alert,
@@ -218,10 +230,29 @@ async def get_next_dialogue_turn(
         )
 
     except Exception as e:
-        logger.error(f"Error parsing LLM response: {e}. Falling back to heuristic engine.")
-        base_state = current_socrates_state if isinstance(current_socrates_state, SocratesState) else SocratesState()
-        return generate_heuristic_turn(ctx, history, base_state, max_turns=max_turns)
+        logger.error(f"Error parsing protocol LLM response: {e}. Falling back to heuristic.")
+        if ctx.hospital_type.lower() == "ayurveda":
+            # Ayurveda fallback
+            norm = protocol.normalize_state({})
+            return DialogueTurnResult(
+                should_stop=(len(history) >= max_turns * 2),
+                next_question="Could you please describe how your digestion, appetite, and sleep are affected?",
+                touch_options=[
+                    TouchOption(id="opt1", label="Digestion is poor/heavy", value="Poor digestion"),
+                    TouchOption(id="opt2", label="Sharp appetite & acid reflux", value="Acid reflux"),
+                    TouchOption(id="opt3", label="Irregular appetite & constipation", value="Irregular digestion"),
+                    TouchOption(id="opt4", label="Sleep is disturbed", value="Disturbed sleep")
+                ],
+                state=norm["state"],
+                covered_slots=norm["covered_slots"],
+                missing_slots=norm["missing_slots"],
+                clinical_summary=protocol.format_doctor_summary(norm["state"], ctx) if len(history) >= max_turns * 2 else None,
+                closing_message="Thank you. Your Ayurvedic consultation details have been recorded." if len(history) >= max_turns * 2 else None
+            )
+        base_socrates = SocratesState()
+        return generate_heuristic_turn(ctx, history, base_socrates, max_turns=max_turns)
 
 async def start_dialogue(patient_context: Union[PatientContext, Dict[str, Any]]) -> DialogueTurnResult:
     """Convenience helper to initialize dialogue with empty history."""
     return await get_next_dialogue_turn(patient_context=patient_context, conversation_history=[])
+

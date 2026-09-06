@@ -3,6 +3,8 @@ from typing import Optional, List, Dict, Any
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException, status
 from pydantic import BaseModel
 from app.ai.asr import bhashini_asr_service, local_whisper_service, groq_whisper_service
+from app.ai.asr.safety import ASRSafetyEvaluator
+from app.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +19,12 @@ class TranscribeResponse(BaseModel):
     target_language: Optional[str] = None
     is_mock: bool = False
     error: Optional[str] = None
+    confidence_score: Optional[float] = None
+    threshold: Optional[float] = None
+    requires_retry: bool = False
+    failure_reason: Optional[str] = None
+    speak_again_prompt: Optional[str] = None
+
 
 
 class LocalWhisperResponse(BaseModel):
@@ -61,6 +69,13 @@ async def transcribe_audio_endpoint(
         audio_format = ext if ext in ["wav", "webm", "mp3", "flac", "ogg"] else "wav"
 
     # Step 1: Try Bhashini if configured
+    final_transcript = ""
+    translated_text = None
+    final_language = language
+    is_mock = False
+    error = None
+    success_flag = False
+
     if bhashini_asr_service.is_configured:
         result = await bhashini_asr_service.transcribe_audio(
             audio_bytes=audio_bytes,
@@ -69,18 +84,15 @@ async def transcribe_audio_endpoint(
             target_language=target_language
         )
         if result["success"]:
-            return TranscribeResponse(
-                success=True,
-                transcript=result["transcript"],
-                translated_text=result.get("translated_text"),
-                language=result["language"],
-                target_language=result.get("target_language"),
-                is_mock=False,
-                error=None
-            )
+            final_transcript = result["transcript"]
+            translated_text = result.get("translated_text")
+            final_language = result["language"]
+            success_flag = True
+        else:
+            error = result.get("error")
 
     # Step 2: Try Groq Whisper (Whisper-Large-v3-Turbo) if configured
-    if groq_whisper_service.is_configured:
+    if not success_flag and groq_whisper_service.is_configured:
         logger.info("Calling Groq Whisper-Large-v3-Turbo API for high-accuracy ASR...")
         groq_res = await groq_whisper_service.transcribe_audio(
             audio_bytes=audio_bytes,
@@ -88,33 +100,47 @@ async def transcribe_audio_endpoint(
             audio_format=audio_format
         )
         if groq_res["success"]:
-            return TranscribeResponse(
-                success=True,
-                transcript=groq_res["transcript"],
-                translated_text=None,
-                language=groq_res.get("detected_language", language),
-                target_language=target_language,
-                is_mock=False,
-                error=None
-            )
+            final_transcript = groq_res["transcript"]
+            final_language = groq_res.get("detected_language", language)
+            success_flag = True
+        else:
+            error = groq_res.get("error")
 
     # Step 3: Fallback to local faster-whisper (Offline engine)
-    logger.info("Bhashini/Groq unconfigured. Falling back to local faster-whisper engine.")
-    local_result = local_whisper_service.transcribe_audio(
+    if not success_flag:
+        logger.info("Bhashini/Groq unconfigured or failed. Falling back to local faster-whisper engine.")
+        local_result = local_whisper_service.transcribe_audio(
+            audio_bytes=audio_bytes,
+            language=language if language else None,
+            task="transcribe",
+            audio_format=audio_format
+        )
+        final_transcript = local_result["transcript"]
+        final_language = local_result.get("detected_language", language)
+        success_flag = local_result["success"]
+        error = local_result.get("error") if not success_flag else "Local whisper fallback used."
+
+    # Run clinical safety guardrail and confidence evaluation
+    safety = ASRSafetyEvaluator.evaluate(
         audio_bytes=audio_bytes,
-        language=language if language else None,
-        task="transcribe",
-        audio_format=audio_format
+        transcript=final_transcript,
+        language_code=final_language,
+        threshold=settings.ASR_CONFIDENCE_THRESHOLD
     )
 
     return TranscribeResponse(
-        success=local_result["success"],
-        transcript=local_result["transcript"],
-        translated_text=None,
-        language=local_result.get("detected_language", language),
+        success=safety.passed and success_flag,
+        transcript=final_transcript,
+        translated_text=translated_text if safety.passed else None,
+        language=final_language,
         target_language=target_language,
-        is_mock=False,
-        error=local_result.get("error") if not local_result["success"] else "Local whisper fallback used."
+        is_mock=is_mock,
+        error=error if (not safety.passed or not success_flag) else None,
+        confidence_score=safety.confidence_score,
+        threshold=safety.threshold,
+        requires_retry=safety.requires_retry or (not success_flag),
+        failure_reason=safety.failure_reason or ("asr_engine_failed" if not success_flag else None),
+        speak_again_prompt=safety.speak_again_prompt if (safety.requires_retry or not success_flag) else None
     )
 
 

@@ -2,15 +2,16 @@
 import httpx
 from typing import Optional, Dict, Any
 from app.config import settings
+from app.ai.asr.safety import ASRSafetyEvaluator, ASRSafetyResult
 
 class SarvamASRClient:
     """
-    Client for Sarvam AI Speech-to-Text (Saarika model) and Translation (Mayura model) APIs.
+    Client for Sarvam AI Speech-to-Text (Saaras model) and Translation (Mayura model) APIs.
     Supports Hindi, Bengali, Gujarati, Kannada, Malayalam, Marathi, Odia, Punjabi, Tamil, Telugu, and Indian English.
     """
     def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
         self.api_key = api_key or settings.SARVAM_API_KEY
-        self.model = model or getattr(settings, "SARVAM_STT_MODEL", "saarika:v2.5")
+        self.model = model or getattr(settings, "SARVAM_STT_MODEL", "saaras:v3")
         self.stt_url = "https://api.sarvam.ai/speech-to-text"
         self.translate_url = "https://api.sarvam.ai/translate"
 
@@ -94,16 +95,18 @@ class SarvamASRClient:
         audio_bytes: bytes,
         filename: str = "audio.wav",
         language: str = "unknown",
-        translate_english: bool = True
+        translate_english: bool = True,
+        threshold: Optional[float] = None
     ) -> Dict[str, Any]:
         """
-        Async transcription + English translation for FastAPI endpoints.
+        Async transcription + English translation + safety evaluation for FastAPI endpoints.
         """
         if not self.api_key:
             self.api_key = settings.SARVAM_API_KEY
             if not self.api_key:
                 raise ValueError("SARVAM_API_KEY is not configured.")
 
+        confidence_threshold = threshold if threshold is not None else getattr(settings, "ASR_CONFIDENCE_THRESHOLD", 0.65)
         lang_code = self._normalize_lang_code(language)
         headers = {
             "api-subscription-key": self.api_key,
@@ -125,14 +128,29 @@ class SarvamASRClient:
             result = response.json()
             raw_transcript = result.get("transcript", "").strip()
             detected_lang = result.get("language_code", lang_code)
+            language_prob = result.get("language_probability")
+            request_id = result.get("request_id")
+
+            # Run clinical safety evaluation against confidence threshold
+            safety_result = ASRSafetyEvaluator.evaluate(
+                audio_bytes=audio_bytes,
+                transcript=raw_transcript,
+                model_probability=language_prob,
+                language_code=detected_lang,
+                threshold=confidence_threshold
+            )
 
             english_transcript = raw_transcript
-            if translate_english and raw_transcript:
+            # Only perform translation if speech passed safety/intelligibility check
+            if safety_result.passed and translate_english and raw_transcript:
                 src_lang = detected_lang if detected_lang != "unknown" else "hi-IN"
                 english_transcript = await self.translate_to_english_async(raw_transcript, src_lang)
 
             return {
                 "transcript": raw_transcript,
                 "english_transcript": english_transcript,
-                "language_code": detected_lang
+                "language_code": detected_lang,
+                "language_probability": language_prob,
+                "request_id": request_id,
+                "safety": safety_result
             }

@@ -1,46 +1,47 @@
-# Master Technical Implementation Plan: Streamlined 6-Endpoint Pipeline
+# Master Technical Implementation Plan: 5-Endpoint Pipeline
 **MediKiosk AI Clinical Intake, Dual-RAG Dialogue, & Automated Doctor EHR Summary**
 
-> **Document Version:** 3.0 (Optimized Ingestion Architecture)  
+> **Document Version:** 4.1 (Integrated OCR Vector RAG Archiving)  
 > **Target Audience:** Autonomous Coding Agents & Senior Backend Engineers  
 > **Problem Statement:** SIH 26047 — Ministry of Ayush / All India Institute of Ayurveda (AIIA)  
-> **Instruction for Implementation:** Read this document and execute the implementation steps in sequential order (Steps 1 through 6).
+> **Instruction for Implementation:** Read this document and execute the implementation steps in sequential order (Steps 1 through 5).
 
 ---
 
 ## 1. Executive Summary & Architectural Invariants
 
-This document contains the complete, production-ready implementation plan for the **Streamlined 6-Endpoint MediKiosk Backend Architecture**.
+This document contains the complete, production-ready implementation plan for the **Unified 5-Endpoint MediKiosk Backend Architecture**. All document scanning, deduplication, thumbnailing, OCR extraction, and **pgvector RAG embedding** are consolidated into **exactly one endpoint**.
 
 ```
 +===================================================================================================+
-|                               MEDIKIOSK FINALIZED 6-ENDPOINT SUITE                                |
+|                               MEDIKIOSK FINALIZED 5-ENDPOINT SUITE                                |
 +===================================================================================================+
-| SUBSYSTEM A: DIRECT VISION OCR & DOCUMENT ARCHIVE (Screen 1: Document Upload)                    |
+| 📂 DOCUMENT & VISION OCR (Only 1 Single Endpoint for all Document Operations)                     |
 +------------------------------------+--------+-----------------------------------------------------+
-| 1. /api/v1/ocr/process-document    | POST   | Direct WebP Upload -> Deduplication -> Gemini OCR  |
-| 2. /api/v1/documents/patient/{id}  | GET    | Retrieves patient document history, thumbs & JSON  |
+| 1. /api/v1/ocr/process-document    | POST   | Direct WebP Upload -> Deduplication -> Gemini OCR   |
+|                                    |        | -> In-Memory Thumb -> pgvector RAG Embedding        |
 +------------------------------------+--------+-----------------------------------------------------+
-| SUBSYSTEM B: DUAL-RAG DIALOGUE & STREAMING TRIAGE (Screen 2: Voice & Touch Dialogue)              |
+| 🗣️ DUAL-RAG DIALOGUE & STREAMING TRIAGE (Screen 2: Voice & Touch Dialogue)                         |
 +------------------------------------+--------+-----------------------------------------------------+
-| 3. /api/v1/dialogue/stream-turn    | POST   | Real-time SSE Token Stream -> Voice TTS (Primary)   |
-| 4. /api/v1/dialogue/turn           | POST   | Discrete REST turn handler for touchscreen taps     |
-| 5. /api/v1/dialogue/session/{id}   | GET    | Session status, SOCRATES slot state & telemetry     |
+| 2. /api/v1/dialogue/stream-turn    | POST   | Real-time SSE Token Stream -> Voice TTS (Primary)   |
+| 3. /api/v1/dialogue/turn           | POST   | Discrete REST turn handler for touchscreen taps     |
+| 4. /api/v1/dialogue/session/{id}   | GET    | Session status, SOCRATES slot state & telemetry     |
 +------------------------------------+--------+-----------------------------------------------------+
-| SUBSYSTEM C: DOCTOR OPD STATION & CONSULTATION PASS (Doctor Dashboard & Thermal QR)               |
+| 👨‍⚕️ DOCTOR OPD STATION & CONSULTATION PASS (Doctor Dashboard & Thermal QR)                          |
 +------------------------------------+--------+-----------------------------------------------------+
-| 6. /api/v1/doctor/ticket/{id}      | GET    | Doctor OPD pre-populated EHR ticket & QR pass       |
+| 5. /api/v1/doctor/ticket/{id}      | GET    | Doctor OPD pre-populated EHR ticket & QR pass       |
 +===================================================================================================+
 ```
 
 ### 🏛️ Core Architectural Invariants:
-1. **Client-Side WebP Compression (Zero Backend Memory Bloat):** Kiosk camera photos are compressed to lightweight $2048\text{px}$ WebP (Q=88, $\sim 250\text{ KB}$) on HTML5 Canvas in $< 15\text{ms}$. Heavy $5\text{ MB}$ raw files never touch backend memory or saturate network bandwidth.
-2. **Sub-15ms Pre-Ingestion Deduplication Gate:** In `POST /api/v1/ocr/process-document`, the backend computes the SHA-256 hash in $< 1\text{ms}$ and queries PostgreSQL. If duplicate $\rightarrow$ skips all storage and LLM calls, returning cached clinical JSON in $< 20\text{ms}$.
-3. **Dual-Variant Storage (Master WebP + 30KB Thumbnail):** New documents generate a 300px thumbnail in $2\text{ms}$ (Pillow). Both the master WebP ($250\text{ KB}$ for OCR and full-screen doctor zoom) and thumbnail ($30\text{ KB}$ for fast doctor timeline feeds) are archived to Supabase Storage.
-4. **Vector-Driven Red Flags (No Regex):** Patient utterances are embedded via `MiniLM-L6-v2` and matched against **ICMR Emergency STWs** in Supabase `pgvector` in **$< 10\text{ms}$**. If similarity exceeds `0.82`, an immediate emergency triage pass is issued.
-5. **Parallel Dual-Vector RAG:** Dialogue turns execute `asyncio.gather()` to fetch (A) Static National Clinical Guidelines (NAMASTE / ICMR) and (B) Patient-Specific OCR Medical History simultaneously.
-6. **Sub-250ms Streaming Voice Dialogue (Phase 1):** Real-time conversational turns are streamed token-by-token via **Server-Sent Events (SSE)** using **Groq Qwen-27B** on LPUs directly to the Kiosk TTS buffer.
-7. **Automatic Doctor EHR Summary (Phase 2):** When `should_stop == True` on the final dialogue turn, **Google Gemini 3.6 Flash** automatically synthesizes all dialogue turns, OCR meds, vitals, and RAG guidelines into a strictly validated `ClinicalSummaryTicket` Pydantic payload in $\sim 1.2\text{s}$ and saves it to PostgreSQL `clinical_summary_tickets`.
+1. **Direct In-Memory OCR & Auto-RAG Embedding:** The backend receives the image directly in memory via `POST /api/v1/ocr/process-document`. Gemini 3.6 Flash Vision runs **directly on the in-memory bytes**. The extracted medical JSON is immediately converted to contextual markdown chunks and embedded into **`patient_structured_vectors` in Supabase `pgvector`** for cross-visit RAG retrieval.
+2. **Client-Side WebP Compression (Zero Backend Memory Bloat):** Kiosk camera photos are compressed to lightweight $2048\text{px}$ WebP (Q=88, $\sim 250\text{ KB}$) on HTML5 Canvas in $< 15\text{ms}$. Heavy $5\text{ MB}$ raw files never touch backend memory or network.
+3. **Sub-15ms Pre-Ingestion Deduplication Gate:** The backend computes the SHA-256 hash in $< 1\text{ms}$ and queries PostgreSQL. If duplicate $\rightarrow$ skips all storage uploads, RAG embeddings, and LLM calls, returning cached clinical JSON in $< 20\text{ms}$.
+4. **Dual-Variant Storage (Master WebP + 30KB Thumbnail):** New documents generate a 300px thumbnail in $2\text{ms}$ (Pillow). Both the master WebP ($250\text{ KB}$ for OCR and full-screen doctor zoom) and thumbnail ($30\text{ KB}$ for fast doctor timeline feeds) are archived to Supabase Storage in the background.
+5. **Vector-Driven Red Flags (No Regex):** Patient utterances are embedded via `MiniLM-L6-v2` and matched against **ICMR Emergency STWs** in Supabase `pgvector` in **$< 10\text{ms}$**. If similarity exceeds `0.82`, an immediate emergency triage pass is issued.
+6. **Parallel Dual-Vector RAG:** Dialogue turns execute `asyncio.gather()` to fetch (A) Static National Clinical Guidelines (NAMASTE / ICMR) and (B) Patient-Specific OCR Medical History from `patient_structured_vectors` simultaneously.
+7. **Sub-250ms Streaming Voice Dialogue (Phase 1):** Real-time conversational turns are streamed token-by-token via **Server-Sent Events (SSE)** using **Groq Qwen-27B** on LPUs directly to the Kiosk TTS buffer.
+8. **Automatic Doctor EHR Summary (Phase 2):** When `should_stop == True` on the final dialogue turn, **Google Gemini 3.6 Flash** automatically synthesizes all dialogue turns, OCR meds, vitals, and RAG guidelines into a strictly validated `ClinicalSummaryTicket` Pydantic payload in $\sim 1.2\text{s}$ and saves it to PostgreSQL `clinical_summary_tickets`.
 
 ---
 
@@ -55,19 +56,20 @@ backend/
 │   │   │   ├── prompts.py              [MODIFY] Inject Dual-RAG context & strict summary prompts
 │   │   │   ├── llm_client.py           [MODIFY] Add Groq SSE streaming & Gemini Flash summary generator
 │   │   │   └── dialogue_manager.py     [MODIFY] Add parallel RAG, vector red flags, & auto-summary
-│   │   └── ocr/
-│   │       ├── image_utils.py          [NEW]    Generate 30KB WebP thumbnails in-memory (Pillow)
-│   │       └── vision_llm.py           [MODIFY] Gemini 3.6 Flash structured clinical JSON extraction
+│   │   ├── ocr/
+│   │   │   ├── image_utils.py          [NEW]    Generate 30KB WebP thumbnails in-memory (Pillow)
+│   │   │   └── vision_llm.py           [MODIFY] Gemini 3.6 Flash structured clinical JSON extraction
+│   │   └── rag/
+│   │       └── inserter.py             [MODIFY] Helper to chunk, embed (MiniLM-384), and insert OCR into pgvector
 │   └── api/
 │       └── v1/
-│           ├── api.py                  [MODIFY] Register ocr, documents, dialogue, and doctor routers
+│           ├── api.py                  [MODIFY] Register ocr, dialogue, and doctor routers
 │           └── endpoints/
-│               ├── ocr.py              [MODIFY] Endpoint 1: Direct WebP upload, deduplication, OCR & storage
-│               ├── documents.py        [NEW]    Endpoint 2: Patient document history & signed preview URLs
-│               ├── dialogue.py         [MODIFY] Endpoints 3, 4, 5: SSE stream-turn, REST turn, & session telemetry
-│               └── doctor.py           [NEW]    Endpoint 6: Doctor OPD consultation ticket
+│               ├── ocr.py              [MODIFY] Endpoint 1: Direct WebP upload, deduplication, OCR, RAG embedding & storage
+│               ├── dialogue.py         [MODIFY] Endpoints 2, 3, 4: SSE stream-turn, REST turn, & session telemetry
+│               └── doctor.py           [NEW]    Endpoint 5: Doctor OPD consultation ticket
 docs/
-└── master_implementation_plan_7_endpoints_pipeline.md  [MODIFY] Updated to Streamlined 6-Endpoint Architecture
+└── master_implementation_plan_7_endpoints_pipeline.md  [MODIFY] Updated to 5-Endpoint Architecture with auto-RAG
 ```
 
 ---
@@ -108,7 +110,20 @@ CREATE TABLE IF NOT EXISTS document_ocr_extractions (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- 3. Clinical Summary Tickets Table (For Doctor OPD Desk)
+-- 3. Patient Structured Vector Store (pgvector for cross-visit RAG)
+CREATE TABLE IF NOT EXISTS patient_structured_vectors (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    patient_id TEXT NOT NULL,
+    document_id TEXT,
+    category TEXT,                                      -- 'medications', 'diagnoses', 'lab_findings', 'clinical_summary'
+    content TEXT NOT NULL,                              -- Markdown chunk with contextual header
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    encounter_date DATE,
+    embedding VECTOR(384) NOT NULL,                     -- all-MiniLM-L6-v2 384 dimensions
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- 4. Clinical Summary Tickets Table (For Doctor OPD Desk)
 CREATE TABLE IF NOT EXISTS clinical_summary_tickets (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     ticket_id TEXT UNIQUE NOT NULL,
@@ -123,12 +138,60 @@ CREATE TABLE IF NOT EXISTS clinical_summary_tickets (
 CREATE INDEX IF NOT EXISTS idx_med_docs_patient ON patient_medical_documents (patient_id);
 CREATE INDEX IF NOT EXISTS idx_med_docs_hash ON patient_medical_documents (file_hash_sha256);
 CREATE INDEX IF NOT EXISTS idx_ocr_extract_patient ON document_ocr_extractions (patient_id);
+CREATE INDEX IF NOT EXISTS idx_patient_vectors_patient ON patient_structured_vectors (patient_id);
 CREATE INDEX IF NOT EXISTS idx_summary_tickets_session ON clinical_summary_tickets (session_id);
 ```
 
 ---
 
-## 4. Subsystem A: Document Ingestion & Vision OCR Architecture
+## 4. Subsystem 1: Document Ingestion, Vision OCR & RAG Embedding
+
+### 🔄 The Exact 6-Step Ingestion, OCR & Vector RAG Pipeline:
+
+```
+1. KIOSK FRONTEND (Captures Prescription)
+   └── Sends single HTTP POST (Multipart: file + patient_id) to FastAPI backend.
+
+2. PRE-INGESTION GATE (< 15 ms on CPU)
+   ├── A. Compute Cryptographic SHA-256 Hash of incoming image bytes (0.8 ms).
+   ├── B. Fast SQL Query:
+   │      `SELECT * FROM patient_medical_documents WHERE file_hash_sha256 = :hash AND patient_id = :patient_id`
+   │
+   └── 🚨 IF DUPLICATE FOUND:
+          ├── Skip Supabase Storage upload (saves bandwidth & cost).
+          ├── Skip Gemini Vision LLM call (saves API tokens).
+          └── ✅ RETURN IMMEDIATELY: Fetch and return existing cached JSON (< 20 ms)!
+
+3. IN-MEMORY MULTI-VARIANT GENERATION (10 ms with Python Pillow)
+   ├── Master WebP (`processed.webp`): Max 2048px width, Q=88 (~250 KB) -> For OCR & Doctor Zoom.
+   └── Thumbnail WebP (`thumb.webp`): Max 300px width, Q=75 (~30 KB) -> For Doctor Timeline Gallery.
+
+4. MULTIMODAL VISION OCR EXTRACTION (~1.2 s)
+   └── Backend passes the in-memory Master WebP bytes directly to Gemini 3.6 Flash Vision (NO Supabase download!).
+       └── Returns structured medical JSON:
+           • Doctor Name, Clinic, & Consultation Date
+           • Diagnoses (Allopathic & Ayurvedic/NAMASTE terms)
+           • Active Medications (Name, Dosage, Frequency, Duration)
+           • Abnormal Lab Values & Flagged Allergies
+
+5. PERSISTENCE, STORAGE & RAG VECTOR EMBEDDING (Concurrent / Non-Blocking)
+   ├── A. Supabase Storage: Uploads 2 files to private bucket `patient-medical-records`:
+   │      • `{patient_id}/prescriptions/{doc_id}.webp`
+   │      • `{patient_id}/prescriptions/{doc_id}_thumb.webp`
+   │
+   ├── B. PostgreSQL Metadata: Inserts row into `patient_medical_documents`.
+   │
+   ├── C. PostgreSQL Clinical JSON: Inserts into `document_ocr_extractions`.
+   │
+   └── D. Vector RAG Embedding Pipeline: Converts extracted JSON into structured markdown chunks
+          (Medications, Diagnoses, Labs), generates 384-dim embeddings (MiniLM-L6-v2), and
+          inserts into `patient_structured_vectors` for cross-visit RAG dialogue recall!
+
+6. RESPONSE SENT TO KIOSK (< 1.4 s Total)
+   └── Returns clean JSON to Kiosk UI to display the digitized medicines and diagnoses on screen.
+```
+
+---
 
 ### File: `backend/app/ai/ocr/image_utils.py` [NEW]
 ```python
@@ -151,6 +214,93 @@ def generate_thumbnail_webp(image_bytes: bytes, max_dim: int = 300, quality: int
 
 ---
 
+### File: `backend/app/ai/rag/inserter.py` [MODIFY / VERIFY]
+Helper function to convert extracted OCR JSON into RAG vectors:
+
+```python
+import logging
+from typing import Dict, Any, List, Optional
+from datetime import datetime
+from app.db import get_supabase_client
+from app.ai.rag.retriever import generate_embedding
+
+logger = logging.getLogger("medikiosk.rag.inserter")
+
+def create_contextual_header(patient_id: str, document_type: str, date_str: str) -> str:
+    return f"[Patient: {patient_id} | Document: {document_type.replace('_', ' ').title()} | Encounter Date: {date_str} | Status: Active]\n\n"
+
+async def embed_and_store_ocr_extractions_async(
+    doc_id: str,
+    patient_id: str,
+    document_type: str,
+    extracted_data: Dict[str, Any]
+) -> bool:
+    """
+    Converts structured OCR JSON into domain chunks, generates 384-dim MiniLM embeddings,
+    and stores them in patient_structured_vectors for dialogue RAG and Doctor Q&A.
+    """
+    try:
+        doc_date = extracted_data.get("consultation_date") or datetime.utcnow().strftime("%Y-%m-%d")
+        header = create_contextual_header(patient_id, document_type, doc_date)
+        rows_to_insert = []
+
+        # 1. Medications Chunk
+        meds = extracted_data.get("current_medications") or extracted_data.get("medications") or []
+        if meds:
+            med_lines = [f"- {m.get('name')}: {m.get('dosage', '')} ({m.get('frequency', '')}, {m.get('duration', '')})" for m in meds if isinstance(m, dict)]
+            content = header + "### 💊 Prescribed Medications:\n" + "\n".join(med_lines)
+            rows_to_insert.append({
+                "patient_id": patient_id,
+                "document_id": doc_id,
+                "category": "medications",
+                "content": content,
+                "metadata": {"medications": meds, "doc_type": document_type},
+                "encounter_date": doc_date,
+                "embedding": generate_embedding(content)
+            })
+
+        # 2. Diagnoses Chunk
+        diagnoses = extracted_data.get("diagnoses") or []
+        if diagnoses:
+            diag_lines = [f"- {d}" for d in diagnoses]
+            content = header + "### 🩺 Diagnoses & Clinical Findings:\n" + "\n".join(diag_lines)
+            rows_to_insert.append({
+                "patient_id": patient_id,
+                "document_id": doc_id,
+                "category": "diagnoses",
+                "content": content,
+                "metadata": {"diagnoses": diagnoses, "doc_type": document_type},
+                "encounter_date": doc_date,
+                "embedding": generate_embedding(content)
+            })
+
+        # 3. Lab Findings & Vitals Chunk
+        vitals = extracted_data.get("vitals_recorded") or extracted_data.get("vitals") or {}
+        labs = extracted_data.get("lab_findings") or []
+        if vitals or labs:
+            content = header + f"### 📊 Vitals & Investigations:\nVitals: {vitals}\nLabs: {labs}"
+            rows_to_insert.append({
+                "patient_id": patient_id,
+                "document_id": doc_id,
+                "category": "lab_findings",
+                "content": content,
+                "metadata": {"vitals": vitals, "labs": labs},
+                "encounter_date": doc_date,
+                "embedding": generate_embedding(content)
+            })
+
+        if rows_to_insert:
+            supabase = get_supabase_client()
+            supabase.table("patient_structured_vectors").insert(rows_to_insert).execute()
+            logger.info(f"Successfully embedded and stored {len(rows_to_insert)} RAG chunks for doc {doc_id}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to embed OCR JSON in RAG: {e}")
+        return False
+```
+
+---
+
 ### File: `backend/app/api/v1/endpoints/ocr.py` [MODIFY]
 * **Endpoint 1: `POST /api/v1/ocr/process-document`**
 
@@ -164,9 +314,10 @@ from pydantic import BaseModel
 from app.config import get_supabase_client
 from app.ai.ocr.vision_llm import extract_clinical_data_from_image
 from app.ai.ocr.image_utils import generate_thumbnail_webp
+from app.ai.rag.inserter import embed_and_store_ocr_extractions_async
 
 logger = logging.getLogger("medikiosk.api.ocr")
-router = APIRouter(prefix="/ocr", tags=["Direct Document Ingestion & Vision OCR"])
+router = APIRouter(prefix="/ocr", tags=["Document Ingestion & Vision OCR"])
 
 class ProcessDocResponse(BaseModel):
     status: str
@@ -186,15 +337,16 @@ async def process_document_ocr(
     session_id: Optional[str] = Form(None, description="Optional active dialogue session ID")
 ):
     """
-    Unified Ingestion & Extraction Endpoint:
+    The Single Unified Document Ingestion & Vision OCR Endpoint:
     1. Receives 250KB WebP image from Kiosk frontend.
     2. Computes SHA-256 hash (<1ms) and checks PostgreSQL for duplicates.
        - IF duplicate: Skips storage & Gemini OCR, returning cached clinical JSON in <20ms!
     3. IF new document:
        - Generates 30KB thumbnail in-memory (2ms).
-       - Executes Gemini 3.6 Flash Vision OCR on image bytes (~1.2s).
+       - Passes in-memory bytes directly to Gemini 3.6 Flash Vision OCR (~1.2s). (Zero Supabase downloads!)
        - Persists structured JSON & metadata to PostgreSQL.
-       - Asynchronously uploads Master WebP + Thumbnail to Supabase Storage.
+       - Asynchronously embeds structured findings into `patient_structured_vectors` for RAG.
+       - Asynchronously uploads Master WebP + Thumbnail to Supabase Storage in the background.
     """
     try:
         file_bytes = await file.read()
@@ -233,7 +385,7 @@ async def process_document_ocr(
         # 2. In-Memory Thumbnail Generation (300px WebP, ~30KB)
         thumb_bytes = generate_thumbnail_webp(file_bytes)
 
-        # 3. Vision LLM Clinical Extraction (Gemini 3.6 Flash)
+        # 3. Vision LLM Clinical Extraction (Gemini 3.6 Flash - in-memory bytes, ZERO download)
         extracted_json = await extract_clinical_data_from_image(file_bytes)
 
         # 4. Storage Path Hierarchy
@@ -262,16 +414,28 @@ async def process_document_ocr(
             "structured_data": extracted_json
         }).execute()
 
-        # 6. Background Non-Blocking Upload to Supabase Storage Bucket
-        def upload_to_storage():
+        # 6. Background Tasks: Storage Upload & Vector RAG Ingestion
+        async def background_pipeline():
             try:
+                # A. Upload files to Supabase Storage
                 storage = supabase.storage.from_("patient-medical-records")
                 storage.upload(master_path, file_bytes, {"content-type": "image/webp"})
                 storage.upload(thumb_path, thumb_bytes, {"content-type": "image/webp"})
             except Exception as upload_err:
                 logger.error(f"Background storage upload error for {doc_id}: {upload_err}")
 
-        background_tasks.add_task(upload_to_storage)
+            try:
+                # B. Chunk, embed (MiniLM 384-dim), and store into patient_structured_vectors
+                await embed_and_store_ocr_extractions_async(
+                    doc_id=doc_id,
+                    patient_id=patient_id,
+                    document_type=document_type,
+                    extracted_data=extracted_json
+                )
+            except Exception as rag_err:
+                logger.error(f"Background RAG embedding error for {doc_id}: {rag_err}")
+
+        background_tasks.add_task(background_pipeline)
 
         return ProcessDocResponse(
             status="completed",
@@ -290,83 +454,7 @@ async def process_document_ocr(
 
 ---
 
-### File: `backend/app/api/v1/endpoints/documents.py` [NEW]
-* **Endpoint 2: `GET /api/v1/documents/patient/{patient_id}`**
-
-```python
-import logging
-from typing import List, Optional, Dict, Any
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from app.config import get_supabase_client
-
-logger = logging.getLogger("medikiosk.api.documents")
-router = APIRouter(prefix="/documents", tags=["Patient Document Records & History"])
-
-class PatientDocumentItem(BaseModel):
-    id: str
-    patient_id: str
-    document_type: str
-    file_path: str
-    file_path_thumb: Optional[str] = None
-    signed_url: str
-    signed_url_thumb: Optional[str] = None
-    created_at: str
-    structured_data: Optional[Dict[str, Any]] = None
-
-@router.get("/patient/{patient_id}", response_model=List[PatientDocumentItem])
-async def get_patient_documents(patient_id: str):
-    """
-    Retrieves all past ingested documents for a patient along with 15-minute temporary
-    signed preview URLs for both the master WebP (fullscreen zoom) and thumbnail (feed grid).
-    """
-    try:
-        supabase = get_supabase_client()
-        docs_res = supabase.table("patient_medical_documents") \
-            .select("*, document_ocr_extractions(structured_data)") \
-            .eq("patient_id", patient_id) \
-            .order("created_at", desc=True) \
-            .execute()
-
-        items: List[PatientDocumentItem] = []
-        for d in docs_res.data or []:
-            master_path = d.get("file_path")
-            thumb_path = d.get("file_path_thumb")
-            
-            # Generate 15-minute secure signed URLs
-            signed_url = ""
-            signed_url_thumb = ""
-            if master_path:
-                url_res = supabase.storage.from_("patient-medical-records").create_signed_url(master_path, 900)
-                signed_url = url_res.get("signedUrl") or url_res.get("signedURL", "")
-            if thumb_path:
-                thumb_res = supabase.storage.from_("patient-medical-records").create_signed_url(thumb_path, 900)
-                signed_url_thumb = thumb_res.get("signedUrl") or thumb_res.get("signedURL", "")
-
-            extractions = d.get("document_ocr_extractions", [])
-            structured = extractions[0].get("structured_data") if extractions else None
-
-            items.append(PatientDocumentItem(
-                id=d["id"],
-                patient_id=d["patient_id"],
-                document_type=d.get("document_type", "prescription"),
-                file_path=master_path,
-                file_path_thumb=thumb_path,
-                signed_url=signed_url,
-                signed_url_thumb=signed_url_thumb or signed_url,
-                created_at=d.get("created_at", ""),
-                structured_data=structured
-            ))
-
-        return items
-    except Exception as e:
-        logger.error(f"Error fetching documents for patient {patient_id}: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-```
-
----
-
-## 5. Subsystem B: Dual-RAG Dialogue, Streaming, & Auto-Summary
+## 5. Subsystem 2: Dual-RAG Dialogue, Streaming, & Auto-Summary
 
 ### File: `backend/app/ai/dialogue/models.py` [MODIFY]
 Add the comprehensive `ClinicalSummaryTicket` Pydantic model:
@@ -614,9 +702,9 @@ async def get_next_dialogue_turn(
 ---
 
 ### File: `backend/app/api/v1/endpoints/dialogue.py` [MODIFY]
-* **Endpoint 3: `POST /api/v1/dialogue/stream-turn` (SSE Stream)**
-* **Endpoint 4: `POST /api/v1/dialogue/turn` (Discrete REST)**
-* **Endpoint 5: `GET /api/v1/dialogue/session/{session_id}` (Telemetry)**
+* **Endpoint 2: `POST /api/v1/dialogue/stream-turn` (SSE Stream)**
+* **Endpoint 3: `POST /api/v1/dialogue/turn` (Discrete REST)**
+* **Endpoint 4: `GET /api/v1/dialogue/session/{session_id}` (Telemetry)**
 
 ```python
 import json
@@ -700,10 +788,10 @@ async def get_session_status(session_id: str):
 
 ---
 
-## 6. Subsystem C: Doctor OPD Station & Consultation Pass
+## 6. Subsystem 3: Doctor OPD Station & Consultation Pass
 
 ### File: `backend/app/api/v1/endpoints/doctor.py` [NEW]
-* **Endpoint 6: `GET /api/v1/doctor/ticket/{session_id}`**
+* **Endpoint 5: `GET /api/v1/doctor/ticket/{session_id}`**
 
 ```python
 from fastapi import APIRouter, HTTPException
@@ -714,13 +802,42 @@ router = APIRouter(prefix="/doctor", tags=["Doctor OPD Station & EMR Queue"])
 @router.get("/ticket/{session_id}")
 async def get_doctor_consultation_ticket(session_id: str):
     """
-    Fetches the pre-populated clinical summary ticket for the examining physician's OPD dashboard.
+    Fetches the pre-populated clinical summary ticket and document preview signed URLs
+    for the examining physician's OPD dashboard.
     """
     supabase = get_supabase_client()
     res = supabase.table("clinical_summary_tickets").select("*").eq("session_id", session_id).execute()
     if not res.data:
         raise HTTPException(status_code=404, detail="Clinical consultation ticket not found for this session.")
-    return res.data[0]
+    
+    ticket = res.data[0]
+    patient_id = ticket.get("patient_id")
+    
+    # Attach 15-minute secure signed URLs for patient documents
+    if patient_id:
+        docs_res = supabase.table("patient_medical_documents").select("*").eq("patient_id", patient_id).execute()
+        document_previews = []
+        for d in docs_res.data or []:
+            master_path = d.get("file_path")
+            thumb_path = d.get("file_path_thumb")
+            signed_url = ""
+            signed_url_thumb = ""
+            if master_path:
+                url_res = supabase.storage.from_("patient-medical-records").create_signed_url(master_path, 900)
+                signed_url = url_res.get("signedUrl") or url_res.get("signedURL", "")
+            if thumb_path:
+                thumb_res = supabase.storage.from_("patient-medical-records").create_signed_url(thumb_path, 900)
+                signed_url_thumb = thumb_res.get("signedUrl") or thumb_res.get("signedURL", "")
+            document_previews.append({
+                "id": d["id"],
+                "document_type": d["document_type"],
+                "signed_url": signed_url,
+                "signed_url_thumb": signed_url_thumb or signed_url,
+                "created_at": d.get("created_at")
+            })
+        ticket["document_previews"] = document_previews
+
+    return ticket
 ```
 
 ---
@@ -731,13 +848,11 @@ async def get_doctor_consultation_ticket(session_id: str):
 ```python
 from fastapi import APIRouter
 from app.api.v1.endpoints.ocr import router as ocr_router
-from app.api.v1.endpoints.documents import router as documents_router
 from app.api.v1.endpoints.dialogue import router as dialogue_router
 from app.api.v1.endpoints.doctor import router as doctor_router
 
 api_router = APIRouter()
 api_router.include_router(ocr_router)
-api_router.include_router(documents_router)
 api_router.include_router(dialogue_router)
 api_router.include_router(doctor_router)
 ```
@@ -748,18 +863,15 @@ api_router.include_router(doctor_router)
 
 When executing the implementation, run the following sequential tests to verify 100% functionality:
 
-1. **Step 1: Test Direct WebP Upload & Deduplication**:
+1. **Step 1: Test Direct WebP Upload, Deduplication & pgvector RAG Embedding**:
    * Command: `python backend/test_ocr_pipeline.py`
-   * Target: Verifies 250KB WebP upload, SHA-256 duplicate bypassing in $<20\text{ms}$, 30KB thumbnail creation, Gemini Vision extraction, and Supabase Storage persistence.
-2. **Step 2: Test Document History & Signed Viewing URLs**:
-   * Command: `python backend/test_documents_endpoint.py`
-   * Target: Verifies `GET /api/v1/documents/patient/{patient_id}` generates valid 15-minute temporary signed URLs for both the master WebP and thumbnail.
-3. **Step 3: Test Vector-Driven Red-Flag Interceptor**:
+   * Target: Verifies 250KB WebP upload, SHA-256 duplicate bypassing in $<20\text{ms}$, 30KB thumbnail creation, Gemini Vision extraction, `patient_structured_vectors` pgvector insertion, and Supabase Storage persistence.
+2. **Step 2: Test Vector-Driven Red-Flag Interceptor**:
    * Command: `python backend/test_vector_red_flags.py`
    * Target: Verifies chest pain/emergency symptoms match ICMR STW in Supabase with $>0.82$ similarity in $<10\text{ms}$.
-4. **Step 4: Test Real-Time SSE Dialogue Stream & Auto-Summary**:
+3. **Step 3: Test Real-Time SSE Dialogue Stream & Auto-Summary**:
    * Command: `python backend/test_dialogue_pipeline_live.py`
    * Target: Runs a complete 4-turn patient simulation, streams tokens via SSE, reaches `should_stop == True`, and verifies the generated `ClinicalSummaryTicket` is saved to `clinical_summary_tickets` table and conforms to NAMASTE and ICD-10 schemas.
-5. **Step 5: Test Doctor OPD Ticket Retrieval**:
+4. **Step 4: Test Doctor OPD Ticket Retrieval**:
    * Command: `python backend/test_doctor_ticket.py`
-   * Target: Verifies `GET /api/v1/doctor/ticket/{session_id}` fetches the synthesized ticket.
+   * Target: Verifies `GET /api/v1/doctor/ticket/{session_id}` fetches the synthesized ticket with attached document previews.

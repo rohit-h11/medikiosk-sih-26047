@@ -1,7 +1,8 @@
+# backend/app/ai/dialogue/models.py
 """
-MediKiosk — Clinical Dialogue Models
-Pydantic schemas for Patient Context, SOCRATES slot tracking, conversation history,
-and dialogue turn results.
+MediKiosk — Multi-Paradigm Clinical Dialogue Models
+Pydantic schemas for Patient Context, multi-phase session tracking,
+SOCRATES/Ayurveda slot extraction, and dialogue turn results.
 """
 
 from typing import List, Optional, Dict, Any
@@ -21,7 +22,7 @@ class TouchOption(BaseModel):
     id: str = Field(..., description="Unique key for option chip")
     label: str = Field(..., description="Display label for touchscreen chip")
     value: str = Field(..., description="Utterance value if selected")
-    slot_tag: Optional[str] = Field(None, description="Associated SOCRATES slot (e.g., 'site', 'severity')")
+    slot_tag: Optional[str] = Field(None, description="Associated clinical slot or option anchor")
 
 class SocratesState(BaseModel):
     site: Optional[str] = Field(None, description="Site / anatomical location of the pain/symptom")
@@ -46,12 +47,15 @@ class PatientContext(BaseModel):
     name: Optional[str] = None
     age: Optional[int] = None
     gender: Optional[str] = None
-    chief_complaint: Optional[str] = Field(None, description="Main presenting complaint, e.g. 'chest tightness', 'headache'")
+    hospital_type: str = Field(default="allopathy", description="'allopathy' | 'ayurveda'")
+    prakriti_profile: Optional[str] = Field(None, description="Calculated baseline Prakriti, e.g. 'Pitta-Vata Prakriti'")
+    dashavidha_state: Optional[Dict[str, Any]] = Field(default_factory=dict, description="Dashavidha 10-limb state")
+    chief_complaint: Optional[str] = Field(None, description="Main presenting complaint")
     symptoms: List[str] = Field(default_factory=list, description="List of recognized symptoms")
-    past_medical_history: List[str] = Field(default_factory=list, description="Chronic conditions, surgeries, e.g. ['Diabetes', 'Hypertension']")
-    current_medications: List[str] = Field(default_factory=list, description="Current drugs, e.g. ['Metformin 500mg', 'Amlodipine 5mg']")
-    allergies: List[str] = Field(default_factory=list, description="Known allergies, e.g. ['Penicillin', 'Sulfa']")
-    vitals: Dict[str, Any] = Field(default_factory=dict, description="Vitals e.g. {'bp': '120/80', 'pulse': 72, 'temp': '98.6 F'}")
+    past_medical_history: List[str] = Field(default_factory=list, description="Chronic conditions, surgeries")
+    current_medications: List[str] = Field(default_factory=list, description="Current drugs")
+    allergies: List[str] = Field(default_factory=list, description="Known allergies")
+    vitals: Dict[str, Any] = Field(default_factory=dict, description="Vitals")
     extracted_docs: Optional[Dict[str, Any]] = Field(default=None, description="Context from OCR/uploaded documents")
     language: str = "en"
 
@@ -75,9 +79,14 @@ class DialogueTurnResult(BaseModel):
         default_factory=list,
         description="Quick-tap touch options for kiosk interface"
     )
+    # Generic state supporting Allopathy and Ayurveda
+    state: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Accumulated paradigm clinical state"
+    )
     socrates_state: SocratesState = Field(
         default_factory=SocratesState,
-        description="Accumulated SOCRATES extraction"
+        description="Backwards-compatible SOCRATES extraction"
     )
     covered_slots: List[str] = Field(
         default_factory=list,
@@ -103,3 +112,12 @@ class DialogueTurnResult(BaseModel):
         None,
         description="Clinical rationale for the question or stop decision"
     )
+    primary_impression: Optional[str] = Field(
+        None,
+        description="Primary working clinical impression for attending physician EHR review"
+    )
+    provisional_differentials: List[str] = Field(
+        default_factory=list,
+        description="Top 3 probable clinical differential impressions for attending physician"
+    )
+

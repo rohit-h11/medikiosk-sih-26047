@@ -1,0 +1,47 @@
+{
+  "total_tested": 10,
+  "passed": 5,
+  "accuracy_pct": 50.0,
+  "failures": [
+    {
+      "id": "SUBTLE-02",
+      "category": "Subacute Intracranial Bleed",
+      "input": "My 72-year-old mother bumped her head in bathroom 2 days ago. Today she dropped her tea cup, has mild confusion and called me by my sister's name.",
+      "expected": true,
+      "actual": false,
+      "reasoning": "The patient report provides onset (2 days ago) and associated symptoms (confusion, dropping cup, misidentification). All other SOCRATES dimensions (site, character, radiation, severity, time_course, exacerbating/relieving) are still missing. With only one turn remaining, we ask a single comprehensive question that can capture multiple missing slots, providing touch options for the most critical missing elements."
+    },
+    {
+      "id": "SUBTLE-03",
+      "category": "Ruptured Ectopic Pregnancy",
+      "input": "I am 7 weeks pregnant. I have sudden sharp pain in my right shoulder tip, lower abdominal cramping and feeling extremely faint when standing.",
+      "expected": true,
+      "actual": false,
+      "reasoning": "The patient's statement provides site (right shoulder tip, lower abdomen), character (sharp, cramping), and an associated symptom (faintness on standing). However, onset timing, radiation, severity, time course, and exacerbating/relieving factors are still unknown. With only one turn remaining, the most critical missing dimension is onset, so the next single question asks when the pain started, offering four touch options to capture the onset information."
+    },
+    {
+      "id": "DISTRACTOR-01",
+      "category": "Family History of Cardiac Death",
+      "input": "My elder brother had a massive heart attack and died last year. I am very worried, but I only have mild knee stiffness when walking upstairs.",
+      "expected": false,
+      "actual": true,
+      "reasoning": "Immediate red flag detected via safety screening."
+    },
+    {
+      "id": "DISTRACTOR-02",
+      "category": "Family History of Stroke",
+      "input": "My mother is currently admitted in hospital with a brain stroke and paralysis. I have been taking care of her and developed a mild tension headache from lack of sleep.",
+      "expected": false,
+      "actual": true,
+      "reasoning": "Immediate red flag detected via safety screening."
+    },
+    {
+      "id": "METAPHOR-01",
+      "category": "Figurative Speech (Heart Attack)",
+      "input": "My boss gave me a heart attack with this new project deadline! My neck and upper shoulders are feeling so stiff from typing all night.",
+      "expected": false,
+      "actual": true,
+      "reasoning": "Immediate red flag detected via safety screening."
+    }
+  ]
+}

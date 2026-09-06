@@ -1,0 +1,28 @@
+{
+  "prakriti": {
+    "tests_run": 100,
+    "math_accuracy_pct": 100.0,
+    "avg_calc_latency_us": 8.641000022180378
+  },
+  "red_flag": {
+    "total_emergency_cases": 8,
+    "detected_count": 8,
+    "sensitivity_recall_pct": 100.0,
+    "turn_of_detection": 1,
+    "avg_triage_latency_ms": 2064.436087515787
+  },
+  "storage": {
+    "raw_size_kb": 117.8,
+    "webp_size_kb": 5.5,
+    "thumb_size_kb": 0.2,
+    "bandwidth_reduction_pct": 95.3,
+    "webp_compression_latency_ms": 308.76,
+    "thumb_generation_latency_ms": 12.36,
+    "sha256_hash_latency_ms": 0.109
+  },
+  "streaming": {
+    "avg_ttft_ms": 9654.50486666911,
+    "avg_ttfa_ms": 9654.505966658084,
+    "avg_turn_stream_latency_ms": 9654.548466651855
+  }
+}

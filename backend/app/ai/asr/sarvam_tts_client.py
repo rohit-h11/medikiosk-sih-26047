@@ -197,13 +197,24 @@ class SarvamTTSClient:
                 }
 
         except Exception as e:
-            logger.error(f"Sarvam TTS exception: {str(e)}")
+            logger.error(f"Sarvam TTS exception: {e}")
             return {
                 "success": False,
                 "audio_base64": None,
                 "audio_bytes": None,
                 "format": "wav",
-                "error": f"Sarvam TTS failed: {str(e)}"
+                "error": str(e)
             }
 
+    async def synthesize_speech_async(
+        self,
+        text: str,
+        language: str = "hi",
+        **kwargs
+    ) -> Optional[str]:
+        """Convenience helper returning raw base64 audio string or None."""
+        res = await self.text_to_speech_async(text, language=language, **kwargs)
+        return res.get("audio_base64")
+
+# Global singleton service
 sarvam_tts_service = SarvamTTSClient()

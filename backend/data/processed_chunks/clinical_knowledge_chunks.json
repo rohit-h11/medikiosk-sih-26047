@@ -1,0 +1,2056 @@
+[
+  {
+    "chunk_id": "ccras_prakriti_physical___anatomical_predictors_sub_1",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors — Core Classical Clinical Concept",
+    "content": "### CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors — Core Classical Clinical Concept\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors | **Domain:** prakriti_assessment\n\nAccording to the classical Ayurvedic treatises (*Charaka Samhita*, *Sushruta Samhita*, and *Ashtanga Hridaya*), physical and anatomical predictors (*Sharirika Lakshana*) serve as objective markers for determining an individual's baseline constitutional phenotype (*Deha Prakriti*). These phenotypic characteristics originate during fertilization (*Garbhana-kale*) based on the dominance of *Tridosha* and remain largely immutable throughout life. Physical predictors encompass structural frame (*Asthi-Mamsa Sarata*), integumentary parameters (*Twak/Loma/Kesha*), ocular features (*Netra Lakshana*), dental features (*Danta*), and articular integrity (*Sandhi-Bandhana*).\n\nStandardization by the Central Council for Research in Ayurvedic Sciences (CCRAS) translates these classical concepts into standardized diagnostic predictors to enable reproducible clinical scoring across diagnostic frameworks.",
+    "symptom_triggers": [
+      "Prakriti Assessment",
+      "Body Frame",
+      "Deha Prakriti",
+      "Ruksha Twak",
+      "Gaura Gatra",
+      "Krisha Akriti",
+      "Vata Pitta Kapha",
+      "CCRAS Tool",
+      "प्रकृति परीक्षा",
+      "शरीर रचना"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 127,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 1,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_physical___anatomical_predictors_sub_2",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors — Diagnostic Assessment Table (Part 1)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors — Diagnostic Assessment Table (Part 1)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors | **Domain:** prakriti_assessment\n\n| Trait | Sanskrit Term (Devanagari/Roman) | Clinical Indicator | Primary Dosha Correlation |\n| :--- | :--- | :--- | :--- |\n| **Body Frame** | कृश / अपचित (*Krisha / Apachita*) | Thin, emaciated frame; prominent body contours | Vata |\n| **Body Frame** | सममांस / मांसल (*Samamamsa / Mamsala*) | Well-built, muscular, symmetrical frame | Kapha |\n| **Body Frame** | शिथिलाङ्ग (*Shithilanga*) | Soft, loose, or lax muscularity | Pitta |\n| **Skin Texture** | रूक्ष त्वक् / रूक्षाङ्ग (*Ruksha Twak / Rukshanga*) | Dry, rough, non-lustrous skin | Vata |\n| **Skin Texture** | प्रसन्न स्निग्ध वर्ण (*Prasanna Snigdha Varna*) | Unctuous, smooth, clear skin without dryness | Kapha |\n| **Complexion** | गौर गात्र (*Gaura Gatra*) | Fair, yellowish, golden, or lotus-like skin tone | Pitta / Kapha |",
+    "symptom_triggers": [
+      "Prakriti Assessment",
+      "Body Frame",
+      "Deha Prakriti",
+      "Ruksha Twak",
+      "Gaura Gatra",
+      "Krisha Akriti",
+      "Vata Pitta Kapha",
+      "CCRAS Tool",
+      "प्रकृति परीक्षा",
+      "शरीर रचना"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 165,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 2,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_physical___anatomical_predictors_sub_3",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors — Diagnostic Assessment Table (Part 2)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors — Diagnostic Assessment Table (Part 2)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors | **Domain:** prakriti_assessment\n\n| Trait | Sanskrit Term (Devanagari/Roman) | Clinical Indicator | Primary Dosha Correlation |\n| :--- | :--- | :--- | :--- |\n| **Complexion** | पीताङ्ग / ताम्र तणु (*Pitanga / Tamra-tanu*) | Yellowish to coppery tinge of skin, palms, and soles | Pitta |\n| **Skin Lesions** | प्रभूत तिल-व्यङ्ग-पिडका (*Prabhuta Tila-Vyanga-Pidaka*) | Abundance of moles, freckles, and acne/pimples | Pitta |\n| **Vascularity** | बहु कण्डरा-सिरा-प्रतान (*Bahu Kandara-Sira-Pratana*) | Prominent surface veins and anatomical tendons | Vata |\n| **Hair Density/Texture** | अल्प केश / विरल केश (*Alpa Kesha / Virala Kesha*) | Scanty, thin, sparse hair on scalp or body | Vata |\n| **Hair Density/Texture** | मृदु रोम (*Mridu Roma*) | Soft, fine body hair | Pitta |\n| **Hair Color/Changes** | कपिल केश (*Kapila Kesha*) | Reddish-brown or coppery hair color | Pitta |",
+    "symptom_triggers": [
+      "Prakriti Assessment",
+      "Body Frame",
+      "Deha Prakriti",
+      "Ruksha Twak",
+      "Gaura Gatra",
+      "Krisha Akriti",
+      "Vata Pitta Kapha",
+      "CCRAS Tool",
+      "प्रकृति परीक्षा",
+      "शरीर रचना"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 169,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 3,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_physical___anatomical_predictors_sub_4",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors — Diagnostic Assessment Table (Part 3)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors — Diagnostic Assessment Table (Part 3)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors | **Domain:** prakriti_assessment\n\n| Trait | Sanskrit Term (Devanagari/Roman) | Clinical Indicator | Primary Dosha Correlation |\n| :--- | :--- | :--- | :--- |\n| **Hair Changes** | अकालपालित / क्षिप्र खालित्य (*Akalapalita / Kshipra Khalitya*) | Premature graying or early hair loss | Pitta |\n| **Teeth** | सूक्ष्म दन्त / तनु दन्त (*Sukshma Danta / Tanu Danta*) | Small, thin, unevenly spaced teeth | Vata |\n| **Teeth/Sleep** | दन्त खादी (*Khadati Dantani Supte / Danta Khadi*) | Nocturnal tooth grinding (bruxism) | Vata |\n| **Joint Integrity** | शिथिल सन्धि (*Shithila Sandhi*) | Lax, hypermobile joint attachments | Pitta / Vata |\n| **Joint Sound** | सशब्द सन्धिगामी (*Sashabda Sandhigami*) | Audible cracking/popping sound during movement | Vata |\n| **Eye Dimensions** | तनु लोचन / अल्प नेत्र (*Tanu Lochana / Alpa Netra*) | Small-sized eyes | Vata |",
+    "symptom_triggers": [
+      "Prakriti Assessment",
+      "Body Frame",
+      "Deha Prakriti",
+      "Ruksha Twak",
+      "Gaura Gatra",
+      "Krisha Akriti",
+      "Vata Pitta Kapha",
+      "CCRAS Tool",
+      "प्रकृति परीक्षा",
+      "शरीर रचना"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 170,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 4,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_physical___anatomical_predictors_sub_5",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors — Diagnostic Assessment Table (Part 4)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors — Diagnostic Assessment Table (Part 4)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors | **Domain:** prakriti_assessment\n\n| Trait | Sanskrit Term (Devanagari/Roman) | Clinical Indicator | Primary Dosha Correlation |\n| :--- | :--- | :--- | :--- |\n| **Eye Dynamics** | चल दृष्टि (*Chala Drishti*) | Unsteady gaze; frequent blinking | Vata |\n| **Eye Dynamics** | स्थिर नेत्र (*Sthira Netra / Stabdha Netra*) | Steady, unblinking gaze; calm eyes | Kapha |\n| **Eye Reactivity** | क्रोधेन/मद्येन रागम् (*Krodhena / Madyen Ragam*) | Eyes turn red readily under stress, heat, or alcohol | Pitta |\n| **Ocular Sleep** | उन्मीलितानीव सुप्ते (*Unmilitaneeva Bhavanti Supte*) | Eyelids remain partially open during sleep | Vata |",
+    "symptom_triggers": [
+      "Prakriti Assessment",
+      "Body Frame",
+      "Deha Prakriti",
+      "Ruksha Twak",
+      "Gaura Gatra",
+      "Krisha Akriti",
+      "Vata Pitta Kapha",
+      "CCRAS Tool",
+      "प्रकृति परीक्षा",
+      "शरीर रचना"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 130,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 5,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_physical___anatomical_predictors_sub_6",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors — Examination Guidelines for Automated Kiosk Scoring",
+    "content": "### CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors — Examination Guidelines for Automated Kiosk Scoring\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Physical & Anatomical Predictors | **Domain:** prakriti_assessment\n\nTo ensure objective assessment via high-density clinical informatics and AI-integrated kiosk systems, standardized imaging and sensor protocols must be applied:\n\n1. **High-Resolution Optical & Dermatological Image Analysis**\n * **Complexion & Skin Lesions:** Utilize calibrated RGB/UV skin spectrophotometry to calculate melanin index, vascular erythema, and quantify *Tila-Vyanga-Pidaka* (moles/freckles count per cm²).\n * **Hair & Scalp Assessment:** High-magnification trichoscopy to quantify follicular density (*Virala* vs. *Ghana*), hair shaft diameter, and pigmentation indices (*Kapila* / *Palita*).\n\n2. **Biometric Anthropometry & Musculoskeletal Frame Mapping**\n * **Frame Measurement:** Apply 3D depth-sensing cameras to calculate frame metrics (Wrist/Ankle circumference ratio to height, body surface area ratio) to classify *Krisha* (Vata), *Shithila* (Pitta), or *Samamamsa* (Kapha).\n * **Joint Evaluation:** Acoustic sensor array over major load-bearing joints to capture high-frequency vibroarthrographic signals (*Sashabda Sandhi*) during range-of-motion testing.\n\n3. **Ocular Dynamics & Gaze Tracking**\n * **Blink Rate & Stability:** Infrared eye-tracking module measuring blink frequency per minute (High frequency = *Chala Drishti* / Vata; Low frequency = *Sthira Netra* / Kapha).\n * **Scleral/Conjunctival Chromaticity:** Multi-spectral imaging assessing ocular vascularity and redness index (*Ragam*) under controlled illumination.\n\n4. **Algorithmic Weighting & Phenotypic Scoring Logic**\n * **Vata Phenotype Score ($S_V$):** High weightage given to *Ruksha Twak*, *Krisha Akriti*, *Sashabda Sandhi*, *Virala Kesha*, and *Chala Drishti*.\n * **Pitta Phenotype Score ($S_P$):** High weightage given to *Gaura/Pitanga*, *Akalapalita/Khalitya*, *Shithila Sandhi*, *Prabhuta Tila/Pidaka*, and ocular *Ragam*.\n * **Kapha Phenotype Score ($S_K$):** High weightage given to *Samamamsa*, *Prasanna Snigdha Varna*, and *Sthira Netra*.\n * Final output displays tri-doshic percentage proportions with primary anatomical classification compliant with CCRAS standardization criteria.",
+    "symptom_triggers": [
+      "Prakriti Assessment",
+      "Body Frame",
+      "Deha Prakriti",
+      "Ruksha Twak",
+      "Gaura Gatra",
+      "Krisha Akriti",
+      "Vata Pitta Kapha",
+      "CCRAS Tool",
+      "प्रकृति परीक्षा",
+      "शरीर रचना"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 284,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 6,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_physiological___metabolic_predictors_sub_1",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors — 1. Core Classical Clinical Concept",
+    "content": "### CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors — 1. Core Classical Clinical Concept\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors | **Domain:** prakriti_assessment\n\nIn classical Ayurveda (*Brihat Trayi*), physiological and metabolic predictors represent the functional dynamics of the three *Doshas* (*Vata*, *Pitta*, *Kapha*) operating through metabolic pathways (*Agni*), waste elimination (*Koshtha* / *Mala Kriya*), physical endurance (*Bala* / *Ojas*), and constitutional sensory affinities (*Rasa Abhilasha*). The Central Council for Research in Ayurvedic Sciences (CCRAS) standardizes these parameters to establish an objective, reproducible baseline (*Prakriti*) assessment.\n\nConstitutional metabolism is dictated by the primary *Agni* state:\n- **Vishamagni (Vata):** Irregular digestion, variable appetite, erratic bowel evacuation, unstable physical stamina, and low thermal tolerance to cold.\n- **Teekshnamagni (Pitta):** Intense digestion (*Teekshna bubhuksha*), excessive thirst (*Shighra pipasa*), profuse sweating (*Prabhuta sweda*), easy bowel evacuation (*Srishta purisha*), and heat intolerance.\n- **Mandagni (Kapha):** Slow digestion, modest appetite (*Alpakshuta*), low thirst (*Alpa trishna*), high physical endurance (*Balvana*), deep/stable sleep (*Nidrapriya*), and strong stress tolerance (*Sahishnu*).\n\nSeparating baseline constitutional physiological traits (*Prakriti*) from transient acquired metabolic derangements (*Vikriti*) is critical for automated digital diagnostic scoring.",
+    "symptom_triggers": [
+      "Teekshna bubhuksha",
+      "Agni assessment",
+      "Prabhuta sweda",
+      "Srishta purisha",
+      "Bala endurance",
+      "Rasa Abhilasha",
+      "Nidrapriya sleep",
+      "Ayurvedic digestion type",
+      "Prakriti metabolism test",
+      "CCRAS physiological criteria",
+      "अग्नि परीक्षा",
+      "प्रकृति परीक्षण"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 185,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 1,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_physiological___metabolic_predictors_sub_2",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors — 2. Diagnostic Assessment Table (Part 1)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors — 2. Diagnostic Assessment Table (Part 1)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors | **Domain:** prakriti_assessment\n\n| Trait | Sanskrit Term (Devanagari / Roman) | Clinical Indicator | Primary Dosha Correlation |\n| :--- | :--- | :--- | :--- |\n| **Intense Hunger** | तीक्ष्ण बुभुक्षा (*Teekshna bubhuksha*) | Cannot tolerate skipped meals; intense, rapid hunger spikes. | **Pitta** |\n| **Low / Mild Appetite** | अल्पक्षुत (*Alpakshuta*) | Light food intake, slow digestion, easily satisfied. | **Kapha / Vata** |\n| **Excessive Food Intake** | बहुभुक् (*Bahubhuk*) | Habitual consumption of large quantities of food. | **Pitta / Kapha** |\n| **Rapid Eating Habit** | चपल आहार (*Chapala ahara*) | Fast, hurried, irregular mastication and swallowing pattern. | **Vata** |\n| **Frequent Thirst** | शीघ्र पिपासा (*Shighra pipasa*) | Frequent sensation of dry mouth/throat requiring water intake. | **Pitta** |\n| **Minimal Thirst** | अल्प तृष्णा (*Alpa trishna*) | Low fluid requirement, dry mouth rarely felt. | **Kapha** |",
+    "symptom_triggers": [
+      "Teekshna bubhuksha",
+      "Agni assessment",
+      "Prabhuta sweda",
+      "Srishta purisha",
+      "Bala endurance",
+      "Rasa Abhilasha",
+      "Nidrapriya sleep",
+      "Ayurvedic digestion type",
+      "Prakriti metabolism test",
+      "CCRAS physiological criteria",
+      "अग्नि परीक्षा",
+      "प्रकृति परीक्षण"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 175,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 2,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_physiological___metabolic_predictors_sub_3",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors — 2. Diagnostic Assessment Table (Part 2)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors — 2. Diagnostic Assessment Table (Part 2)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors | **Domain:** prakriti_assessment\n\n| Trait | Sanskrit Term (Devanagari / Roman) | Clinical Indicator | Primary Dosha Correlation |\n| :--- | :--- | :--- | :--- |\n| **Easy Bowel Evacuation** | सृष्ट पुरीष (*Srishta purisha*) | Soft, smooth stool passed easily without straining (Mridu Koshtha). | **Pitta** |\n| **Excessive Sleep / Sleep Affinity** | निद्राप्रिय (*Nidrapriya*) | Tendency to sleep long hours, heavy unarousable sleep. | **Kapha** |\n| **Nocturnal Bruxism** | खादति दन्तानि सुप्ते (*Khadati dantani supte*) | Teeth grinding or jaw clenching during sleep. | **Vata** |\n| **Partial Eyelid Closure** | उन्मीलितानीव भवन्ति सुप्ते (*Unmilitaneeva bhavanti supte*) | Eyes remain partially open or twitching during sleep. | **Vata** |\n| **Profuse Sweating** | प्रभूत सृष्ट स्वेद (*Prabhuta srishta sweda*) | Heavy perspiration even with minimal exertion or moderate ambient temperature. | **Pitta** |\n| **High Physical Endurance** | बलवन्त (*Balvana*) | Strong muscular strength, high physical and mental stamina. | **Kapha** |",
+    "symptom_triggers": [
+      "Teekshna bubhuksha",
+      "Agni assessment",
+      "Prabhuta sweda",
+      "Srishta purisha",
+      "Bala endurance",
+      "Rasa Abhilasha",
+      "Nidrapriya sleep",
+      "Ayurvedic digestion type",
+      "Prakriti metabolism test",
+      "CCRAS physiological criteria",
+      "अग्नि परीक्षा",
+      "प्रकृति परीक्षण"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 185,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 3,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_physiological___metabolic_predictors_sub_4",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors — 2. Diagnostic Assessment Table (Part 3)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors — 2. Diagnostic Assessment Table (Part 3)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors | **Domain:** prakriti_assessment\n\n| Trait | Sanskrit Term (Devanagari / Roman) | Clinical Indicator | Primary Dosha Correlation |\n| :--- | :--- | :--- | :--- |\n| **Ample Vitality / Ojas** | ओजस्विन् (*Ojasvinah*) | Superior immunity, systemic resilience, vigor. | **Kapha** |\n| **Stress / Pain Tolerance** | सहिष्णु (*Sahishnu*) | Tolerant of physical exertion, pain, and psychological stress. | **Kapha** |\n| **Low Stress Endurance** | हीनसत्त्व (*Hinasatva*) | Easily overwhelmed by pain, fatigue, or fright; low psychological reserve. | **Vata** |\n| **Heat Intolerance** | उष्ण असहिष्णु (*Ushna-asahishnu*) | Dislike/intolerance of warm climates, direct sunlight, and hot food. | **Pitta** |\n| **Cold / Cool Preference** | शीताभिलाषी (*Sheeta bhilashi*) | Strong preference for cold food, iced drinks, and cool weather. | **Pitta** |\n| **Sweet Preference** | मधुर अन्नपानाकांक्षा (*Madhura annapanakanksha*) | High affinity for sweet taste in food and beverages. | **Vata / Pitta** |",
+    "symptom_triggers": [
+      "Teekshna bubhuksha",
+      "Agni assessment",
+      "Prabhuta sweda",
+      "Srishta purisha",
+      "Bala endurance",
+      "Rasa Abhilasha",
+      "Nidrapriya sleep",
+      "Ayurvedic digestion type",
+      "Prakriti metabolism test",
+      "CCRAS physiological criteria",
+      "अग्नि परीक्षा",
+      "प्रकृति परीक्षण"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 179,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 4,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_physiological___metabolic_predictors_sub_5",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors — 2. Diagnostic Assessment Table (Part 4)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors — 2. Diagnostic Assessment Table (Part 4)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors | **Domain:** prakriti_assessment\n\n| Trait | Sanskrit Term (Devanagari / Roman) | Clinical Indicator | Primary Dosha Correlation |\n| :--- | :--- | :--- | :--- |\n| **Sour Preference** | अम्ल अन्नपानाकांक्षा (*Amla annapanakanksha*) | Strong craving for sour foods and acidic beverages. | **Vata** |\n| **Pungent Preference** | कटु भोजी (*Katu bhoji*) | Affinity for spicy, hot, and pungent foods. | **Kapha** |\n| **Bitter Preference** | तिक्त अभिलाषा (*Tikta abhilasha*) | Affinity for bitter greens, beverages, and herbs. | **Pitta / Kapha** |\n| **Astringent Preference** | कषाय अभिलाषा (*Kashaya abhilasha*) | Preference for astringent foods, dry teas, and raw plant products. | **Pitta / Kapha** |",
+    "symptom_triggers": [
+      "Teekshna bubhuksha",
+      "Agni assessment",
+      "Prabhuta sweda",
+      "Srishta purisha",
+      "Bala endurance",
+      "Rasa Abhilasha",
+      "Nidrapriya sleep",
+      "Ayurvedic digestion type",
+      "Prakriti metabolism test",
+      "CCRAS physiological criteria",
+      "अग्नि परीक्षा",
+      "प्रकृति परीक्षण"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 139,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 5,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_physiological___metabolic_predictors_sub_6",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors — 3. Examination Guidelines for Automated Kiosk Scoring (Part 1)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors — 3. Examination Guidelines for Automated Kiosk Scoring (Part 1)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Physiological & Metabolic Predictors | **Domain:** prakriti_assessment",
+    "symptom_triggers": [
+      "Teekshna bubhuksha",
+      "Agni assessment",
+      "Prabhuta sweda",
+      "Srishta purisha",
+      "Bala endurance",
+      "Rasa Abhilasha",
+      "Nidrapriya sleep",
+      "Ayurvedic digestion type",
+      "Prakriti metabolism test",
+      "CCRAS physiological criteria",
+      "अग्नि परीक्षा",
+      "प्रकृति परीक्षण"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 33,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 6,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_psychological___behavioral_predictors_sub_1",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors — 1. Core Classical Clinical Concept",
+    "content": "### CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors — 1. Core Classical Clinical Concept\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors | **Domain:** prakriti_assessment\n\nIn Ayurvedic clinical informatics and Prakriti phenotyping, psychological and behavioral predictors (*Manasa & Vyavaharika Bhavas*) reflect the systemic predominance of Vata, Pitta, and Kapha at the level of *Sattva* and *Manas*. The CCRAS Standardized Prakriti Assessment Tool codifies these internal psycho-neuro-endocrinological traits into objective, quantifiable clinical indicators. These traits assess cognitive processing (grasping, retention, intellect), emotional reactivity (anger threshold, tolerance, attachment), behavioral execution (speech pattern, gait, action initiation), and socio-moral orientation (spiritual inclination, truthfulness, respect).",
+    "symptom_triggers": [
+      "Smritimaan",
+      "Medhavi",
+      "Chala smriti",
+      "Krodhi",
+      "Sahishnu",
+      "Prakriti assessment",
+      "Psychological predictors",
+      "CCRAS tool",
+      "Vata Pitta Kapha mind",
+      "Speech velocity Prakriti"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 104,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 1,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_psychological___behavioral_predictors_sub_2",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors — 2. Diagnostic Assessment Table (Part 1)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors — 2. Diagnostic Assessment Table (Part 1)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors | **Domain:** prakriti_assessment\n\n| Trait | Sanskrit Term (Devanagari / Roman) | Clinical Indicator | Primary Dosha Correlation |\n| :--- | :--- | :--- | :--- |\n| **Memory Retention** | Le`freku / *Smritimaan* | Long-term memory retention and stability | **Kapha** |\n| **Memory Retention** | py Le`fr / *Chala smriti* | Impaired/unstable recall, transient memory | **Vata** |\n| **Emotional Stability** | lfg\".kq / *Sahishnu* | High tolerance for mental & physical strain | **Kapha** |\n| **Emotional Stability** | vuofLFkr vkRek / *Anavasthita atma* | Indecisiveness, emotional volatility | **Vata** |\n| **Emotional Stability** | ghulÙo / *Hinasatva* | Low stress threshold, easily frightened | **Vata** |\n| **Speech Velocity** | okpky / *Vaachala* | Fast, excessive, or irrelevant speech | **Vata** |",
+    "symptom_triggers": [
+      "Smritimaan",
+      "Medhavi",
+      "Chala smriti",
+      "Krodhi",
+      "Sahishnu",
+      "Prakriti assessment",
+      "Psychological predictors",
+      "CCRAS tool",
+      "Vata Pitta Kapha mind",
+      "Speech velocity Prakriti"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 154,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 2,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_psychological___behavioral_predictors_sub_3",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors — 2. Diagnostic Assessment Table (Part 2)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors — 2. Diagnostic Assessment Table (Part 2)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors | **Domain:** prakriti_assessment\n\n| Trait | Sanskrit Term (Devanagari / Roman) | Clinical Indicator | Primary Dosha Correlation |\n| :--- | :--- | :--- | :--- |\n| **Speech Velocity** | ferokd / *Mitavak* | Measured, brief, soft-spoken speech | **Kapha** |\n| **Anger Threshold** | Øks/kh / *Krodhi* | Short-tempered, rapid anger onset | **Pitta** |\n| **Anger Threshold** | {kekoku / *Kshamavana* | High anger threshold, forgiving disposition | **Kapha** |\n| **Grasping Power** | es/kkoh / *Medhavi* | High intellect, rapid comprehension | **Pitta** |\n| **Grasping Power** | y?kq ps\"Vk / *Laghu chesta* | Rapid initiation of action & quick grasping | **Vata** |\n| **Dream & Sleep Behavior** | nar[kknh LoIus\"kq / *Khadati dantani supte* | Teeth grinding during sleep | **Vata / Pitta** |",
+    "symptom_triggers": [
+      "Smritimaan",
+      "Medhavi",
+      "Chala smriti",
+      "Krodhi",
+      "Sahishnu",
+      "Prakriti assessment",
+      "Psychological predictors",
+      "CCRAS tool",
+      "Vata Pitta Kapha mind",
+      "Speech velocity Prakriti"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 158,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 3,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_psychological___behavioral_predictors_sub_4",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors — 2. Diagnostic Assessment Table (Part 3)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors — 2. Diagnostic Assessment Table (Part 3)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors | **Domain:** prakriti_assessment\n\n| Trait | Sanskrit Term (Devanagari / Roman) | Clinical Indicator | Primary Dosha Correlation |\n| :--- | :--- | :--- | :--- |\n| **Dream & Sleep Behavior** | mfUefyrkuho supte / *Unmilitaneeva supte* | Sleeping with eyes partially open | **Vata** |\n| **Spiritual Inclination** | 'kkL=fç; / *Shastrapriya* | Fondness for reading/listening to scriptures | **Pitta / Kapha** |\n| **Spiritual Inclination** | 'kqfp / *Shuchi* | Purity in thoughts, words, and actions | **Kapha / Sattva** |\n| **Spiritual Inclination** | xq#ekfUYrk / *Gurumanayita* | Deference and respect toward elders/teachers | **Kapha / Sattva** |",
+    "symptom_triggers": [
+      "Smritimaan",
+      "Medhavi",
+      "Chala smriti",
+      "Krodhi",
+      "Sahishnu",
+      "Prakriti assessment",
+      "Psychological predictors",
+      "CCRAS tool",
+      "Vata Pitta Kapha mind",
+      "Speech velocity Prakriti"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 130,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 4,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_psychological___behavioral_predictors_sub_5",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors — 3. Examination Guidelines for Automated Kiosk Scoring",
+    "content": "### CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors — 3. Examination Guidelines for Automated Kiosk Scoring\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Psychological & Behavioral Predictors | **Domain:** prakriti_assessment\n\n1. **Cognitive Domain Scoring (Grasping vs. Retention):**\n - **Vata Pattern:** High score on *Laghu chesta* (rapid grasping) paired with *Chala smriti* (rapid decay of memory).\n - **Kapha Pattern:** Delayed initial response time paired with *Smritimaan* (exceptionally high long-term retention).\n - **Pitta Pattern:** High score on *Medhavi* (intellect) with analytical precision.\n\n2. **Affective & Emotional Stability Index:**\n - Evaluate anger threshold using *Krodhi* (Pitta) vs *Kshamavana* (Kapha).\n - Measure stress adaptability via *Sahishnu* (Kapha resilience) versus *Hinasatva* (Vata vulnerability).\n\n3. **Verbal Velocity & Acoustic Analysis:**\n - Automated speech pattern analysis: High word count/minute + variable tone indicates *Vaachala* (Vata).\n - Low word count/minute + deep pitch indicates *Mitavak / Gambhira swara* (Kapha).\n\n4. **Moral & Behavioral Verification:**\n - Cross-verify self-reported values on *Shuchi* (Purity), *Satyavadi* (Truthfulness), and *Gurumanayita* (Respect) to determine Sattvika weightage in overall Prakriti assessment.",
+    "symptom_triggers": [
+      "Smritimaan",
+      "Medhavi",
+      "Chala smriti",
+      "Krodhi",
+      "Sahishnu",
+      "Prakriti assessment",
+      "Psychological predictors",
+      "CCRAS tool",
+      "Vata Pitta Kapha mind",
+      "Speech velocity Prakriti"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 167,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 5,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_standard_clinical_scoring___diagnostic_triage_matrix_sub_1",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix — 1. Core Classical Clinical Concept",
+    "content": "### CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix — 1. Core Classical Clinical Concept\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix | **Domain:** prakriti_assessment\n\nThe standardized Deha Prakriti assessment tool developed by the Central Council for Research in Ayurvedic Sciences (CCRAS) operationalizes classical textual attributes (*Atma-Laksana* / *Dosha-Laksana*) from fundamental treatises—including Charaka Samhita (CS), Sushruta Samhita (Su.S), Ashtanga Hridaya (AH), Ashtanga Samgraha (AS), and Bhavaprakasha (BP)—into verifiable, objective clinical predictors. In digitized diagnostic kiosks and clinical informatics systems, these physical, physiological, and psychological parameters are systematically evaluated through an algorithmic scoring matrix to determine Ekadoshaja, Dwandwaja, or Sama-Prakriti profiles.",
+    "symptom_triggers": [
+      "CCRAS Prakriti assessment",
+      "Prakriti scoring matrix",
+      "Vataja diagnostic criteria",
+      "Pittaja diagnostic criteria",
+      "Kaphaja diagnostic criteria",
+      "Dwandwaja Prakriti classification",
+      "Ayurvedic clinical informatics",
+      "Prakriti assessment kiosk algorithm"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 110,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 1,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_standard_clinical_scoring___diagnostic_triage_matrix_sub_2",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix — 2. Diagnostic Assessment Table (Part 1)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix — 2. Diagnostic Assessment Table (Part 1)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix | **Domain:** prakriti_assessment\n\n| Trait | Sanskrit Term (Devanagari / Roman) | Clinical Indicator | Primary Dosha Correlation |\n|---|---|---|---|\n| **Skin Texture** | Rukshanga (रूक्षाङ्ग) / Ruksha Twak | Dry, non-lustrous skin | Vata |\n| **Skin Complexion** | Gaura Gatra (गौर गात्र) / Pitanga (पीताङ्ग) | Fair/golden vs. Yellowish tinge | Kapha / Pitta |\n| **Hair Dynamics** | Sheegrha Khalitya / Akalapalita (अकालपालित) | Early hair fall / Premature graying | Pitta |\n| **Vocal Profile** | Snigdha-Gambhira Swara vs. Sanna Swara | Deep, resonant vs. Feeble, shattered voice | Kapha vs. Vata |\n| **Joint Acoustics** | Sashabda Sandhigami (सशब्द सन्धिगामी) | Crackling/popping sounds on joint movement | Vata |\n| **Structural Integrity** | Shithila Sandhi (शिथिल सन्धि) / Shithilanga | Lax joints and soft/flaccid musculature | Pitta |",
+    "symptom_triggers": [
+      "CCRAS Prakriti assessment",
+      "Prakriti scoring matrix",
+      "Vataja diagnostic criteria",
+      "Pittaja diagnostic criteria",
+      "Kaphaja diagnostic criteria",
+      "Dwandwaja Prakriti classification",
+      "Ayurvedic clinical informatics",
+      "Prakriti assessment kiosk algorithm"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 166,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 2,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_standard_clinical_scoring___diagnostic_triage_matrix_sub_3",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix — 2. Diagnostic Assessment Table (Part 2)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix — 2. Diagnostic Assessment Table (Part 2)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix | **Domain:** prakriti_assessment\n\n| Trait | Sanskrit Term (Devanagari / Roman) | Clinical Indicator | Primary Dosha Correlation |\n|---|---|---|---|\n| **Metabolic Appetite** | Teekshna Bubhuksha (तीक्ष्ण बुभुक्षा) vs. Alpakshuta | Intense, urgent hunger vs. Low appetite | Pitta vs. Kapha |\n| **Thirst & Fluid Intake** | Shigrha Pipasa (शीघ्र पिपासा) vs. Alpa Trishna | Frequent, intense thirst vs. Scanty thirst | Pitta vs. Kapha |\n| **Bowel Evacuation** | Srishta Purisha (सृष्ट पुरीष) | Easy, smooth bowel evacuation | Pitta |\n| **Thermoregulation** | Ushna-Asahishnu vs. Sheeta Abhilashi | Heat intolerance vs. Preference for cold items | Pitta |\n| **Musculoskeletal Build** | Samamamsa (सममांस) vs. Krisha/Apachita | Well-proportioned, toned vs. Thin, emaciated | Kapha vs. Vata |\n| **Gait & Locomotion** | Druta/Chapala Gati vs. Saara Gati | Swift, quick gait vs. Steady, consistent gait | Vata vs. Kapha |",
+    "symptom_triggers": [
+      "CCRAS Prakriti assessment",
+      "Prakriti scoring matrix",
+      "Vataja diagnostic criteria",
+      "Pittaja diagnostic criteria",
+      "Kaphaja diagnostic criteria",
+      "Dwandwaja Prakriti classification",
+      "Ayurvedic clinical informatics",
+      "Prakriti assessment kiosk algorithm"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 176,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 3,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_standard_clinical_scoring___diagnostic_triage_matrix_sub_4",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix — 2. Diagnostic Assessment Table (Part 3)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix — 2. Diagnostic Assessment Table (Part 3)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix | **Domain:** prakriti_assessment\n\n| Trait | Sanskrit Term (Devanagari / Roman) | Clinical Indicator | Primary Dosha Correlation |\n|---|---|---|---|\n| **Cognitive Memory** | Smritimaan (स्मृतिमान्) vs. Chala Smriti | Good long-term retention vs. Unstable memory | Kapha vs. Vata |\n| **Sleep Behaviors** | Unmilitaneeva / Khadati Dantani Supte | Eyes half-open / Teeth grinding during sleep | Vata |\n| **Affective Temperament**| Krodhi (क्रोधी) vs. Kshamavana (क्षमावान्) | Short-tempered/irritable vs. Forgiving/tolerant | Pitta vs. Kapha |",
+    "symptom_triggers": [
+      "CCRAS Prakriti assessment",
+      "Prakriti scoring matrix",
+      "Vataja diagnostic criteria",
+      "Pittaja diagnostic criteria",
+      "Kaphaja diagnostic criteria",
+      "Dwandwaja Prakriti classification",
+      "Ayurvedic clinical informatics",
+      "Prakriti assessment kiosk algorithm"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 111,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 4,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "ccras_prakriti_standard_clinical_scoring___diagnostic_triage_matrix_sub_5",
+    "parent_guideline": "CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix",
+    "domain": "prakriti_assessment",
+    "category": "diagnostic_criteria",
+    "title": "CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix — 3. Examination Guidelines & Automated Kiosk Scoring Matrix (Part 1)",
+    "content": "### CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix — 3. Examination Guidelines & Automated Kiosk Scoring Matrix (Part 1)\n**Parent Guideline:** CCRAS Standardized Prakriti Assessment: Standard Clinical Scoring & Diagnostic Triage Matrix | **Domain:** prakriti_assessment",
+    "symptom_triggers": [
+      "CCRAS Prakriti assessment",
+      "Prakriti scoring matrix",
+      "Vataja diagnostic criteria",
+      "Pittaja diagnostic criteria",
+      "Kaphaja diagnostic criteria",
+      "Dwandwaja Prakriti classification",
+      "Ayurvedic clinical informatics",
+      "Prakriti assessment kiosk algorithm"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 40,
+    "metadata": {
+      "source_document": "DevelopmentofStandardizedPrakritiAssessmentToolAnOverviewof0AOngoingCCRASInitiatives.pdf",
+      "guideline_body": "Central Council for Research in Ayurvedic Sciences (CCRAS)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 5,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_panchakarma_procedures__indicati_sub_1",
+    "parent_guideline": "WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications — Overview & Core Concept",
+    "content": "### WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications — Overview & Core Concept\n**Parent Guideline:** WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications | **Domain:** ayurveda\n\n**Source:** WHO Benchmarks for the Practice of Ayurveda | **Relevant Pages:** [11, 20, 29, 32]",
+    "symptom_triggers": [
+      "Panchakarma",
+      "Vamana",
+      "Virecana",
+      "Nasya",
+      "Vasti",
+      "Basti",
+      "Sodhana",
+      "Samana",
+      "Samsarjana",
+      "Dosha vitiation",
+      "Emesis",
+      "Purgation"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 43,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 1,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_panchakarma_procedures__indicati_sub_2",
+    "parent_guideline": "WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications — 1. International Benchmark Principles",
+    "content": "### WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications — 1. International Benchmark Principles\n**Parent Guideline:** WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications | **Domain:** ayurveda\n\n* **Definition of Pañcakarma**: A comprehensive therapeutic system consisting of five main cleansing methodologies (*pradhāna karma*) designed to prepare, physically expel, or remove vitiated *doṣa* (biological factors) and *mala* (excretable materials), thereby re-establishing normal metabolic function (*agni*).\n* **Classification of Procedures**:\n * **Pūrva Karma (Preparatory Procedures)**: Interventions that prepare the body for main cleansing, including *accha-snehapāna* (administration of lipid-based medicines in titrated quantities) and *svedana* (application of heat).\n * **Pradhāna Karma (Main Procedures)**: The five primary therapeutic modalities:\n 1. *Vamana*: Therapeutically induced emesis.\n 2. *Virecana*: Therapeutically induced purgation.\n 3. *Nasya*: Nasal administration of medicaments.\n 4. *Āsthāpanavasti / Kaṣāyavasti / Nirūhavasti*: Medicated enemas composed predominantly of herbal decoctions.\n 5. *Anuvāsanavasti / Snehavasti*: Medicated enemas utilizing lipid-based preparations (oils/ghee).\n * **Paścāt Karma (Post-Therapy Procedures)**: Post-cleansing measures, notably *saṃsarjana* (a systematic, controlled dietary and activity regimen) aimed at restoring gastrointestinal digestive power (*jaṭharāgni*).\n* **Practice Level Requirements**: Complex *pañcakarma* interventions—such as titrated *accha-snehapāna*, customized liquid enema combinations, and potent agents like *tuvarakarasāyana* (*Hydnocarpus laurifolia*)—are restricted to advanced or specialty-level practice (Type II practitioners) and require appropriate facility infrastructure.",
+    "symptom_triggers": [
+      "Panchakarma",
+      "Vamana",
+      "Virecana",
+      "Nasya",
+      "Vasti",
+      "Basti",
+      "Sodhana",
+      "Samana",
+      "Samsarjana",
+      "Dosha vitiation",
+      "Emesis",
+      "Purgation"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 203,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 2,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_panchakarma_procedures__indicati_sub_3",
+    "parent_guideline": "WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications — 2. Clinical Indications & Contraindications Matrix",
+    "content": "### WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications — 2. Clinical Indications & Contraindications Matrix\n**Parent Guideline:** WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications | **Domain:** ayurveda\n\n| Procedure | Primary Site / Target Doṣa | Clinical Indications | Key Contraindications / Practice Caveats |\n| :--- | :--- | :--- | :--- |\n| **Vamana (Emesis)** | Chest / Upper GI Tract (*Kapha*) | Vitiated *kapha* accumulation; disease-causing material in stomach, upper GI tract, and respiratory tract. | Contraindicated if patient health is unsuitable for cleansing (*śodhana*); requires post-care *saṃsarjana*. |\n| **Virecana (Purgation)** | Umbilical Region / Intestines (*Pitta*) | Vitiated *pitta* accumulation; disease-causing material in intestines and lower body. | Contraindicated in weak/unsuitable patients; requires strict post-care dietary restoration (*saṃsarjana*). |\n| **Nasya (Nasal Admin.)** | Nasopharynx, Head & Neck | Vitiated *doṣa* accumulated in the head, neck, and nasopharyngeal route. | Local/systemic unsuitability for nasal administration. |\n| **Āsthāpanavasti / Kaṣāyavasti / Nirūhavasti** | Lower Intestine / Seat of *Vāta* | Excessive/vitiated *vāta*; conditions requiring drastic reduction (*śodhana*) via herbal decoctions. | Direct action at seat of *vāta* with natural exit; does not always demand elaborate *pūrva/paścāt karma*. |\n| **Anuvāsanavasti / Snehavasti** | Lower Intestine / Seat of *Vāta* | Excessive/vitiated *vāta*; conditions requiring unctuous/lipid-based enemas. | Must be customized to patient condition; restricted to trained advanced/specialty practice. |\n| **Pacifying Therapy (Śamana)** | Systemic / Metabolic Balance | Mild disease; non-extensive *doṣa* vitiation; low risk of progression. | **Indicated when Śodhana is strict contraindication** (patient unfit for cleansing). |",
+    "symptom_triggers": [
+      "Panchakarma",
+      "Vamana",
+      "Virecana",
+      "Nasya",
+      "Vasti",
+      "Basti",
+      "Sodhana",
+      "Samana",
+      "Samsarjana",
+      "Dosha vitiation",
+      "Emesis",
+      "Purgation"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 258,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 3,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_panchakarma_procedures__indicati_sub_4",
+    "parent_guideline": "WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications — 3. Operative Safety Guidelines",
+    "content": "### WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications — 3. Operative Safety Guidelines\n**Parent Guideline:** WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications | **Domain:** ayurveda\n\n* **Patient Suitability Evaluation**: Before initiating *śodhana* (*pañcakarma*), assess the patient's overall health and degree of *doṣa* vitiation. If the disease is mild, has low risk of progression, or the patient cannot tolerate cleansing, transition immediately to pacifying therapies (*śamana*).\n* **Infrastructure & Facility Mandates**:\n * Advanced/specialty-level establishments must feature dedicated heating facilities (*svedana*), fire safety, waste management, and accessible washrooms.\n * Procedures utilizing highly potent agents (e.g., *tuvarakarasāyana*) require safe, secure, gender-sensitive post-intervention recovery rooms to observe patients before discharge or transfer to inpatient wards.\n* **Dosing and Preparation Integrity**: Dosing must be precise and optimal to produce desired therapeutic endpoints without untoward effects. Fresh preparations and decoctions must meet strict pharmaceutical preparation care.\n* **Post-Procedure Gastrointestinal Restoration (*Saṃsarjana*)**: Because emesis and purgation considerably disturb and reduce GI tract digestive capacity (*jaṭharāgni*), a controlled regimen of diet and lifestyle activities must be systematically enforced post-procedure.",
+    "symptom_triggers": [
+      "Panchakarma",
+      "Vamana",
+      "Virecana",
+      "Nasya",
+      "Vasti",
+      "Basti",
+      "Sodhana",
+      "Samana",
+      "Samsarjana",
+      "Dosha vitiation",
+      "Emesis",
+      "Purgation"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 174,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 4,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_panchakarma_procedures__indicati_sub_5",
+    "parent_guideline": "WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications — 4. Immediate Red Flags / Discontinuation Protocols",
+    "content": "### WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications — 4. Immediate Red Flags / Discontinuation Protocols\n**Parent Guideline:** WHO Benchmark: Panchakarma Procedures, Indications & Strict Contraindications | **Domain:** ayurveda\n\n* **Excessive or Insufficient Therapeutic Outcome**: Monitor continuously for outcome indicators showing insufficient effect (*ayoga*) or excessive effect (*atiyoga*). Halt administration if adverse complications arise, and institute immediate remedial measures.\n* **Severe Impairment of Digestive Fire (*Agni*)**: Sudden collapse or severe reduction of gastrointestinal digestion post-emesis or post-purgation requires immediate cessation of normal intake and initiation of structured *saṃsarjana* diet protocols.\n* **Clinical Unsuitability for Cleansing**: If a patient exhibits deterioration or weakness rendering them unfit for physical expulsion procedures, immediately halt *śodhana* and adopt *śamana* (pacifying) therapies, prioritizing digestive control (*laṅghana*) and metabolic balance (*agni-cikitsā*).",
+    "symptom_triggers": [
+      "Panchakarma",
+      "Vamana",
+      "Virecana",
+      "Nasya",
+      "Vasti",
+      "Basti",
+      "Sodhana",
+      "Samana",
+      "Samsarjana",
+      "Dosha vitiation",
+      "Emesis",
+      "Purgation"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 127,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 5,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_ayurvedic_diagnostic_assessment__sub_1",
+    "parent_guideline": "WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha)",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha) — Overview & Core Concept",
+    "content": "### WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha) — Overview & Core Concept\n**Parent Guideline:** WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha) | **Domain:** ayurveda\n\n**Source:** WHO Benchmarks for the Practice of Ayurveda | **Relevant Pages:** [10, 11, 12, 13]",
+    "symptom_triggers": [
+      "Trividha Pariksha",
+      "Ashtavidha Pariksha",
+      "Ayurvedic diagnostic assessment",
+      "Nidana Panchaka",
+      "Samprapti evaluation",
+      "Upashaya Anupashaya",
+      "Tridosha diagnostic principles",
+      "Nadi Pariksha pulse examination",
+      "Ayurvedic clinical examination",
+      "Dhatu Mala assessment"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 45,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 1,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_ayurvedic_diagnostic_assessment__sub_2",
+    "parent_guideline": "WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha)",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha) — 1. International Benchmark Principles",
+    "content": "### WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha) — 1. International Benchmark Principles\n**Parent Guideline:** WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha) | **Domain:** ayurveda\n\nAccording to WHO benchmarks, Ayurvedic diagnostic assessment relies on a comprehensive, systematic framework to evaluate body physiology, pathology, and patient status. The primary objective of diagnostic assessment is two-fold: maintaining/promoting health in the healthy (*svāsthyasyorjaskaraṃ*) and treating pathology in the unwell (*ārtasyaroganut*).\n\n* **Foundational Etiopathological Framework (*Nidāna Pañcaka*)**:\n * **Nidāna**: Identification of causative and precipitating factors.\n * **Pūrvarūpa**: Recognition of early prodromal signs and symptoms.\n * **Rūpa**: Analysis of the full spectrum of manifest clinical signs and symptoms.\n * **Upaśaya & Anupaśaya**: Diagnostic observation of positive or negative patient responses to specific exploratory interventions (therapeutic trials) to deduce obscure disease pathology.\n * **Saṃprāpti**: Mapping the precise pathogenesis and disease pathway from causative exposure to manifest tissue imbalance.\n* **Physiological Triad Assessment (*Doṣa-Dhātu-Mala*)**:\n * **Doṣa**: Evaluating functional biological balance—*Vāta* (motion), *Pitta* (transformation), and *Kapha* (cumulation)—and their synchronized interplay among the five basic elements (*Pañca-mahābhūta*).\n * **Dhātu**: Assessing the functional and structural integrity of the body's structural elements (*dhātu*).\n * **Mala**: Evaluating the elimination and metabolic balance of bodily excretions (*mala*).\n* **Diagnostic Examination Methods**:\n * **Trividha Parīkṣā (Threefold Examination)**: *Darśana* (inspection/observation), *Sparśana* (palpation/touch), and *Praśna* (interrogation/detailed history taking).\n * **Aṣṭavidha Parīkṣā (Eightfold Examination)**: Diagnostic evaluation encompassing *Nāḍī* (pulse), *Mūtra* (urine), *Purīṣa* (stool), *Jihvā* (tongue), *Śabda* (voice/body sounds), *Sparśa* (skin/touch), *Dṛk* (eyes/vision), and *Ākṛti* (general bodily frame/physiognomy).",
+    "symptom_triggers": [
+      "Trividha Pariksha",
+      "Ashtavidha Pariksha",
+      "Ayurvedic diagnostic assessment",
+      "Nidana Panchaka",
+      "Samprapti evaluation",
+      "Upashaya Anupashaya",
+      "Tridosha diagnostic principles",
+      "Nadi Pariksha pulse examination",
+      "Ayurvedic clinical examination",
+      "Dhatu Mala assessment"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 245,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 2,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_ayurvedic_diagnostic_assessment__sub_3",
+    "parent_guideline": "WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha)",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha) — 2. Clinical Indications & Contraindications Matrix",
+    "content": "### WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha) — 2. Clinical Indications & Contraindications Matrix\n**Parent Guideline:** WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha) | **Domain:** ayurveda\n\n| Assessment Domain | Clinical Indications | Diagnostic Limitations & Contraindications |\n| :--- | :--- | :--- |\n| **Baseline Health Assessment** | Health promotion, preventive care planning (*dinacaryā*, *ṛtucaryā*), and determining constitution. | Avoid relying solely on superficial symptoms without evaluating core *Doṣa-Dhātu-Mala* dynamics. |\n| **Chronic & Complex Pathology** | Unclear etiology, multi-system disorders, determination of exact *Saṃprāpti*. | Diagnostic delay in acute life-threatening emergencies requiring immediate surgical or resuscitation protocol. |\n| **Pre-Therapeutic Evaluation** | Mandatory baseline assessment prior to major procedures (e.g., *Pañcakarma* including *Vamana*, *Virecana*, *Nasya*, *Basti*). | Absolute contraindication to proceed with major expulsive therapies (*Pradhāna Karma*) without full etiological mapping. |\n| **Differential Diagnosis** | Ambiguous symptomatic presentation requiring diagnostic trial (*Upaśaya/Anupaśaya*). | Contraindicated to perform aggressive diagnostic interventions in severely debilitated, elderly, or pediatric patients. |",
+    "symptom_triggers": [
+      "Trividha Pariksha",
+      "Ashtavidha Pariksha",
+      "Ayurvedic diagnostic assessment",
+      "Nidana Panchaka",
+      "Samprapti evaluation",
+      "Upashaya Anupashaya",
+      "Tridosha diagnostic principles",
+      "Nadi Pariksha pulse examination",
+      "Ayurvedic clinical examination",
+      "Dhatu Mala assessment"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 167,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 3,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_ayurvedic_diagnostic_assessment__sub_4",
+    "parent_guideline": "WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha)",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha) — 3. Operative Safety Guidelines",
+    "content": "### WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha) — 3. Operative Safety Guidelines\n**Parent Guideline:** WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha) | **Domain:** ayurveda\n\n* **Rigorous Etiological Analysis**: Practitioners must thoroughly study, analyze, and comprehend the disease pathway (*saṃprāpti*) before initiating restorative interventions.\n* **Safe Application of Diagnostic Trials (*Upaśaya*)**: Exploratory therapeutic measures used to confirm diagnosis must be mild, reversible, and closely monitored to prevent acute aggravation (*anupaśaya*).\n* **Metabolic & Excretory Verification**: Ensure comprehensive examination of digestive capability (*Agni*) and excretory pathways (*Mala*) to prevent adverse reactions during subsequent medical or manual therapies.\n* **Patient-Centric Customization**: Diagnostic outputs must strictly inform individual-specific treatment planning rather than generic disease-oriented prescribing.",
+    "symptom_triggers": [
+      "Trividha Pariksha",
+      "Ashtavidha Pariksha",
+      "Ayurvedic diagnostic assessment",
+      "Nidana Panchaka",
+      "Samprapti evaluation",
+      "Upashaya Anupashaya",
+      "Tridosha diagnostic principles",
+      "Nadi Pariksha pulse examination",
+      "Ayurvedic clinical examination",
+      "Dhatu Mala assessment"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 117,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 4,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_ayurvedic_diagnostic_assessment__sub_5",
+    "parent_guideline": "WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha)",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha) — 4. Immediate Red Flags / Discontinuation Protocols",
+    "content": "### WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha) — 4. Immediate Red Flags / Discontinuation Protocols\n**Parent Guideline:** WHO Benchmark: Ayurvedic Diagnostic Assessment Principles (Trividha, Ashtavidha Pariksha) | **Domain:** ayurveda\n\n* **Red Flag Indicators**:\n * Paradoxical worsening of symptoms or acute systemic deterioration during diagnostic therapeutic trials (*anupaśaya*).\n * Identification of acute multi-organ compromise, severe metabolic disruption, or structural collapse.\n * Emergence of acute surgical indications (*Śalya-tantra* emergencies).\n* **Discontinuation & Escalation Protocol**:\n 1. **Halt Trial**: Immediately cease any ongoing diagnostic intervention or exploratory therapy upon observing adverse responses (*anupaśaya*).\n 2. **Re-evaluate**: Conduct an immediate re-examination of *Doṣa*, *Dhātu*, and *Mala* balance.\n 3. **Emergency Escalation**: Transfer the patient to appropriate high-level care facilities (e.g., specialized clinical branches such as *Kāya-cikitsā*, *Śalya-tantra*, or emergency medical services) if vital functional integrity is threatened.",
+    "symptom_triggers": [
+      "Trividha Pariksha",
+      "Ashtavidha Pariksha",
+      "Ayurvedic diagnostic assessment",
+      "Nidana Panchaka",
+      "Samprapti evaluation",
+      "Upashaya Anupashaya",
+      "Tridosha diagnostic principles",
+      "Nadi Pariksha pulse examination",
+      "Ayurvedic clinical examination",
+      "Dhatu Mala assessment"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 134,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 5,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_safety__pharmacovigilance___herb_sub_1",
+    "parent_guideline": "WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols — Overview & Core Concept",
+    "content": "### WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols — Overview & Core Concept\n**Parent Guideline:** WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols | **Domain:** ayurveda\n\n**Source:** WHO Benchmarks for the Practice of Ayurveda | **Relevant Pages:** [4, 6, 15, 16]",
+    "symptom_triggers": [
+      "adverse drug reaction",
+      "pharmacovigilance",
+      "herb drug interaction",
+      "auṣadha safety",
+      "agada tantra",
+      "cikitsā catuṣpāda",
+      "tridoṣa imbalance",
+      "toxicity",
+      "side effects",
+      "patient safety"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 43,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 1,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_safety__pharmacovigilance___herb_sub_2",
+    "parent_guideline": "WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols — 1. International Benchmark Principles",
+    "content": "### WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols — 1. International Benchmark Principles\n**Parent Guideline:** WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols | **Domain:** ayurveda\n\n- **Systemic Safety Framework**: Safety in Ayurveda is anchored in the foundational doctrines of *pañca-mahābhūta* (five basic elements: *ākāśa*, *vāyu*, *agni*, *āpa*, *pṛthvī*) and *tridoṣa* (*vāta*, *pitta*, *kapha*). Clinical safety depends on maintaining dynamic physiological balance and understanding metabolic interplay within the structural elements (*dhātu*) of the body.\n- **The Four Pillars of Clinical Practice (*Cikitsā Catuṣpāda*)**: Safety and therapeutic efficacy require the harmonious quality of four interdependent components:\n 1. **Ayurveda Practitioner (*Bhiṣak/Vaidya*)**: Must be licensed, skilful, wise, experienced, alert, hygienic, and possess both textual knowledge and contextual intelligence.\n 2. **Therapeutic Tools (*Dravya/Auṣadha/Upakaraṇa*)**: Medicines must be safe, multi-beneficial, suitable across dosage forms, highly effective, and manufactured to quality standards.\n 3. **Support Staff (*Paricāraka*)**: Paramedical staff must be compassionate, hygienic, skilful, diligent, prompt, and intelligent.\n 4. **Patient (*Rogi*)**: Must comply with treatment advice, have confidence in the practitioner, possess sufficient resources, communicate accurately, and maintain a balanced mindset.\n- **Specialized Toxicological Safety**: Diagnosis and management of adverse effects, external toxins, and adverse material interactions fall under the classical specialty of *Agada-tantra* (one of the eight clinical domains, *Aṣṭāṅga Āyurveda*).",
+    "symptom_triggers": [
+      "adverse drug reaction",
+      "pharmacovigilance",
+      "herb drug interaction",
+      "auṣadha safety",
+      "agada tantra",
+      "cikitsā catuṣpāda",
+      "tridoṣa imbalance",
+      "toxicity",
+      "side effects",
+      "patient safety"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 206,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 2,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_safety__pharmacovigilance___herb_sub_3",
+    "parent_guideline": "WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols — 2. Clinical Indications & Contraindications Matrix",
+    "content": "### WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols — 2. Clinical Indications & Contraindications Matrix\n**Parent Guideline:** WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols | **Domain:** ayurveda\n\n| Clinical Domain | Benchmark Indications & Safety Prerequisites | Risk Factors & Contraindications |\n| :--- | :--- | :--- |\n| **Medicinal Safety (*Auṣadha*)** | Quality-assured formulations; appropriate dosage forms; clear therapeutic indications; verified preparation pathways. | Substandard, contaminated, or adulterated formulations; improper dosage; unverified toxic heavy metal processing without safety validation. |\n| **Practitioner Standards (*Bhiṣak*)** | Licensed/registered practitioner; adherence to scope of practice; real-time diagnostic assessment; high ethical standards. | Unlicensed practice; operating outside certified scope; failure to obtain informed consent; lack of personal/environmental hygiene. |\n| **Patient Suitability (*Rogi*)** | Accurate disclosure of medical history; compliance with dietary (*āhāra*) and lifestyle (*vihāra*) instructions; balanced mental state. | Non-compliance; uncommunicated concurrent pharmaceutical use; inability to follow clinical directions. |\n| **Delivery Model** | Real-time, 1-on-1 direct consultation; compliant telemedicine with local physical exam verification and shared electronic records. | Asynchronous/non-interactive prescriptions; lack of diagnostic imagery or objective clinical data during remote consultation. |",
+    "symptom_triggers": [
+      "adverse drug reaction",
+      "pharmacovigilance",
+      "herb drug interaction",
+      "auṣadha safety",
+      "agada tantra",
+      "cikitsā catuṣpāda",
+      "tridoṣa imbalance",
+      "toxicity",
+      "side effects",
+      "patient safety"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 187,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 3,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_safety__pharmacovigilance___herb_sub_4",
+    "parent_guideline": "WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols — 3. Operative Safety Guidelines",
+    "content": "### WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols — 3. Operative Safety Guidelines\n**Parent Guideline:** WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols | **Domain:** ayurveda\n\n- **Facility & Environmental Safety**:\n - Standard operating procedures must be enforced for cleaning, sterilization, waste management, and Infection Prevention and Control (IPC).\n - Pharmacy services must be integrated either via co-located in-house facilities or validated outsourced providers adhering to recognized quality standards.\n- **Consultation & Telemedicine Protocols**:\n - Direct, face-to-face evaluation is the standard. Telemedicine requires real-time interaction, electronic sharing of diagnostic data/imagery, and physical examination reported by a co-located local practitioner when necessary.\n- **Preventing Herb-Drug Interactions**:\n - Conduct systematic baseline reviews of all concurrent conventional pharmaceuticals and Ayurvedic formulations (*auṣadha*).\n - Monitor for pharmacokinetic/pharmacodynamic interactions, particularly during multi-component herbomineral interventions.",
+    "symptom_triggers": [
+      "adverse drug reaction",
+      "pharmacovigilance",
+      "herb drug interaction",
+      "auṣadha safety",
+      "agada tantra",
+      "cikitsā catuṣpāda",
+      "tridoṣa imbalance",
+      "toxicity",
+      "side effects",
+      "patient safety"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 131,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 4,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_safety__pharmacovigilance___herb_sub_5",
+    "parent_guideline": "WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols — 4. Immediate Red Flags / Discontinuation Protocols",
+    "content": "### WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols — 4. Immediate Red Flags / Discontinuation Protocols\n**Parent Guideline:** WHO Benchmark: Safety, Pharmacovigilance & Herb-Drug Interaction Protocols | **Domain:** ayurveda\n\n- **Adverse Event Management**:\n - Immediately discontinue any Ayurvedic medicine or intervention upon the onset of adverse signs or symptoms (referencing WHO Annex 7 & 8 guidelines).\n - Provide immediate clinical stabilization or supportive care.\n- **Pharmacovigilance Reporting Protocol (Section 8.4)**:\n - Mandatorily document and report all suspected Adverse Drug Reactions (ADRs) to designated national pharmacovigilance channels.\n - Record product details, including batch number, formulation type, dosage, duration, and concurrent exposures.\n- **Referral and Cross-Referral Pathways (Sections 8.2 & 8.3)**:\n - Immediately refer or cross-refer cases involving statutory notifiable diseases, acute emergency presentations, or severe systemic toxicities to specialty care facilities.",
+    "symptom_triggers": [
+      "adverse drug reaction",
+      "pharmacovigilance",
+      "herb drug interaction",
+      "auṣadha safety",
+      "agada tantra",
+      "cikitsā catuṣpāda",
+      "tridoṣa imbalance",
+      "toxicity",
+      "side effects",
+      "patient safety"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 132,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 5,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_promotive__preventive_and_curati_sub_1",
+    "parent_guideline": "WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta)",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) — Overview & Core Concept",
+    "content": "### WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) — Overview & Core Concept\n**Parent Guideline:** WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) | **Domain:** ayurveda\n\n**Source:** WHO Benchmarks for the Practice of Ayurveda | **Relevant Pages:** []\n\n# WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta)",
+    "symptom_triggers": [
+      "Swasthavritta",
+      "Ayurvedic prevention",
+      "Dinacharya",
+      "Ritucharya",
+      "health promotion",
+      "lifestyle management",
+      "preventive medicine",
+      "Ahara and Vihara",
+      "Sadvritta",
+      "dinacharyā",
+      "ritucharyā",
+      "preventive healthcare"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 52,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 1,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_promotive__preventive_and_curati_sub_2",
+    "parent_guideline": "WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta)",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) — 1. International Benchmark Principles",
+    "content": "### WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) — 1. International Benchmark Principles\n**Parent Guideline:** WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) | **Domain:** ayurveda\n\nSwasthavritta represents the core branch of Ayurveda dedicated to the maintenance and promotion of positive health (*Swasthasya Swasthya Rakshanam*) and the prevention and curative management of disease (*Aturasya Vikara Prashamanam*). In accordance with WHO benchmarks for Ayurvedic practice, Swasthavritta integrates comprehensive lifestyle, bio-purificatory, and therapeutic measures tailored to individual constitution (*Prakriti*), climate, and age.",
+    "symptom_triggers": [
+      "Swasthavritta",
+      "Ayurvedic prevention",
+      "Dinacharya",
+      "Ritucharya",
+      "health promotion",
+      "lifestyle management",
+      "preventive medicine",
+      "Ahara and Vihara",
+      "Sadvritta",
+      "dinacharyā",
+      "ritucharyā",
+      "preventive healthcare"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 84,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 2,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_promotive__preventive_and_curati_sub_3",
+    "parent_guideline": "WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta)",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) — Core Pillars of Swasthavritta",
+    "content": "### WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) — Core Pillars of Swasthavritta\n**Parent Guideline:** WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) | **Domain:** ayurveda\n\n* **Dinacharya (Daily Regimen):** Standardized daily practices including early rising (*Brahma Muhurta*), oral hygiene (*Danta Dhavana*, *Jivha Nirlekhana*), oil gargling (*Gandusha/Kavala*), topical oil application (*Abhyanga*), exercise (*Vyayama*), and nasal instillation (*Pratimarsha Nasya*).\n* **Ritucharya (Seasonal Regimen):** Systematic modifications in diet (*Ahara*) and regimen (*Vihara*) to prevent seasonal Dosha aggravation (*Sanchaya*, *Prakopa*, *Prashama*), including seasonal purificatory procedures (*Shodhana*).\n* **Sadvritta & Achara Rasayana (Ethical & Mental Hygiene):** Behavioral and psychosocial guidelines to promote mental tranquility (*Sattva*), emotional stability, and social well-being.\n* **Trayopastambha (The Three Pillars of Health):** Optimal balance of Diet (*Ahara*), Sleep (*Nidra*), and Regulated Lifestyle/Energy Conservation (*Brahmacharya*).\n* **Vega Dharana / Adharaniya Vega (Management of Natural Urges):** Non-suppression of 13 natural physical urges (e.g., micturition, defecation, hunger, sleep) and restraint of harmful psychological urges (e.g., greed, anger, envy).",
+    "symptom_triggers": [
+      "Swasthavritta",
+      "Ayurvedic prevention",
+      "Dinacharya",
+      "Ritucharya",
+      "health promotion",
+      "lifestyle management",
+      "preventive medicine",
+      "Ahara and Vihara",
+      "Sadvritta",
+      "dinacharyā",
+      "ritucharyā",
+      "preventive healthcare"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 160,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 3,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_promotive__preventive_and_curati_sub_4",
+    "parent_guideline": "WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta)",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) — 2. Clinical Indications & Contraindications Matrix",
+    "content": "### WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) — 2. Clinical Indications & Contraindications Matrix\n**Parent Guideline:** WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) | **Domain:** ayurveda\n\n| Intervention Category | Primary Indications | Absolute / Relative Contraindications |\n| :--- | :--- | :--- |\n| **Dinacharya (Daily Procedures)** | Maintenance of metabolic health, prevention of age-related degradation, sensory organ preservation, stress mitigation. | **Abhyanga:** Acute fever (*Nava Jwara*), acute indigestion (*Ama*), immediately post-Shodhana, severe acute inflammation.<br>**Vyayama:** Severe cardiac disease, acute respiratory distress, severe fatigue (*Shrama*), immediately after meals. |\n| **Ritucharya (Seasonal Adjustments)** | Prevention of seasonal metabolic and immunological dysfunctions, mitigation of lifestyle disorders. | Abrupt or radical changes in diet/lifestyle without transitioning through the prescribed 14-day inter-seasonal period (*Ritusandhi*). |\n| **Trayopastambha Protocols** | Metabolic disorders, insomnia, anxiety, chronic digestive dysfunction, fatigue syndromes. | **Dietary Intervention:** Ingestion of heavy/unctuous foods during diminished digestive capacity (*Manda Agni*) or acute *Ama* states. |\n| **Preventive Shodhana** | Seasonal bio-cleansing for disease prevention in healthy individuals prior to seasonal Dosha spikes. | Acute weakness, pregnancy, extreme age (very young or elderly), active acute infections, uncompensated systemic organ failure. |",
+    "symptom_triggers": [
+      "Swasthavritta",
+      "Ayurvedic prevention",
+      "Dinacharya",
+      "Ritucharya",
+      "health promotion",
+      "lifestyle management",
+      "preventive medicine",
+      "Ahara and Vihara",
+      "Sadvritta",
+      "dinacharyā",
+      "ritucharyā",
+      "preventive healthcare"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 195,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 4,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_promotive__preventive_and_curati_sub_5",
+    "parent_guideline": "WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta)",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) — 3. Operative Safety Guidelines",
+    "content": "### WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) — 3. Operative Safety Guidelines\n**Parent Guideline:** WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) | **Domain:** ayurveda\n\n1. **Individualized Assessment (Trividha / Ashtavidha Pariksha):** Prior to prescribing any preventive or promotive regimen, a complete assessment of *Prakriti*, *Agni* (digestive strength), *Koshtha* (bowel habit), *Bala* (physical strength), and *Vaya* (age) must be documented.\n2. **Gradual Adaptation Protocol (Padamshika Krama):** Unhealthy habits or existing routines must be discontinued gradually, and new health routines introduced incrementally over a period to prevent metabolic shock.\n3. **Seasonal Transition (Ritusandhi Guidelines):** Practice strict regimen modification during the last 7 days of the outgoing season and the first 7 days of the incoming season to allow physiological adaptation.\n4. **Hygiene & Material Standards:** All substances used for *Gandusha*, *Abhyanga*, and *Nasya* must meet WHO quality standards for herbal medicines, ensuring freedom from heavy metals, microbial contamination, and pesticides.",
+    "symptom_triggers": [
+      "Swasthavritta",
+      "Ayurvedic prevention",
+      "Dinacharya",
+      "Ritucharya",
+      "health promotion",
+      "lifestyle management",
+      "preventive medicine",
+      "Ahara and Vihara",
+      "Sadvritta",
+      "dinacharyā",
+      "ritucharyā",
+      "preventive healthcare"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 154,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 5,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "who_ayurveda_promotive__preventive_and_curati_sub_6",
+    "parent_guideline": "WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta)",
+    "domain": "ayurveda",
+    "category": "treatment_protocol",
+    "title": "WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) — 4. Immediate Red Flags / Discontinuation Protocols",
+    "content": "### WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) — 4. Immediate Red Flags / Discontinuation Protocols\n**Parent Guideline:** WHO Benchmark: Promotive, Preventive and Curative Health Interventions (Swasthavritta) | **Domain:** ayurveda\n\nDiscontinue Swasthavritta procedures immediately and initiate standard emergency medical assessment if any of the following occur:\n\n* **Acute Systemic Signs:** Sudden onset of high fever (*Jwara*), severe acute abdomen, sudden drop in blood pressure, or signs of anaphylaxis/severe allergic reaction to medicated oils or herbs.\n* **Cardiorespiratory Distress:** Acute chest pain, palpitations, or severe dyspnea during or following physical exercises (*Vyayama*) or bio-purificatory measures.\n* **Neurological Signs:** Dizziness, syncope, severe localized pain, or focal neurological deficits during postural or nasal interventions (*Nasya*).\n* **Severe Digestive Distress:** Persistent vomiting, severe diarrhea, or intense acute indigestion indicative of severe *Ama* toxicosis.",
+    "symptom_triggers": [
+      "Swasthavritta",
+      "Ayurvedic prevention",
+      "Dinacharya",
+      "Ritucharya",
+      "health promotion",
+      "lifestyle management",
+      "preventive medicine",
+      "Ahara and Vihara",
+      "Sadvritta",
+      "dinacharyā",
+      "ritucharyā",
+      "preventive healthcare"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 132,
+    "metadata": {
+      "source_document": "WHO-Ayurveda.pdf",
+      "guideline_body": "World Health Organization (WHO)",
+      "system": "ayurvedic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 6,
+      "total_subchunks_in_parent": 6
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p4_sub_1",
+    "parent_guideline": "ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory — ICD-10 Code & Definition",
+    "content": "### ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory — ICD-10 Code & Definition\n**Parent Guideline:** ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory | **Domain:** allopathy\n\n- **ICD-10 Code:** Z51.89 (Encounter for other specified medical care) / Z71.9 (Healthcare consultation, unspecified)\n- **Definition:** Official Indian Council of Medical Research (ICMR) Standard Treatment Workflow (STW) foundational framework providing expert-driven, evidence-based clinical advisory guidance tailored to multi-level healthcare feasibility across India.",
+    "symptom_triggers": [
+      "icmr guidelines",
+      "standard treatment workflow",
+      "clinical triage",
+      "primary care protocol",
+      "referral advisory",
+      "emergency triage",
+      "treatment workflow",
+      "healthcare feasibility"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 75,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 4,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 1,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p4_sub_2",
+    "parent_guideline": "ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory — Immediate Red Flags & Emergency Triage Indicators",
+    "content": "### ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory — Immediate Red Flags & Emergency Triage Indicators\n**Parent Guideline:** ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory | **Domain:** allopathy\n\n- **Hemodynamic Instability:** Systolic BP < 90 mmHg, severe tachycardia (> 120 bpm), or peripheral hypoperfusion/shock.\n- **Respiratory Compromise:** Respiratory rate > 30/min, SpO2 < 90% on room air, or acute severe dyspnea.\n- **Neurological Deterioration:** Altered mental status, GCS < 13, acute focal neurological deficits, or ongoing seizures.\n- **Acute Critical Symptoms:** Severe retrosternal chest pain, acute abdomen, uncompensated anaphylaxis, or severe trauma.",
+    "symptom_triggers": [
+      "icmr guidelines",
+      "standard treatment workflow",
+      "clinical triage",
+      "primary care protocol",
+      "referral advisory",
+      "emergency triage",
+      "treatment workflow",
+      "healthcare feasibility"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 99,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 4,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 2,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p4_sub_3",
+    "parent_guideline": "ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory — Diagnostic Workup (Basic vs Desirable vs Optional)",
+    "content": "### ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory — Diagnostic Workup (Basic vs Desirable vs Optional)\n**Parent Guideline:** ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory | **Domain:** allopathy\n\n- **Basic (PHC/CHC Level):** Comprehensive clinical history, full physical examination, and vital sign monitoring (BP, Heart Rate, Respiratory Rate, SpO2, Temperature, Blood Glucose).\n- **Desirable (District Hospital Level):** Routine laboratory investigations (CBC, Renal Function Tests, Liver Function Tests, Electrolytes), 12-lead ECG, and basic radiography (X-ray Chest/Abdomen).\n- **Optional (Tertiary Centre Level):** Advanced imaging (CT/MRI), specialized biomarker assays, culture/sensitivity panels, and organ-specific invasive diagnostic evaluations.",
+    "symptom_triggers": [
+      "icmr guidelines",
+      "standard treatment workflow",
+      "clinical triage",
+      "primary care protocol",
+      "referral advisory",
+      "emergency triage",
+      "treatment workflow",
+      "healthcare feasibility"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 99,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 4,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 3,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p4_sub_4",
+    "parent_guideline": "ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory — Pharmacotherapy & Step-by-Step Management",
+    "content": "### ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory — Pharmacotherapy & Step-by-Step Management\n**Parent Guideline:** ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory | **Domain:** allopathy\n\n- **Step 1 (Triage & Categorization):** Evaluate presenting symptoms against level-appropriate ICMR STW algorithms to determine care urgency.\n- **Step 2 (Initial Clinical Stabilization):** Secure airway, breathing, and circulation (ABCs); administer baseline supportive care or emergency resuscitation if indicated.\n- **Step 3 (Targeted Therapy & Physician Oversight):** Initiate condition-specific pharmacotherapy as per STW protocols. Modulate treatment based on patient-specific clinical variations under direct medical supervision.\n- **Step 4 (Monitoring & Documentation):** Document clinical response, treatment efficacy, adverse reactions, and adherence to evidence-based advisory standards.",
+    "symptom_triggers": [
+      "icmr guidelines",
+      "standard treatment workflow",
+      "clinical triage",
+      "primary care protocol",
+      "referral advisory",
+      "emergency triage",
+      "treatment workflow",
+      "healthcare feasibility"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 116,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 4,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 4,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p4_sub_5",
+    "parent_guideline": "ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory — Pharmacotherapy & Step-by-Step Management",
+    "content": "### ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory — Pharmacotherapy & Step-by-Step Management\n**Parent Guideline:** ICMR Protocol: General Clinical Triage Framework & Standard Treatment Advisory | **Domain:** allopathy\n\n### **Level-wise Referral Protocol (PHC/CHC -> District Hospital -> Tertiary Centre)**\n- **PHC / CHC (Primary Care):** Provide initial assessment, basic diagnostic screening, symptom stabilization, and first-line evidence-based pharmacotherapy. Initiate early referral for diagnostic uncertainty or severe distress.\n- **District Hospital (Secondary Care):** Manage moderate-to-severe clinical presentations requiring specialized diagnostics, organ-supportive care, and inpatient medical management.\n- **Tertiary Centre (Advanced Care):** Accept high-complexity cases, multi-organ failure, refractory clinical conditions, and cases requiring sub-specialty intervention or intensive care support.",
+    "symptom_triggers": [
+      "icmr guidelines",
+      "standard treatment workflow",
+      "clinical triage",
+      "primary care protocol",
+      "referral advisory",
+      "emergency triage",
+      "treatment workflow",
+      "healthcare feasibility"
+    ],
+    "urgency_level": "ROUTINE",
+    "word_count": 110,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 4,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 5,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p10_sub_1",
+    "parent_guideline": "ICMR Protocol: Atrial Fibrillation Management",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Atrial Fibrillation Management — ICD-10 Code & Definition",
+    "content": "### ICMR Protocol: Atrial Fibrillation Management — ICD-10 Code & Definition\n**Parent Guideline:** ICMR Protocol: Atrial Fibrillation Management | **Domain:** allopathy\n\n* **ICD-10 Code:** I48.91 (Unspecified Atrial Fibrillation)\n* **Definition:** A supraventricular tachyarrhythmia characterized by uncoordinated atrial activation with consequent deterioration of atrial mechanical function.\n* **AF Classification:**\n * **Paroxysmal AF:** Self-terminating or intervention-terminated episodes lasting < 7 days.\n * **Persistent AF:** Continuous AF lasting from 7 days to 1 year.\n * **Long-Standing Persistent AF:** Continuous AF lasting > 1 year when a rhythm control strategy is adopted.\n * **Permanent AF:** AF accepted by the patient and physician where rate control is the sole treatment goal.",
+    "symptom_triggers": [
+      "atrial fibrillation",
+      "irregularly irregular pulse",
+      "palpitations",
+      "rapid heart rate",
+      "dizziness",
+      "shortness of breath",
+      "arrhythmia",
+      "stroke risk AF"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 107,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 10,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 1,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p10_sub_2",
+    "parent_guideline": "ICMR Protocol: Atrial Fibrillation Management",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Atrial Fibrillation Management — Immediate Red Flags & Emergency Triage Indicators",
+    "content": "### ICMR Protocol: Atrial Fibrillation Management — Immediate Red Flags & Emergency Triage Indicators\n**Parent Guideline:** ICMR Protocol: Atrial Fibrillation Management | **Domain:** allopathy\n\n* **Hemodynamic Instability:** Systolic BP < 90 mmHg, Heart Rate > 150/min or < 50/min.\n* **Acute Ischemia:** Ongoing angina or Acute Coronary Syndrome (ACS).\n* **Heart Failure & Neurological Signs:** Acute Congestive Heart Failure (CHF), Transient Ischemic Attack (TIA), or Stroke.\n* **Bleeding Complications:** Major bleeding in patients on Oral Anticoagulants (OAC).",
+    "symptom_triggers": [
+      "atrial fibrillation",
+      "irregularly irregular pulse",
+      "palpitations",
+      "rapid heart rate",
+      "dizziness",
+      "shortness of breath",
+      "arrhythmia",
+      "stroke risk AF"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 78,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 10,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 2,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p10_sub_3",
+    "parent_guideline": "ICMR Protocol: Atrial Fibrillation Management",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Atrial Fibrillation Management — Diagnostic Workup",
+    "content": "### ICMR Protocol: Atrial Fibrillation Management — Diagnostic Workup\n**Parent Guideline:** ICMR Protocol: Atrial Fibrillation Management | **Domain:** allopathy\n\n* **Basic Investigations:**\n * Hemogram, Blood Sugar, Serum Creatinine, Serum Electrolytes.\n * **12-Lead ECG:** Look for ventricular rate, chamber enlargement, pre-excitation (Wolff-Parkinson-White), prior MI signs, bundle branch block, and QT interval.\n* **Desirable Investigations:**\n * Plain Chest X-ray, Thyroid Evaluation (TSH), Liver Function Tests (LFT), Troponins, Coagulation Profile (PT/INR), Echocardiography.\n* **Optional / Advanced Investigations:**\n * Prolonged ECG monitoring (Holter/event monitor), Transesophageal Echocardiography (TEE), Exercise Stress Test, CT scan, Cardiac MRI, Electrophysiology (EP) study, Coronary Angiography.",
+    "symptom_triggers": [
+      "atrial fibrillation",
+      "irregularly irregular pulse",
+      "palpitations",
+      "rapid heart rate",
+      "dizziness",
+      "shortness of breath",
+      "arrhythmia",
+      "stroke risk AF"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 96,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 10,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 3,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p10_sub_4",
+    "parent_guideline": "ICMR Protocol: Atrial Fibrillation Management",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Atrial Fibrillation Management — Pharmacotherapy & Step-by-Step Management",
+    "content": "### ICMR Protocol: Atrial Fibrillation Management — Pharmacotherapy & Step-by-Step Management\n**Parent Guideline:** ICMR Protocol: Atrial Fibrillation Management | **Domain:** allopathy\n\n#### **1. Stroke & Bleeding Risk Stratification**\n* **CHA₂DS₂-VASc Score (Stroke Risk):**\n * **C**HF / LV dysfunction (1), **H**ypertension (1), **A**ge ≥75 years (2), **D**iabetes mellitus (1), **S**troke / TIA / Thromboembolism (2), **V**ascular disease [prior MI, PAD, aortic plaque] (1), **A**ge 65–74 years (1), **S**ex category [Female] (1).\n * *Indication:* Initiate Oral Anticoagulants (OAC) if score **≥ 1 in men** or **≥ 2 in women**.\n* **HAS-BLED Score (Bleeding Risk):**\n * **H**ypertension (SBP >160) (1), **A**bnormal renal/liver function (1 or 2), **S**troke (1), **B**leeding history/predisposition (1), **L**abile INR (1), **E**lderly (Age >65) (1), **D**rugs/Alcohol [aspirin/NSAIDs/alcohol] (1 or 2).\n * *Interpretation:* Score **≥ 3** indicates high bleeding risk.\n* **Bleeding Risk Reduction Measures:** Maintain SBP < 140 mmHg, eliminate alcohol, avoid concomitant NSAIDs/aspirin, correct anemia, modify dietary interactions, monitor INR regularly (target INR 2.0–3.0 for Vitamin K Antagonists).\n\n#### **2. Rate Control Strategy (Target HR < 110 bpm)**\n* **First-line:** Beta-blocker (e.g., Metoprolol) or Non-dihydropyridine Calcium Channel Blocker (Diltiazem/Verapamil).\n* **Patients with Heart Failure:** Beta-blocker + Digoxin combination.\n\n#### **3. Rhythm Control Strategy (Conversion to Normal Sinus Rhythm)**\n* **Indications:** Hemodynamic instability, uncontrolled symptoms despite rate control, patient preference, unacceptable drug side effects.\n* **Pharmacological Cardioversion / Long-term Rhythm Control Options:**\n * **Normal Heart:** Flecainide, Propafenone, Sotalol, Amiodarone, Ibutilide, or \"Pill-in-the-pocket\" strategy (Flecainide/Propafenone).\n * **Coronary Artery Disease (CAD) / LV Hypertrophy:** Amiodarone, Sotalol, Flecainide.\n * **Congestive Heart Failure (CHF):** Amiodarone.\n* **Electrical (DC) Cardioversion:** Immediate DC cardioversion after heparinization for hemodynamically unstable patients.",
+    "symptom_triggers": [
+      "atrial fibrillation",
+      "irregularly irregular pulse",
+      "palpitations",
+      "rapid heart rate",
+      "dizziness",
+      "shortness of breath",
+      "arrhythmia",
+      "stroke risk AF"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 265,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 10,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 4,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p10_sub_5",
+    "parent_guideline": "ICMR Protocol: Atrial Fibrillation Management",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Atrial Fibrillation Management — Level-wise Referral Protocol",
+    "content": "### ICMR Protocol: Atrial Fibrillation Management — Level-wise Referral Protocol\n**Parent Guideline:** ICMR Protocol: Atrial Fibrillation Management | **Domain:** allopathy\n\n```\n+-----------------------------------------------------------------------------------+\n| PRIMARY / COMMUNITY HEALTH CENTRE (PHC / CHC) |\n| • Perform detailed clinical evaluation, basic lab work, and 12-lead ECG. |\n| • Initiate Metoprolol if HR > 110 bpm and no evidence of CHF. |\n| • Initiate OAC based on stroke risk score if applicable. |\n| • REFER IMMEDIATELY if immediate intervention indicators or red flags exist. |\n+-----------------------------------------------------------------------------------+\n |\n v\n+-----------------------------------------------------------------------------------+\n| DISTRICT HOSPITAL |\n| • Admit patients with immediate intervention indicators. |\n| • Immediate DC cardioversion after heparinization if hemodynamically unstable. |\n| • Treat precipitating causes (sepsis, thyrotoxicosis, ACS, PE, alcohol binge). |\n| • Conduct Echocardiography; calculate CHA₂DS₂-VASc and HAS-BLED scores. |\n| • Initiate/titrate OAC (target INR 2–3) and optimize rate control (BB +/- CCB). |\n| • REFER to Tertiary Centre if HR remains uncontrolled, severe CHF, or angina. |\n+-----------------------------------------------------------------------------------+\n |\n v\n+-----------------------------------------------------------------------------------+\n| TERTIARY CENTRE |\n| • Advanced rhythm control (Electrophysiological study, catheter ablation). |\n| • Transesophageal echocardiography (TEE)-guided cardioversion. |\n| • Management of refractory AF, complex valvular heart disease, or structural heart|\n| disease interventions. |\n+-----------------------------------------------------------------------------------+\n```",
+    "symptom_triggers": [
+      "atrial fibrillation",
+      "irregularly irregular pulse",
+      "palpitations",
+      "rapid heart rate",
+      "dizziness",
+      "shortness of breath",
+      "arrhythmia",
+      "stroke risk AF"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 210,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 10,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 5,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p11_sub_1",
+    "parent_guideline": "ICMR Protocol: Symptomatic Bradyarrhythmias",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Symptomatic Bradyarrhythmias — ICD-10 Code & Definition",
+    "content": "### ICMR Protocol: Symptomatic Bradyarrhythmias — ICD-10 Code & Definition\n**Parent Guideline:** ICMR Protocol: Symptomatic Bradyarrhythmias | **Domain:** allopathy\n\n* **ICD-10 Code:** R00.1 (Bradycardia, unspecified)\n* **Definition:** Persistent heart rate < 50 beats per minute (bpm) accompanied by clinical symptoms of hypoperfusion, such as syncope, presyncope, dizziness, fatigue, lethargy, exertional angina, or breathlessness.",
+    "symptom_triggers": [
+      "bradycardia",
+      "slow heart rate",
+      "syncope",
+      "dizziness",
+      "complete heart block",
+      "AV block",
+      "sinus node dysfunction",
+      "presyncope",
+      "yellow oleander poisoning"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 54,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 11,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 1,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p11_sub_2",
+    "parent_guideline": "ICMR Protocol: Symptomatic Bradyarrhythmias",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Symptomatic Bradyarrhythmias — Immediate Red Flags & Emergency Triage Indicators",
+    "content": "### ICMR Protocol: Symptomatic Bradyarrhythmias — Immediate Red Flags & Emergency Triage Indicators\n**Parent Guideline:** ICMR Protocol: Symptomatic Bradyarrhythmias | **Domain:** allopathy\n\nPatients presenting with HR < 50 bpm AND any of the following require **immediate emergency resuscitation and urgent referral**:\n* **Hemodynamic Instability:** Hypotension (SBP < 90 mmHg), drowsiness, impaired consciousness, or ongoing chest pain.\n* **Severe Symptoms:** Recurrent or ongoing syncope/presyncope, or severe headache with/without focal neurological deficits (suspect intracranial event).\n* **High-Risk ECG Findings:**\n * Complete Heart Block (3rd-degree AV block)\n * Sinus Node Dysfunction with sinus pauses > 3 seconds\n * Mobitz Type II second-degree AV block\n* **Biochemical / Metabolic Emergencies:** Bradycardia with severe hyperkalemia (Serum K⁺ > 5.0 mEq/L).\n* **Special High-Risk Scenarios:** Pre-existing implanted pacemaker/cardiac device failure or suspected Yellow Oleander poisoning.",
+    "symptom_triggers": [
+      "bradycardia",
+      "slow heart rate",
+      "syncope",
+      "dizziness",
+      "complete heart block",
+      "AV block",
+      "sinus node dysfunction",
+      "presyncope",
+      "yellow oleander poisoning"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 130,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 11,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 2,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p11_sub_3",
+    "parent_guideline": "ICMR Protocol: Symptomatic Bradyarrhythmias",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Symptomatic Bradyarrhythmias — Diagnostic Workup (Basic vs Desirable vs Optional)",
+    "content": "### ICMR Protocol: Symptomatic Bradyarrhythmias — Diagnostic Workup (Basic vs Desirable vs Optional)\n**Parent Guideline:** ICMR Protocol: Symptomatic Bradyarrhythmias | **Domain:** allopathy\n\n#### **1. Basic Tests (PHC / CHC Level)**\n* **12-lead Electrocardiogram (ECG):** Assess for AV block, sinus node dysfunction, or 1:1 conduction disorders.\n* **Serum Electrolytes:** Focus on Serum Potassium (K⁺) to identify hyperkalemia.\n* **Renal Function Tests:** Blood Urea and Serum Creatinine.\n* **Point-of-Care / Blood Glucose:** Rule out hypoglycemia as a contributor.\n* **Focused History & Physical Exam:** Assess drug history (beta-blockers, CCBs, digoxin, clonidine, lithium), device history, toxicity exposure, BP, HR, and neurologic status.\n\n#### **2. Desirable Tests (District Hospital Level)**\n* **Transthoracic Echocardiography (TTE):** Evaluate LVEF, structural heart disease, and wall motion abnormalities.\n* **Ambulatory ECG (Holter Monitoring):** For symptom-rhythm correlation in 1st/2nd-degree AV block, suspected sinus node disease, LBBB, or bifascicular block.\n* **Sleep Apnea Screening:** Clinical scoring systems (e.g., Epworth Sleepiness Scale).\n\n#### **3. Optional / Advanced Tests (Tertiary Care Level)**\n* **Cardiac MRI (cMRI):** If infiltrative cardiomyopathy or neuromuscular disease is suspected.\n* **Electrophysiologic Study (EPS):** Measure HV interval (HV ≥ 100 ms is an indication for pacing).\n* **Implantable Loop Recorder (ILR):** For unexplained recurrent syncope.",
+    "symptom_triggers": [
+      "bradycardia",
+      "slow heart rate",
+      "syncope",
+      "dizziness",
+      "complete heart block",
+      "AV block",
+      "sinus node dysfunction",
+      "presyncope",
+      "yellow oleander poisoning"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 197,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 11,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 3,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p11_sub_4",
+    "parent_guideline": "ICMR Protocol: Symptomatic Bradyarrhythmias",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Symptomatic Bradyarrhythmias — Pharmacotherapy & Step-by-Step Management",
+    "content": "### ICMR Protocol: Symptomatic Bradyarrhythmias — Pharmacotherapy & Step-by-Step Management\n**Parent Guideline:** ICMR Protocol: Symptomatic Bradyarrhythmias | **Domain:** allopathy\n\n#### **Step 1: Emergency Stabilization (Unstable Patients)**\n* Secure airway, oxygenation, and IV access.\n* **Inotropic / Chronotropic Support:** Administer IV Dopamine or IV Adrenaline infusion as a bridge until Temporary Pacemaker Insertion (TPI) can be placed.\n\n#### **Step 2: Specific Etiology Management**\n* **Hyperkalemia:** Initiate aggressive IV potassium-lowering therapy immediately.\n* **Drug-Induced Toxicity (Beta-Blockers / Calcium Channel Blockers):**\n 1. **Withhold** the suspected offending agent.\n 2. **High-Dose Insulin Therapy:** IV Insulin 1 U/kg bolus followed by 0.5 U/kg/hour infusion, accompanied by continuous blood glucose monitoring.\n 3. **IV Glucagon:** Administer if available.\n\n#### **Step 3: Invasive Intervention (Temporary Pacing)**\n* Perform **Temporary Pacemaker Insertion (TPI)** for refractory hemodynamic instability, complete heart block, or symptomatic pauses unresponsive to pharmacotherapy.\n\n#### **Step 4: Definitive Management (Indications for Permanent Pacemaker - PPM)**\n* **AV Nodal Disease:** Complete heart block, advanced AV block, Mobitz Type II block, or symptomatic AV block of any degree.\n* **Sinus Node Dysfunction:** Symptomatic patients with pauses > 3 seconds; asymptomatic patients with pauses > 6 seconds.\n* **Recommended Pacing Modes:**\n * **SND with intact AV conduction:** Atrial-based single or dual-chamber pacing (VVI reasonable if symptoms are infrequent).\n * **AV Node Disease with LVEF > 50%:** Dual-chamber or VVI pacing.\n * **AV Node Disease with LVEF 36–50% & >40% ventricular pacing demand:** CRT (Cardiac Resynchronization Therapy) or HBP (His Bundle Pacing).\n * **AV Node Disease with LVEF < 35%:** CRT or HBP.",
+    "symptom_triggers": [
+      "bradycardia",
+      "slow heart rate",
+      "syncope",
+      "dizziness",
+      "complete heart block",
+      "AV block",
+      "sinus node dysfunction",
+      "presyncope",
+      "yellow oleander poisoning"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 252,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 11,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 4,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p11_sub_5",
+    "parent_guideline": "ICMR Protocol: Symptomatic Bradyarrhythmias",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Symptomatic Bradyarrhythmias — Pharmacotherapy & Step-by-Step Management",
+    "content": "### ICMR Protocol: Symptomatic Bradyarrhythmias — Pharmacotherapy & Step-by-Step Management\n**Parent Guideline:** ICMR Protocol: Symptomatic Bradyarrhythmias | **Domain:** allopathy\n\n### **Level-wise Referral Protocol (PHC/CHC -> District Hospital -> Tertiary Centre)**\n\n* **PHC / CHC Level:**\n * Perform immediate initial evaluation, 12-lead ECG, blood sugar, and basic blood sampling.\n * Identify emergency red flags (hypotension, CHB, altered sensorium).\n * Stop all nodal-blocking medications.\n * Initiate emergency medical stabilization (IV Dopamine/Adrenaline; IV Insulin/Glucose for drug overdose).\n * Rapidly transfer all unstable patients or those with complete heart block via ALS ambulance.\n\n* **District Hospital:**\n * Perform Transthoracic Echocardiography and renal/electrolyte management.\n * Perform **Temporary Pacemaker Insertion (TPI)** for acute stabilization.\n * Manage severe drug toxicity or complex metabolic derangements.\n * Refer patients needing definitive device implantation or complex evaluation to Tertiary Care.\n\n* **Tertiary Centre:**\n * Permanent Pacemaker (PPM) implantation, CRT, or His Bundle Pacing (HBP).\n * Advanced diagnostics: Cardiac MRI, Electrophysiological Studies (EPS), and Implantable Loop Recorder (ILR) insertion.",
+    "symptom_triggers": [
+      "bradycardia",
+      "slow heart rate",
+      "syncope",
+      "dizziness",
+      "complete heart block",
+      "AV block",
+      "sinus node dysfunction",
+      "presyncope",
+      "yellow oleander poisoning"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 159,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 11,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 5,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p12_sub_1",
+    "parent_guideline": "ICMR Protocol: Management of Chronic Heart Failure (CHF)",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Management of Chronic Heart Failure (CHF) — ICD-10 Code & Definition",
+    "content": "### ICMR Protocol: Management of Chronic Heart Failure (CHF) — ICD-10 Code & Definition\n**Parent Guideline:** ICMR Protocol: Management of Chronic Heart Failure (CHF) | **Domain:** allopathy\n\n- **ICD-10 Code:** I50.9 (Heart Failure, unspecified) / I50.2 (Systolic [congestive] heart failure)\n- **Definition:** Clinical syndrome resulting from structural or functional cardiac impairment leading to elevated intracardiac pressures or inadequate cardiac output, presenting with dyspnea, fluid retention, and fatigue.",
+    "symptom_triggers": [
+      "breathlessness",
+      "heart failure",
+      "dyspnea",
+      "orthopnea",
+      "pedal edema",
+      "fluid overload",
+      "paroxysmal nocturnal dyspnea",
+      "congestive heart failure",
+      "HFrEF",
+      "furosemide"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 68,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 12,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 1,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p12_sub_2",
+    "parent_guideline": "ICMR Protocol: Management of Chronic Heart Failure (CHF)",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Management of Chronic Heart Failure (CHF) — Immediate Red Flags & Emergency Triage Indicators",
+    "content": "### ICMR Protocol: Management of Chronic Heart Failure (CHF) — Immediate Red Flags & Emergency Triage Indicators\n**Parent Guideline:** ICMR Protocol: Management of Chronic Heart Failure (CHF) | **Domain:** allopathy\n\nPromptly triage and refer if any of the following are present:\n- **Blood Pressure:** SBP < 90 mmHg or > 200 mmHg\n- **Heart Rate:** < 50/min or > 120/min\n- **Respiratory Rate & Oxygenation:** RR > 30/min, severe respiratory distress, cyanosis, or SpO2 < 90%\n- **Renal/Perfusion Indicators:** Oliguria\n- **Neurological:** Altered mental status / sensorium",
+    "symptom_triggers": [
+      "breathlessness",
+      "heart failure",
+      "dyspnea",
+      "orthopnea",
+      "pedal edema",
+      "fluid overload",
+      "paroxysmal nocturnal dyspnea",
+      "congestive heart failure",
+      "HFrEF",
+      "furosemide"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 88,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 12,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 2,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p12_sub_3",
+    "parent_guideline": "ICMR Protocol: Management of Chronic Heart Failure (CHF)",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Management of Chronic Heart Failure (CHF) — Diagnostic Workup",
+    "content": "### ICMR Protocol: Management of Chronic Heart Failure (CHF) — Diagnostic Workup\n**Parent Guideline:** ICMR Protocol: Management of Chronic Heart Failure (CHF) | **Domain:** allopathy\n\n#### **Basic Investigations (PHC / CHC Level)**\n- **Laboratory:** Hemogram, ESR, Blood Sugar, Urine Examination, Serum Urea / Creatinine, Serum Sodium / Potassium\n- **ECG:** Rule out acute STEMI; evaluate for pathological Q waves and conduction blocks\n- **Chest X-ray (PA view):** Differentiate CHF from pulmonary causes (cardiomegaly, pulmonary edema)\n\n#### **Desirable Investigations (District Hospital / Tertiary Level)**\n- **2D Echocardiography:** Confirm HFrEF (LV Ejection Fraction < 35%) vs HFpEF (EF 35–50%)\n- **Biomarkers:** BNP / NT-proBNP, Serum Troponin\n- **Etiology & Risk Profiling:** Lipid profile, Thyroid function tests (TFT), Iron profile",
+    "symptom_triggers": [
+      "breathlessness",
+      "heart failure",
+      "dyspnea",
+      "orthopnea",
+      "pedal edema",
+      "fluid overload",
+      "paroxysmal nocturnal dyspnea",
+      "congestive heart failure",
+      "HFrEF",
+      "furosemide"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 118,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 12,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 3,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p12_sub_4",
+    "parent_guideline": "ICMR Protocol: Management of Chronic Heart Failure (CHF)",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Management of Chronic Heart Failure (CHF) — Pharmacotherapy & Step-by-Step Management",
+    "content": "### ICMR Protocol: Management of Chronic Heart Failure (CHF) — Pharmacotherapy & Step-by-Step Management\n**Parent Guideline:** ICMR Protocol: Management of Chronic Heart Failure (CHF) | **Domain:** allopathy\n\n1. **Furosemide (Diuretic)**\n - **Acute Stage:** 10–40 mg IV SOS for active congestion.\n - **Maintenance:** 20–80 mg daily PO once symptoms subside.\n - **Monitoring:** Serum electrolytes, creatinine, and uric acid.\n\n2. **Enalapril (ACE Inhibitor)**\n - **Dose:** 2.5 mg to 10 mg PO twice daily.\n - **Initiation Criteria:** SBP > 100 mmHg, normal electrolytes, and serum creatinine < 2.5 mg/dL.\n - **Titration:** Uptitrate every 1–2 weeks to the maximum tolerable dose.\n - **Monitoring:** Check BP and electrolytes before each dose increment and during follow-up.\n\n3. **Spironolactone (MRA)**\n - **Dose:** 25–50 mg PO once daily.\n - **Monitoring:** Check serum potassium and creatinine every 2–4 weeks.\n\n4. **Carvedilol (Beta-Blocker)**\n - **Dose:** 3.125 mg to 25 mg PO twice daily.\n - **Initiation Criteria:** Start **ONLY after complete decongestion**, provided SBP > 100 mmHg and HR > 60/min.\n - **Titration:** Uptitrate every 1–2 weeks to maximum tolerable dose.\n - **Monitoring:** Watch BP, heart rate, and potential precipitation of heart failure symptoms.\n - **Managing CHF Recurrence:** Increase diuretic dose and temporarily reduce carvedilol.",
+    "symptom_triggers": [
+      "breathlessness",
+      "heart failure",
+      "dyspnea",
+      "orthopnea",
+      "pedal edema",
+      "fluid overload",
+      "paroxysmal nocturnal dyspnea",
+      "congestive heart failure",
+      "HFrEF",
+      "furosemide"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 195,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 12,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 4,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p12_sub_5",
+    "parent_guideline": "ICMR Protocol: Management of Chronic Heart Failure (CHF)",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Management of Chronic Heart Failure (CHF) — Level-wise Referral Protocol",
+    "content": "### ICMR Protocol: Management of Chronic Heart Failure (CHF) — Level-wise Referral Protocol\n**Parent Guideline:** ICMR Protocol: Management of Chronic Heart Failure (CHF) | **Domain:** allopathy\n\n#### **1. Primary Health Centre (PHC)**\n- Differentiate CHF from respiratory conditions (e.g., breathlessness with fever/cough/expectoration or known asthma/COPD).\n- If CHF is likely: Initiating decongestion with Furosemide.\n- Refer immediately if Red Flag emergency indicators are present.\n\n#### **2. Community Health Centre (CHC)**\n- Admit and stabilize.\n- Send basic investigations (ECG to rule out STEMI; Chest X-ray to exclude primary respiratory etiology).\n- Decongest with IV Furosemide; administer O2 therapy if SpO2 < 90%.\n- Initiate oral Enalapril and Spironolactone.\n- Consider Carvedilol **after** clinical decongestion.\n\n#### **3. District Hospital**\n- Admit, re-assess, and optimize medical therapy (Furosemide, Enalapril, Spironolactone, O2).\n- Provide Non-Invasive Ventilation (NIV) for marked respiratory distress with SpO2 < 90%.\n- Perform 2D Echocardiography to confirm HFrEF (LVEF < 35%).\n- Investigate underlying etiology; initiate Carvedilol post-decongestion.\n- Refer back to CHC/PHC once stabilized.\n\n#### **4. Tertiary Care Centre**\n- **Indications for Referral:** Uncontrolled CHF, unstable hemodynamics, suspected ongoing ischemia, abnormal electrolytes/renal parameters, structural heart disease, or unclear etiology.\n- **Management:**\n - Categorize HF: Acute (<3 months) vs Chronic (>3 months); HFrEF (<35%) vs HFpEF (35–50%).\n - Advanced Medical Therapy: Consider ARNI (Sacubitril/Valsartan) and Ivabradine.\n - Preventive Care: Pneumococcal and Influenza vaccinations.\n - Invasive / Non-Pharmacological Interventions:\n - **ICD:** Implantable Cardioverter Defibrillator in selected patients.\n - **CRT / BiV:** Cardiac Resynchronization Therapy if NYHA class II/III, LVEF < 35%, QRS > 150 ms with LBBB morphology on optimal medical therapy > 3 months.\n - **Etiology-Based Procedures:** PCI, CABG, or Valve Replacement.",
+    "symptom_triggers": [
+      "breathlessness",
+      "heart failure",
+      "dyspnea",
+      "orthopnea",
+      "pedal edema",
+      "fluid overload",
+      "paroxysmal nocturnal dyspnea",
+      "congestive heart failure",
+      "HFrEF",
+      "furosemide"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 274,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 12,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 5,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p13_sub_1",
+    "parent_guideline": "ICMR Protocol: Management of Stable Angina",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Management of Stable Angina — ICD-10 Code & Definition",
+    "content": "### ICMR Protocol: Management of Stable Angina — ICD-10 Code & Definition\n**Parent Guideline:** ICMR Protocol: Management of Stable Angina | **Domain:** allopathy\n\n* **ICD-10 Code:** I20.9 (Angina Pectoris, Unspecified)\n* **Definition:** Stable Angina is characterized by effort-related chest discomfort (diffuse retrosternal pain, heaviness, or constriction radiating to arms, neck, or back) that is easily reproduced by post-meal exertion or stress, and is relieved by rest or sublingual Nitroglycerine (NTG) within 1–2 minutes.",
+    "symptom_triggers": [
+      "chest pain",
+      "stable angina",
+      "retrosternal heaviness",
+      "exertional dyspnea",
+      "sweating with chest pain",
+      "epigastric discomfort",
+      "coronary artery disease",
+      "exertional fatigue"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 74,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 13,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 1,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p13_sub_2",
+    "parent_guideline": "ICMR Protocol: Management of Stable Angina",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Management of Stable Angina — Immediate Red Flags & Emergency Triage Indicators",
+    "content": "### ICMR Protocol: Management of Stable Angina — Immediate Red Flags & Emergency Triage Indicators\n**Parent Guideline:** ICMR Protocol: Management of Stable Angina | **Domain:** allopathy\n\n#### **1. Rule Out Acute Coronary Syndrome (ACS) - Immediate Referral to Emergency/STEMI Protocol:**\n* Angina presenting at rest or lasting **> 20 minutes**.\n* **Crescendo Angina:** Recent worsening of stable angina to CCS Class III.\n* **New-Onset Effort Angina:** Less than 1 month duration in CCS Class II/III.\n* **Post-Infarction Angina.**\n\n#### **2. Clinical Features Supporting Angina:**\n* Diffuse retrosternal pain, heaviness, constriction with radiation to arms, neck, or back.\n* Accompanied by profuse sweating.\n* Easily reproduced by post-meal exertion.\n* *Atypical Presentations:* Exertional fatigue, breathlessness, profuse sweating, or epigastric discomfort.\n* Higher likelihood in patients with known Coronary Artery Disease (CAD).\n\n#### **3. Features Making Angina Unlikely:**\n* Variable location or characteristics.\n* Duration long (hours to days) or very short (< 1 minute).\n* Restricted to areas strictly above the jaw or below the epigastrium.\n* Pain localized to a single point; pricking, piercing, or stabbing type.\n* Pain precipitated by neck/arm movement or respiration.",
+    "symptom_triggers": [
+      "chest pain",
+      "stable angina",
+      "retrosternal heaviness",
+      "exertional dyspnea",
+      "sweating with chest pain",
+      "epigastric discomfort",
+      "coronary artery disease",
+      "exertional fatigue"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 186,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 13,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 2,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p13_sub_3",
+    "parent_guideline": "ICMR Protocol: Management of Stable Angina",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Management of Stable Angina — Diagnostic Workup",
+    "content": "### ICMR Protocol: Management of Stable Angina — Diagnostic Workup\n**Parent Guideline:** ICMR Protocol: Management of Stable Angina | **Domain:** allopathy\n\n#### **A. Essential Investigations (Basic)**\n1. Hemogram\n2. Renal Function & Electrolytes (Urea, Creatinine, Electrolytes)\n3. Glycemic Status (Blood Sugar, HbA1c)\n4. Lipid Profile\n5. Liver Function Tests (LFT)\n6. 12-Lead ECG\n7. Plain Chest X-Ray\n\n#### **B. Desirable Investigations**\n1. Echocardiography\n2. Exercise Treadmill Test (ETT)\n3. Thyroid Function Tests (TFT)\n4. Iron Profile\n5. Serum Uric Acid\n\n#### **C. Optional Investigations**\n1. Stress Radionuclide / Echocardiographic Imaging\n2. Multi-slice CT Coronary Angiography\n3. Invasive Coronary Angiography (CAG)\n4. Coronary Fractional Flow Reserve (FFR)\n5. Intra-vascular Ultrasound (IVUS) / Optical Coherence Tomography (OCT)",
+    "symptom_triggers": [
+      "chest pain",
+      "stable angina",
+      "retrosternal heaviness",
+      "exertional dyspnea",
+      "sweating with chest pain",
+      "epigastric discomfort",
+      "coronary artery disease",
+      "exertional fatigue"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 116,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 13,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 3,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p13_sub_4",
+    "parent_guideline": "ICMR Protocol: Management of Stable Angina",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Management of Stable Angina — Pharmacotherapy & Step-by-Step Management",
+    "content": "### ICMR Protocol: Management of Stable Angina — Pharmacotherapy & Step-by-Step Management\n**Parent Guideline:** ICMR Protocol: Management of Stable Angina | **Domain:** allopathy\n\n#### **1. Essential Secondary Prevention**\n* **Anti-platelets:**\n * Aspirin: 75 mg OD\n * Clopidogrel: 75 mg OD (if aspirin intolerant)\n* **Statins (High Intensity):**\n * Atorvastatin: 40–80 mg OD OR\n * Rosuvastatin: 20–40 mg OD\n* **ACE Inhibitors:**\n * Ramipril: 2.5–10 mg OD OR\n * Enalapril: 2.5–10 mg BD\n\n#### **2. Anti-Ischemic Therapy**\n* **Beta-Blockers (First Line):**\n * Metoprolol (Short Acting): 25–100 mg BD OR\n * Metoprolol (Long Acting): 25–100 mg OD\n* **Nitrates:**\n * Isosorbide Mononitrate: 20–60 mg in 2 divided doses OR\n * Nitroglycerine Sustained Release: 2.6–6.5 mg BD\n* **Calcium Channel Blockers (CCBs):**\n * Verapamil: 40–80 mg TDS OR\n * Diltiazem: 30–90 mg TDS\n* **Second-Line / Adjunct Anti-Ischemic Agents:**\n * Nicorandil: 5–10 mg BD\n * Ranolazine: 500–1000 mg BD\n * Trimetazidine: 20 mg TDS\n\n#### **3. General Management & Trigger Optimization**\n* Manage aggravating/potentiating factors: Anemia, Thyrotoxicosis, Pregnancy, Febrile illness, Hypertension, Ventricular hypertrophy, CHF, Tachy/Brady-arrhythmias, and offender drugs (e.g., bronchodilators, steroids).\n* Strict cardiovascular risk factor control & screening for peripheral vascular disease (PVD) / stroke.",
+    "symptom_triggers": [
+      "chest pain",
+      "stable angina",
+      "retrosternal heaviness",
+      "exertional dyspnea",
+      "sweating with chest pain",
+      "epigastric discomfort",
+      "coronary artery disease",
+      "exertional fatigue"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 194,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 13,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 4,
+      "total_subchunks_in_parent": 5
+    }
+  },
+  {
+    "chunk_id": "stw_manual_v1_p13_sub_5",
+    "parent_guideline": "ICMR Protocol: Management of Stable Angina",
+    "domain": "allopathy",
+    "category": "treatment_protocol",
+    "title": "ICMR Protocol: Management of Stable Angina — Level-Wise Referral Protocol",
+    "content": "### ICMR Protocol: Management of Stable Angina — Level-Wise Referral Protocol\n**Parent Guideline:** ICMR Protocol: Management of Stable Angina | **Domain:** allopathy\n\n#### **PHC / CHC Level**\n1. Initiate angina symptom control using **Metoprolol**; add **Nitrates** if symptoms persist.\n2. Obtain 12-lead ECG (evaluate for Q waves, ST-T changes, Bundle Branch Blocks, or chamber enlargement).\n3. Initiate **Aspirin** and **high-intensity Statin** therapy.\n4. Refer electively to a higher center.\n\n#### **District Hospital Level**\n1. Optimize anti-anginal medical therapy.\n2. Perform Echocardiography to evaluate LV function and structural heart disease.\n3. Perform Risk Stratification via Exercise Treadmill Test (DUKE Risk Score) for ambulatory patients with interpretable baseline ECGs.\n4. **Refer to Tertiary Centre if:**\n * Angina remains uncontrolled on Optimal Medical Therapy (OMT).\n * Echo reveals structural/LV abnormalities.\n * Patient is non-ambulatory or baseline ECG is uninterpretable.\n * High risk determined on exercise stress testing.\n\n#### **Tertiary Level**\n1. Reassess and optimize multi-drug anti-anginal regimen (incorporate Trimetazidine, Nicorandil, Ranolazine, or Ivabradine as required).\n2. Perform Stress Imaging (Nuclear/Echo) if patient is non-ambulatory, baseline ECG is abnormal/uninterpretable, ETT result is equivocal, or LV function is compromised.\n3. **Revascularization Workup:**\n * **Low/Intermediate Risk:** Continue Optimal Medical Therapy with follow-up every 3–6 months at primary/secondary care.\n * **High Risk:** Perform Coronary Angiography if angina is uncontrolled on OMT, non-invasive testing shows high risk, or patient is a cardiac arrest survivor/has documented VT. Revascularize if coronary anatomy is suitable.",
+    "symptom_triggers": [
+      "chest pain",
+      "stable angina",
+      "retrosternal heaviness",
+      "exertional dyspnea",
+      "sweating with chest pain",
+      "epigastric discomfort",
+      "coronary artery disease",
+      "exertional fatigue"
+    ],
+    "urgency_level": "HIGH",
+    "word_count": 235,
+    "metadata": {
+      "source_document": "STW_Manual_v1.pdf",
+      "page_number": 13,
+      "guideline_body": "Indian Council of Medical Research (ICMR)",
+      "system": "allopathic",
+      "is_atomic_subchunk": true,
+      "subchunk_index": 5,
+      "total_subchunks_in_parent": 5
+    }
+  }
+]

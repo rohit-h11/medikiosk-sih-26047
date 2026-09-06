@@ -1,10 +1,12 @@
+# backend/app/ai/dialogue/session_store.py
 """
-MediKiosk — In-Memory Session Store for Clinical Dialogue Sessions
-Tracks active kiosk dialogue sessions, history, and accumulated SOCRATES state.
+MediKiosk — Multi-Paradigm Session Store
+Tracks active kiosk dialogue sessions, phase transitions (Prakriti -> Dashavidha -> Dynamic),
+history, and accumulated clinical states.
 """
 
 import uuid
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Any
 from pydantic import BaseModel, Field
 from datetime import datetime, timezone
 from app.ai.dialogue.models import (
@@ -21,6 +23,12 @@ class DialogueSession(BaseModel):
     session_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     patient_context: PatientContext
     history: List[ConversationMessage] = Field(default_factory=list)
+    phase: str = Field(default="AUTO", description="'PRAKRITI' | 'DASHAVIDHA' | 'DYNAMIC_VIKRITI' | 'DYNAMIC_SOCRATES' | 'COMPLETED'")
+    prakriti_answers: List[str] = Field(default_factory=list)
+    dashavidha_answers: List[str] = Field(default_factory=list)
+    prakriti_result: Optional[Dict[str, Any]] = None
+    dashavidha_state: Optional[Dict[str, Any]] = None
+    clinical_state: Dict[str, Any] = Field(default_factory=dict)
     socrates_state: SocratesState = Field(default_factory=SocratesState)
     last_result: Optional[DialogueTurnResult] = None
     turn_count: int = 0
@@ -31,8 +39,10 @@ class DialogueSession(BaseModel):
 
 _SESSIONS: Dict[str, DialogueSession] = {}
 
-def create_session(patient_context: PatientContext, max_turns: int = 10) -> DialogueSession:
+def create_session(patient_context: PatientContext, max_turns: int = 10, session_id: Optional[str] = None) -> DialogueSession:
+    sid = session_id or str(uuid.uuid4())
     session = DialogueSession(
+        session_id=sid,
         patient_context=patient_context,
         max_turns=max_turns
     )

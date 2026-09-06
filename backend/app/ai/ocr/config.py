@@ -92,11 +92,10 @@ class PreprocessConfig:
 class VisionLLMConfig:
     """Settings for the Multimodal Vision LLM Clinical Extraction engine."""
     provider: str = "gemini"            # "gemini" | "openai" | "mock"
-    model_name: str = "gemini-2.5-flash"
+    model_name: str = "gemini-3.6-flash"
     temperature: float = 0.1            # low temperature for factual medical extraction
     max_output_tokens: int = 16384      # generous token limit to accommodate thinking + structured clinical JSON
     enable_ayush_detection: bool = True
     enable_abnormal_lab_flagging: bool = True
     enable_namaste_icd11_mapping: bool = True
     api_key_env_var: str = "GEMINI_API_KEY"
-

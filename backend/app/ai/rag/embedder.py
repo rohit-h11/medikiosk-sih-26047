@@ -1,7 +1,12 @@
 import json
 from pathlib import Path
 from typing import List, Dict, Any
-from Validator import OCRPayload  # type: ignore
+try:
+    from app.ai.rag.validator import OCRPayload
+    from app.ai.rag.utils import normalize_clinical_date
+except ImportError:
+    from validator import OCRPayload  # type: ignore
+    from utils import normalize_clinical_date  # type: ignore
 from pydantic import ValidationError
 
 def create_contextual_header(patient_id: str, document_type: str, date: str) -> str:

@@ -1,7 +1,12 @@
 # backend/app/ai/rag/retriever.py
+import asyncio
 import logging
 from typing import List, Dict, Any, Optional
 from app.db import get_supabase_client
+try:
+    from app.ai.rag.utils import normalize_clinical_date
+except ImportError:
+    from utils import normalize_clinical_date  # type: ignore
 
 logger = logging.getLogger("medikiosk.rag.retriever")
 
@@ -22,7 +27,7 @@ def get_embedding_model():
     return _embedding_model
 
 def generate_embedding(text: str) -> List[float]:
-    """Generates a 384-dimensional vector embedding for given text."""
+    """Generates a 384-dimensional vector embedding for given text (synchronous)."""
     model = get_embedding_model()
     if model is None:
         # Return dummy 384-dim zero vector if model is uninstalled
@@ -30,15 +35,41 @@ def generate_embedding(text: str) -> List[float]:
     emb = model.encode(text, normalize_embeddings=True)
     return emb.tolist()
 
+async def generate_embedding_async(text: str) -> List[float]:
+    """
+    Asynchronously generates a 384-dimensional vector embedding for given text,
+    offloading CPU-bound PyTorch inference to a background thread to keep FastAPI non-blocking.
+    """
+    model = get_embedding_model()
+    if model is None:
+        return [0.0] * 384
+    emb = await asyncio.to_thread(model.encode, text, normalize_embeddings=True)
+    return emb.tolist()
+
+async def generate_embeddings_batch_async(texts: List[str]) -> List[List[float]]:
+    """
+    Asynchronously generates 384-dimensional vector embeddings for a list of texts in a single batch,
+    offloading CPU-bound PyTorch inference to a background thread to keep FastAPI non-blocking.
+    """
+    if not texts:
+        return []
+    model = get_embedding_model()
+    if model is None:
+        return [[0.0] * 384 for _ in texts]
+    embs = await asyncio.to_thread(model.encode, texts, normalize_embeddings=True)
+    return embs.tolist()
+
 async def retrieve_patient_history_async(
     patient_id: str,
     query_text: str,
-    top_k: int = 3,
+    top_k: int = 5,
     similarity_threshold: float = 0.35,
     category: Optional[str] = None
 ) -> List[Dict[str, Any]]:
     """
     Performs patient-scoped vector similarity search via Supabase pgvector RPC.
+    If the embedding model is unavailable or vector search encounters an error,
+    it gracefully falls back to a chronological SQL query for the patient's records.
     
     Returns a list of relevant medical context records (past diagnoses, medications, labs, etc.).
     """
@@ -47,7 +78,33 @@ async def retrieve_patient_history_async(
 
     try:
         supabase = get_supabase_client()
-        query_vector = generate_embedding(query_text)
+    except Exception as e:
+        logger.warning(f"Could not get Supabase client: {e}")
+        return []
+
+    def _chronological_fallback() -> List[Dict[str, Any]]:
+        """Fallback: retrieves patient's most recent structured clinical records by date."""
+        try:
+            logger.info(f"Executing chronological SQL fallback for patient {patient_id}...")
+            query = supabase.table("patient_structured_vectors") \
+                .select("id, patient_id, category, content, metadata, encounter_date") \
+                .eq("patient_id", patient_id)
+            if category:
+                query = query.eq("category", category)
+            res = query.order("encounter_date", desc=True).limit(top_k).execute()
+            return res.data or []
+        except Exception as sql_err:
+            logger.error(f"SQL fallback also failed: {sql_err}")
+            return []
+
+    # Check if embedding model is available
+    model = get_embedding_model()
+    if model is None:
+        logger.warning(f"Embedding model unavailable. Using chronological SQL fallback for patient {patient_id}.")
+        return await asyncio.to_thread(_chronological_fallback)
+
+    try:
+        query_vector = await generate_embedding_async(query_text)
 
         rpc_params = {
             "p_patient_id": patient_id,
@@ -58,13 +115,15 @@ async def retrieve_patient_history_async(
             "p_use_recency": True
         }
 
-        response = supabase.rpc("match_patient_history", rpc_params).execute()
+        response = await asyncio.to_thread(
+            lambda: supabase.rpc("match_patient_history", rpc_params).execute()
+        )
         results = response.data or []
         logger.info(f"Retrieved {len(results)} relevant RAG chunks for patient {patient_id}")
         return results
     except Exception as e:
-        logger.warning(f"RAG retrieval skipped or encountered error: {e}")
-        return []
+        logger.warning(f"RAG vector search encountered error: {e}. Executing chronological SQL fallback...")
+        return await asyncio.to_thread(_chronological_fallback)
 
 async def store_dialogue_summary_in_rag_async(
     patient_id: str,
@@ -84,10 +143,11 @@ async def store_dialogue_summary_in_rag_async(
         supabase = get_supabase_client()
 
         # Format contextual chunk header as per MediKiosk standard
-        header = f"[Patient: {patient_id} | Document: Clinical Intake Interview | Encounter Date: {encounter_date or 'Recent'} | Status: Completed]\n\n"
+        iso_date = normalize_clinical_date(encounter_date)
+        header = f"[Patient: {patient_id} | Document: Clinical Intake Interview | Encounter Date: {iso_date or 'Recent'} | Status: Completed]\n\n"
         full_content = header + clinical_summary.strip()
 
-        embedding = generate_embedding(full_content)
+        embedding = await generate_embedding_async(full_content)
 
         row = {
             "patient_id": patient_id,
@@ -99,6 +159,7 @@ async def store_dialogue_summary_in_rag_async(
                 "socrates_state": socrates_state,
                 "type": "interview_summary"
             },
+            "encounter_date": iso_date,
             "embedding": embedding
         }
 

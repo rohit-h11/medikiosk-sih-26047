@@ -165,9 +165,8 @@ async def stream_dynamic_turn_sse(
         except Exception as e:
             logger.warning(f"Audio chunk synthesis exception: {e}")
 
-    # 4. Translate & emit touchscreen options
-    localized_chips = []
-    for opt in touch_opts:
+    # 4. Translate & emit touchscreen options concurrently (<300ms)
+    async def _localize_option(opt: Dict[str, Any]) -> Dict[str, Any]:
         label = opt.get("label", "")
         native_label = label
         if language != "en" and label:
@@ -175,17 +174,21 @@ async def stream_dynamic_turn_sse(
                 native_label = await sarvam_tts_service.translate_text_async(label, source_lang="en", target_lang=language)
             except Exception:
                 native_label = label
-        
-        localized_chips.append({
+        return {
             "id": opt.get("id"),
             "label": native_label,
             "english_label": label,
             "value": opt.get("value"),
             "slot_tag": opt.get("slot_tag")
-        })
-        
+        }
+
+    if touch_opts:
+        localized_chips = await asyncio.gather(*[_localize_option(opt) for opt in touch_opts])
+    else:
+        localized_chips = []
+
     yield await format_sse_event("touch_options", {
-        "touch_options": localized_chips
+        "touch_options": list(localized_chips)
     })
 
     # 5. Emit state update

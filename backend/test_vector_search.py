@@ -15,7 +15,7 @@ supabase_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_ANO
 
 sb = create_client(supabase_url, supabase_key)
 print("Loading embedder model...", flush=True)
-embedder = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+embedder = SentenceTransformer("BAAI/bge-small-en-v1.5")
 
 test_queries = [
     "Patient has irregular racing heartbeat and palpitations",
@@ -24,7 +24,7 @@ test_queries = [
 ]
 
 print("\n" + "="*70)
-print("🔥 TESTING LIVE SUPABASE VECTOR SEARCH (HNSW Index)")
+print("🔥 TESTING LIVE SUPABASE VECTOR SEARCH (HNSW Index - BAAI/bge-small-en-v1.5, K=5)")
 print("="*70)
 
 for q in test_queries:
@@ -33,7 +33,7 @@ for q in test_queries:
     
     res = sb.rpc("match_clinical_guidelines", {
         "p_query_embedding": emb,
-        "p_top_k": 3,
+        "p_top_k": 5,
         "p_similarity_threshold": 0.35
     }).execute()
     

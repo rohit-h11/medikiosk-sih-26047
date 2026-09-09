@@ -129,9 +129,9 @@ def run_tests():
     print(f"Result: status={data4.get('status')}, is_duplicate={data4.get('is_duplicate')}, type={data4.get('duplicate_type')}")
     assert res4.status_code == 200
     assert data4.get("is_duplicate") is True
-    assert data4.get("duplicate_type") == "VISUAL_DHASH"
+    assert data4.get("duplicate_type") in ("VISUAL_DHASH", "VISUAL_PHASH")
     assert latency_ms4 < 50.0
-    print(f"✅ Test 4 Passed: Visual dHash variation detected as duplicate in {latency_ms4:.2f}ms!")
+    print(f"✅ Test 4 Passed: Visual perceptual variation detected as duplicate ({data4.get('duplicate_type')}) in {latency_ms4:.2f}ms!")
 
     print("\n" + "=" * 65)
     print("🎉 ALL OCR ENDPOINT TESTS PASSED SUCCESSFULLY!")

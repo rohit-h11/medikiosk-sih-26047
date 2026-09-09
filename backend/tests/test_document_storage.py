@@ -19,6 +19,8 @@ from app.schemas.document import DocumentType, OCRStatus, PreIngestionCheckResul
 from app.ai.ocr.pre_ingestion_gate import (
     compute_sha256,
     compute_perceptual_dhash,
+    compute_perceptual_phash,
+    compute_dual_perceptual_hashes,
     compute_hamming_distance,
     is_perceptual_duplicate,
     assess_image_clarity,
@@ -96,6 +98,25 @@ class TestPreIngestionGate:
         assert dist <= 5
         assert is_perceptual_duplicate(dhash1, dhash2, max_distance=5) is True
 
+    def test_perceptual_phash_and_dual_hashes(self):
+        img_bytes = create_sample_prescription_image()
+        dhash, phash = compute_dual_perceptual_hashes(img_bytes)
+
+        assert len(dhash) == 16
+        assert len(phash) == 16
+        assert compute_hamming_distance(phash, phash) == 0
+
+        # Test pHash invariance under contrast change
+        arr = np.frombuffer(img_bytes, np.uint8)
+        decoded = cv2.imdecode(arr, cv2.IMREAD_COLOR)
+        altered = cv2.convertScaleAbs(decoded, alpha=0.95, beta=10)
+        _, altered_bytes = cv2.imencode(".jpg", altered)
+
+        phash2 = compute_perceptual_phash(altered_bytes.tobytes())
+        dist = compute_hamming_distance(phash, phash2)
+        assert dist <= 6
+        assert is_perceptual_duplicate(phash, phash2, max_distance=6) is True
+
     def test_sharp_image_passes_clarity_check(self):
         sharp_bytes = create_sample_prescription_image(blur=False)
         report = assess_image_clarity(sharp_bytes, min_sharpness=35.0)
@@ -134,6 +155,7 @@ class TestPreIngestionGate:
         assert result.suggested_action == "PROCEED"
         assert len(result.sha256_hash) == 64
         assert result.dhash_fingerprint is not None
+        assert result.phash_fingerprint is not None
 
 
 class TestDocumentStorageService:
@@ -164,7 +186,8 @@ class TestDocumentStorageService:
             raw_file_bytes=raw_bytes,
             filename="my_prescription.jpg",
             document_type=DocumentType.PRESCRIPTION,
-            session_id="sess_demo_123"
+            session_id="sess_demo_123",
+            supabase_client=False
         )
 
         assert result.id is not None
@@ -185,5 +208,6 @@ class TestDocumentStorageService:
             await ingest_patient_document_pipeline(
                 patient_id="PAT-TEST-100",
                 raw_file_bytes=blurry_bytes,
-                filename="blurry_photo.jpg"
+                filename="blurry_photo.jpg",
+                supabase_client=False
             )

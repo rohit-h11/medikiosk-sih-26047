@@ -109,6 +109,7 @@ class DocumentExtractor:
             "is_acceptable": quality.is_acceptable,
             "reasons": quality.reasons,
             "retake_required": False,
+            "processed_rgb": pipeline_result.final_image_rgb,
             "extracted_data": extracted_data.model_dump(),
             "rag_chunks": rag_chunks
         }
@@ -125,6 +126,12 @@ class DocumentExtractor:
         doc_date = data.document_date or "Unknown Date"
         hospital = data.clinic_or_hospital or "OPD Clinic"
         sys_type = data.medicine_system.value
+
+        full_dump = data.model_dump()
+        serialized_meds = full_dump.get("medications", [])
+        serialized_diags = full_dump.get("diagnoses", [])
+        serialized_labs = full_dump.get("lab_investigations", [])
+        serialized_ayur = full_dump.get("ayurvedic_assessment")
 
         # Chunk 1: Document Overview & Diagnoses
         diag_lines = [f"- {d.condition} (Code: {d.code or 'N/A'}, System: {d.system_terminology})" for d in data.diagnoses]
@@ -144,7 +151,12 @@ class DocumentExtractor:
             "metadata": {
                 "patient_id": patient_id,
                 "date": doc_date,
-                "system": sys_type
+                "facility": hospital,
+                "system": sys_type,
+                "diagnoses": serialized_diags,
+                "chief_complaints": data.chief_complaints,
+                "document_type": data.document_type.value if hasattr(data.document_type, "value") else str(data.document_type),
+                "structured_data": full_dump
             }
         })
 
@@ -167,7 +179,9 @@ class DocumentExtractor:
                 "metadata": {
                     "patient_id": patient_id,
                     "date": doc_date,
-                    "system": sys_type
+                    "facility": hospital,
+                    "system": sys_type,
+                    "medications": serialized_meds
                 }
             })
 
@@ -185,7 +199,9 @@ class DocumentExtractor:
                 "content": lab_content,
                 "metadata": {
                     "patient_id": patient_id,
-                    "date": doc_date
+                    "date": doc_date,
+                    "facility": hospital,
+                    "lab_investigations": serialized_labs
                 }
             })
 
@@ -207,7 +223,9 @@ class DocumentExtractor:
                 "metadata": {
                     "patient_id": patient_id,
                     "date": doc_date,
-                    "system": "ayurvedic"
+                    "system": "ayurvedic",
+                    "ayurvedic_assessment": serialized_ayur,
+                    "diet_and_lifestyle_advice": data.diet_and_lifestyle_advice
                 }
             })
 

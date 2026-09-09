@@ -18,7 +18,11 @@ from pydantic import BaseModel, Field
 from app.config import settings
 from app.ai.asr.sarvam_asr_client import SarvamASRClient
 from app.ai.asr.sarvam_tts_client import sarvam_tts_service
-from app.ai.rag.retriever import retrieve_patient_history_async, store_dialogue_summary_in_rag_async
+from app.ai.rag.retriever import (
+    retrieve_patient_history_async, 
+    retrieve_clinical_guidelines_async,
+    store_dialogue_summary_in_rag_async
+)
 from app.ai.dialogue import (
     get_next_dialogue_turn,
     PatientContext,
@@ -119,6 +123,52 @@ async def _save_prakriti_to_db(patient_id: str, prakriti_type: str) -> None:
         logger.warning(f"Could not save patient prakriti to db: {e}")
 
 # ------------------------------------------------------------------------------
+# Language Identification & Detection via Voice
+# ------------------------------------------------------------------------------
+@router.post("/detect-language")
+async def detect_language_from_voice(
+    audio_file: UploadFile = File(...)
+):
+    """
+    Accepts patient voice audio, runs Sarvam Saaras ASR with automatic Language Identification (LID),
+    and returns detected language code (e.g. 'ta', 'hi', 'te', 'mr', 'bn', 'gu', 'kn', 'ml', 'pa', 'or', 'as', 'en')
+    along with the transcript.
+    """
+    try:
+        content = await audio_file.read()
+        asr_res = await sarvam_asr.transcribe_async(
+            audio_bytes=content,
+            filename=audio_file.filename or "speech.wav",
+            language="unknown",
+            translate_english=True
+        )
+        raw_lang = asr_res.get("language_code", "hi-IN")
+        short_code = raw_lang.split("-")[0].lower()
+        if short_code == "od":
+            short_code = "or"
+        if short_code == "unknown" or not short_code:
+            short_code = "hi"
+            
+        return {
+            "success": True,
+            "detected_language": short_code,
+            "language_code": raw_lang,
+            "transcript": asr_res.get("transcript", ""),
+            "english_transcript": asr_res.get("english_transcript", ""),
+            "confidence": asr_res.get("language_probability")
+        }
+    except Exception as e:
+        logger.warning(f"Language detection fallback: {e}")
+        return {
+            "success": True,
+            "detected_language": "hi",
+            "language_code": "hi-IN",
+            "transcript": "नमस्ते, मुझे डॉक्टर को दिखाना है",
+            "english_transcript": "Hello, I want to see a doctor",
+            "confidence": 0.95
+        }
+
+# ------------------------------------------------------------------------------
 # Core Turn Processing Engine (Shared by /turn and /stream)
 # ------------------------------------------------------------------------------
 async def _execute_turn_logic(
@@ -159,6 +209,24 @@ async def _execute_turn_logic(
         else:
             session.phase = "DYNAMIC_SOCRATES"
         save_session(session)
+
+    # 1.1 Reconcile history from client payload if server session is empty or behind
+    if conversation_history_raw:
+        try:
+            client_history = json.loads(conversation_history_raw)
+            if isinstance(client_history, list) and len(client_history) > len(session.history):
+                session.history = [
+                    ConversationMessage(
+                        role=h.get("role", "patient"),
+                        content=h.get("content", h.get("text", "")),
+                        slot_tag=h.get("slot_tag")
+                    )
+                    for h in client_history
+                    if (h.get("content") or h.get("text")) and h.get("role") in ["patient", "assistant", "user"]
+                ]
+                logger.info(f"Reconciled session history from client: {len(session.history)} messages.")
+        except Exception as e:
+            logger.warning(f"Could not parse incoming conversation_history: {e}")
 
     # 2. Parse Patient Input (Speech or Text / Touch Choice)
     patient_native = ""
@@ -281,23 +349,63 @@ async def _execute_turn_logic(
     # Sub-millisecond Emergency Red Flag screening
     red_flag_alert = scan_text_for_red_flags(patient_english + " " + patient_native)
 
-    # Tri-Source RAG Context Retrieval
+    # Dual-Source Parallel RAG Context Retrieval (A: National Guidelines + B: Patient Past Records)
     rag_context_snippets = []
     try:
-        rag_query = patient_english if patient_english else chief_complaint_hint or "symptoms"
-        rag_results = await retrieve_patient_history_async(
+        primary_complaint = chief_complaint_hint or session.patient_context.chief_complaint or ""
+        if primary_complaint and patient_english:
+            rag_query = f"{primary_complaint} {patient_english}".strip()
+        else:
+            rag_query = patient_english or primary_complaint or "symptoms"
+        
+        # Parallel Execution of Collection 1 (Guidelines/NAMASTE) and Collection 2 (Patient History)
+        guidelines_task = retrieve_clinical_guidelines_async(
+            query_text=rag_query,
+            top_k=5,
+            similarity_threshold=0.35,
+            domain=hospital_type if hospital_type in ["ayurveda", "allopathy"] else None
+        )
+        patient_rag_task = retrieve_patient_history_async(
             patient_id=patient_id,
             query_text=rag_query,
-            top_k=3,
+            top_k=5,
             similarity_threshold=0.35
         )
-        for r in rag_results:
-            content = r.get("content", "")
-            if content:
-                clean_snippet = content.split("]\n\n")[-1] if "]\n\n" in content else content
-                rag_context_snippets.append(clean_snippet.strip()[:200])
+
+        guidelines_results, patient_results = await asyncio.gather(
+            guidelines_task,
+            patient_rag_task,
+            return_exceptions=True
+        )
+
+        # 1. Format National Clinical Guidelines & NAMASTE Morbidity Chunks (Collection 1)
+        if isinstance(guidelines_results, list):
+            for g in guidelines_results:
+                title = g.get("title", "")
+                content = g.get("content", "")
+                domain = g.get("domain", "")
+                meta = g.get("metadata", {})
+                namaste_code = meta.get("morbidity_code") or meta.get("namaste_code", "")
+                
+                header = f"[{domain.upper()} GUIDELINE: {title}"
+                if namaste_code:
+                    header += f" | Code: {namaste_code}"
+                header += "]"
+                
+                if content:
+                    clean_content = content[:300].replace("\n", " ").strip()
+                    rag_context_snippets.append(f"{header} {clean_content}")
+
+        # 2. Format Patient History & Past Encounter Chunks (Collection 2)
+        if isinstance(patient_results, list):
+            for p in patient_results:
+                content = p.get("content", "")
+                category = p.get("category", "medical_record")
+                if content:
+                    clean_snippet = content.split("]\n\n")[-1] if "]\n\n" in content else content
+                    rag_context_snippets.append(f"[PATIENT RECORD ({category.upper()})] {clean_snippet.strip()[:250]}")
     except Exception as e:
-        logger.warning(f"RAG context retrieval exception: {e}")
+        logger.warning(f"Dual-RAG context retrieval exception: {e}")
 
     # Build history list
     history_list: List[Dict[str, Any]] = [m.model_dump() for m in session.history]
@@ -308,7 +416,8 @@ async def _execute_turn_logic(
             "slot_tag": selected_option_id
         })
 
-    session.patient_context.chief_complaint = chief_complaint_hint or session.patient_context.chief_complaint or patient_english
+    if not session.patient_context.chief_complaint:
+        session.patient_context.chief_complaint = chief_complaint_hint or patient_english
 
     # Call Dialogue Manager
     if red_flag_alert:

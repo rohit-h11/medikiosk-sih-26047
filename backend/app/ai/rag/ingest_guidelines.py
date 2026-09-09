@@ -57,8 +57,8 @@ def get_embedding_model():
     global _model
     if _model is None:
         from sentence_transformers import SentenceTransformer
-        logger.info("Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...")
-        _model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+        logger.info("Loading embedding model: BAAI/bge-small-en-v1.5...")
+        _model = SentenceTransformer("BAAI/bge-small-en-v1.5")
     return _model
 
 def compute_embedding(text: str) -> List[float]:
@@ -299,7 +299,7 @@ def run_ingestion(dry_run: bool = False, upload: bool = True):
     from supabase import create_client
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
     
-    logger.info("Computing vector embeddings with all-MiniLM-L6-v2 and uploading in batches...")
+    logger.info("Computing vector embeddings with BAAI/bge-small-en-v1.5 and uploading in batches...")
     model = get_embedding_model()
     
     batch_size = 50

@@ -1,0 +1,136 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - region "Notifications alt+T"
+    - main [ref=e3]:
+      - generic [ref=e4]:
+        - button [ref=e6]:
+          - banner [ref=e7]:
+            - link "Try Mermaid Advanced Editor — OSS users get 10% off with code JS26 Get started" [ref=e9] [cursor=pointer]:
+              - /url: https://mermaid.ai/app/user/billing/checkout?utm_campaign=oss_coupon&utm_medium=banner_ad&utm_source=ai_live_editor&coupon=arDfyFT8&tier=plus
+              - generic [ref=e10]: Try Mermaid Advanced Editor — OSS users get 10% off with code JS26
+              - button "Get started" [ref=e11]
+            - button "Dismiss banner" [ref=e12]
+        - navigation [ref=e13]:
+          - generic [ref=e14]:
+            - button [ref=e15]
+            - link "Mermaid Live Editor" [ref=e21] [cursor=pointer]:
+              - /url: /
+          - generic [ref=e22]:
+            - button [ref=e23]:
+              - button [ref=e24]
+            - separator [ref=e25]
+            - button [ref=e26]
+            - button "Share" [ref=e27]
+            - button [ref=e28]:
+              - link [ref=e30] [cursor=pointer]:
+                - /url: https://mermaid.ai/app/plugin/save?state=pako:eNqFlO1O4kAUhm_lZDYsmrS1HdpCG2OC_RA2oAaMmrX7Y2hHmLW0ZDpVXCTZe9g73CvZoQjKLln7pz0f7_POOZN0geI8ochFtdqCZUy4sKiLCZ3Sa8IZGaW0qMsU1DPZNZyRmGVjmWjqCtQ5yR7eUqYFy-WyVot4lN2n-VM8IVxAb7CKQT7tuwgZGgzIE_RpwmKSwqUfFscjfnRyXExJmp4c3HQuFPC8QXuoQNfrDw6Pj9aVCH0DVT2BUwnBGlw-90sphksyphCyVFC-w-nQkrNCsFh28ILy95zNeTbv0xX4ZUAFYRl4qdyBPNoLeNKpoUGv198mIZgLTmKR75p1PV81dPgM5-1-e3gV7DNbm_isiAlP4DzP1DenW-nk83wGVxeepAzyQo6zu5f1iPClzB6qmYv_DeRVm_Il1dSgLfKpXMOwHKneRMr_WpSB9d8_f2FTh5ucJ3uxfoULJM7SwMszQecCBlTtZt9pLFie7QBlQ8JWWehQkuzffFARQ0m0NZA1tS9X0eurPVt9xDu0RstUEzaFa7ra-j5WWLHO7g4i1NTkmDMyIgWF2fiR_nNRnfPhjZygYBmFbpbQ-TvgYUXcUAvxnFJowz1LU_dT0Ahx6CuF4PkDdT8Zlm15-muoPrFETFxDs2bzXfXtqzoMg9Mg2Ko9G7dw60O1t1WHjUDfqgPbMvSPvc82J2-FVuBs1Tho-g28q8Zr7VqPFDTmLEGu4CVV0JTyKVmFaLGqRqj6MUTIlZ8JvSdlKiIUZUspm5Hsa55PN0qel-MJcu9JWsionCVEUJ-RMSdvLVReAffyMhPIdSoCchdojlyMHa1lYKxbVsNqGrZtK-hZplsabjjYMUzDdGzHMc2lgn5UpoamY91oNnXdbuJV1V7-AUQIg0I&utm_source=ai_live_editor&utm_medium=save_diagram
+                - img "Mermaid Chart" [ref=e31]
+                - text: Save diagram
+        - generic [ref=e34]:
+          - generic [ref=e36]:
+            - generic [ref=e37]:
+              - toolbar [ref=e38] [cursor=pointer]:
+                - list [ref=e40]:
+                  - tab "Code" [ref=e41]
+                  - separator [ref=e43]
+                  - tab "Config" [ref=e44]
+                - link "Docs" [ref=e45]:
+                  - /url: https://mermaid.ai/open-source/syntax/flowchart.html
+              - code [ref=e50]:
+                - generic [ref=e51]:
+                  - generic [aria-hidden] [ref=e54]:
+                    - generic [ref=e55]: "1"
+                    - generic [ref=e58]:
+                      - generic [ref=e59] [cursor=pointer]: 
+                      - generic [ref=e60]: "2"
+                    - generic [ref=e61]: "3"
+                    - generic [ref=e63]: "4"
+                    - generic [ref=e65]: "5"
+                    - generic [ref=e67]: "6"
+                    - generic [ref=e69]: "7"
+                    - generic [ref=e71]: "8"
+                  - generic [aria-hidden] [ref=e90]:
+                    - generic [ref=e91]: "%%{init: {'themeVariables': { 'nodeSpacing': 70, 'rankSpacing': 45 }}}%%"
+                    - generic [ref=e93]: flowchart LR
+                    - generic [ref=e95]: A["1. Raw Medical PDFs<br/><small>(WHO, CCRAS, ICMR)</small>"] --> B["2. PyMuPDF Page Filter<br/><small>(Heuristic Parser)</small>"]
+                    - generic [ref=e99]: B -->|Retain Clinical| C["3. LLM Clinical Extractor<br/><small>(ICD-10 & NAMASTE)</small>"]
+                    - generic [ref=e101]: B -->|Discard Non-Clinical| X["Drop TOC & Rosters<br/><small>(Filter Junk Pages)</small>"]
+                    - generic [ref=e105]: C --> D["4. Atomic Sub-Chunker<br/><small>(120–240 Words)</small>"]
+                  - textbox "Editor content" [ref=e107]: "%%{init: {'themeVariables': { 'nodeSpacing': 70, 'rankSpacing': 45 }}}%% flowchart LR A[\"1. Raw Medical PDFs<br/><small>(WHO, CCRAS, ICMR)</small>\"] --> B[\"2. PyMuPDF Page Filter<br/><small>(Heuristic Parser)</small>\"] B -->|Retain Clinical| C[\"3. LLM Clinical Extractor<br/><small>(ICD-10 & NAMASTE)</small>\"] B -->|Discard Non-Clinical| X[\"Drop TOC & Rosters<br/><small>(Filter Junk Pages)</small>\"] C --> D[\"4. Atomic Sub-Chunker<br/><small>(120–240 Words)</small>"
+            - generic [ref=e108]:
+              - generic [ref=e109]:
+                - toolbar [ref=e110] [cursor=pointer]:
+                  - menubar [ref=e111]: Sample Diagrams
+                - generic [ref=e117]:
+                  - button "Flowchart" [ref=e118]
+                  - button "Class" [ref=e119]
+                  - button "Sequence" [ref=e120]
+                  - button "Entity Relationship" [ref=e121]
+                  - button "State" [ref=e122]
+                  - button "Mindmap" [ref=e123]
+                  - button "Architecture" [ref=e124]
+                  - button "Block" [ref=e125]
+                  - button "C4" [ref=e126]
+                  - button "Gantt" [ref=e127]
+                  - button "Git" [ref=e128]
+                  - button "Ishikawa" [ref=e129]
+                  - button "Kanban" [ref=e130]
+                  - button "Packet" [ref=e131]
+                  - button "Pie" [ref=e132]
+                  - button "Quadrant" [ref=e133]
+                  - button "Radar" [ref=e134]
+                  - button "Requirement" [ref=e135]
+                  - button "Sankey" [ref=e136]
+                  - button "Timeline" [ref=e137]
+                  - button "TreeView" [ref=e138]
+                  - button "Treemap" [ref=e139]
+                  - button "User Journey" [ref=e140]
+                  - button "Venn" [ref=e141]
+                  - button "Wardley Maps" [ref=e142]
+                  - button "XY" [ref=e143]
+                  - button "ZenUML" [ref=e144]
+              - toolbar [ref=e146] [cursor=pointer]:
+                - menubar [ref=e147]: Actions
+          - separator [ref=e150]
+          - generic [ref=e151]:
+            - document [ref=e154]:
+              - generic [ref=e157]:
+                - generic [ref=e161]:
+                  - paragraph [ref=e167]: Retain Clinical
+                  - paragraph [ref=e173]: Discard Non-Clinical
+                - generic [ref=e174]:
+                  - paragraph [ref=e181]: 1. Raw Medical PDFs(WHO, CCRAS, ICMR)
+                  - paragraph [ref=e188]: 2. PyMuPDF Page Filter(Heuristic Parser)
+                  - paragraph [ref=e195]: 3. LLM Clinical Extractor(ICD-10 & NAMASTE)
+                  - paragraph [ref=e202]: Drop TOC & Rosters(Filter Junk Pages)
+                  - paragraph [ref=e209]: 4. Atomic Sub-Chunker(120–240 Words)
+                  - paragraph [ref=e216]: 5. Context Re-Injection(Condition Header)
+                  - paragraph [ref=e223]: 6. all-MiniLM-L6-v2(384-dim Vector)
+                  - paragraph [ref=e230]: 7. Supabase pgvector(HNSW Cosine Index)
+            - button [ref=e232]:
+              - link "Mermaid Chart Edit visually" [ref=e234] [cursor=pointer]:
+                - /url: https://mermaid.ai/app/plugin/save?state=pako:eNqFlO1O4kAUhm_lZDYsmrS1HdpCG2OC_RA2oAaMmrX7Y2hHmLW0ZDpVXCTZe9g73CvZoQjKLln7pz0f7_POOZN0geI8ochFtdqCZUy4sKiLCZ3Sa8IZGaW0qMsU1DPZNZyRmGVjmWjqCtQ5yR7eUqYFy-WyVot4lN2n-VM8IVxAb7CKQT7tuwgZGgzIE_RpwmKSwqUfFscjfnRyXExJmp4c3HQuFPC8QXuoQNfrDw6Pj9aVCH0DVT2BUwnBGlw-90sphksyphCyVFC-w-nQkrNCsFh28ILy95zNeTbv0xX4ZUAFYRl4qdyBPNoLeNKpoUGv198mIZgLTmKR75p1PV81dPgM5-1-e3gV7DNbm_isiAlP4DzP1DenW-nk83wGVxeepAzyQo6zu5f1iPClzB6qmYv_DeRVm_Il1dSgLfKpXMOwHKneRMr_WpSB9d8_f2FTh5ucJ3uxfoULJM7SwMszQecCBlTtZt9pLFie7QBlQ8JWWehQkuzffFARQ0m0NZA1tS9X0eurPVt9xDu0RstUEzaFa7ra-j5WWLHO7g4i1NTkmDMyIgWF2fiR_nNRnfPhjZygYBmFbpbQ-TvgYUXcUAvxnFJowz1LU_dT0Ahx6CuF4PkDdT8Zlm15-muoPrFETFxDs2bzXfXtqzoMg9Mg2Ko9G7dw60O1t1WHjUDfqgPbMvSPvc82J2-FVuBs1Tho-g28q8Zr7VqPFDTmLEGu4CVV0JTyKVmFaLGqRqj6MUTIlZ8JvSdlKiIUZUspm5Hsa55PN0qel-MJcu9JWsionCVEUJ-RMSdvLVReAffyMhPIdSoCchdojlyMHa1lYKxbVsNqGrZtK-hZplsabjjYMUzDdGzHMc2lgn5UpoamY91oNnXdbuJV1V7-AUQIg0I&utm_source=ai_live_editor&utm_medium=visual_edit&utm_campaign=visual_1
+                - img "Mermaid Chart" [ref=e235]
+                - text: Edit
+                - generic [ref=e236]: visually
+            - generic [ref=e238]:
+              - button "Reset view" [ref=e239]
+              - separator [ref=e240]
+              - button [ref=e241]
+              - button [ref=e242]
+              - separator [ref=e243]
+              - link "Full Screen" [ref=e244] [cursor=pointer]:
+                - /url: /view#pako:eNqFlO1O4kAUhm_lZDYsmrS1HdpCG2OC_RA2oAaMmrX7Y2hHmLW0ZDpVXCTZe9g73CvZoQjKLln7pz0f7_POOZN0geI8ochFtdqCZUy4sKiLCZ3Sa8IZGaW0qMsU1DPZNZyRmGVjmWjqCtQ5yR7eUqYFy-WyVot4lN2n-VM8IVxAb7CKQT7tuwgZGgzIE_RpwmKSwqUfFscjfnRyXExJmp4c3HQuFPC8QXuoQNfrDw6Pj9aVCH0DVT2BUwnBGlw-90sphksyphCyVFC-w-nQkrNCsFh28ILy95zNeTbv0xX4ZUAFYRl4qdyBPNoLeNKpoUGv198mIZgLTmKR75p1PV81dPgM5-1-e3gV7DNbm_isiAlP4DzP1DenW-nk83wGVxeepAzyQo6zu5f1iPClzB6qmYv_DeRVm_Il1dSgLfKpXMOwHKneRMr_WpSB9d8_f2FTh5ucJ3uxfoULJM7SwMszQecCBlTtZt9pLFie7QBlQ8JWWehQkuzffFARQ0m0NZA1tS9X0eurPVt9xDu0RstUEzaFa7ra-j5WWLHO7g4i1NTkmDMyIgWF2fiR_nNRnfPhjZygYBmFbpbQ-TvgYUXcUAvxnFJowz1LU_dT0Ahx6CuF4PkDdT8Zlm15-muoPrFETFxDs2bzXfXtqzoMg9Mg2Ko9G7dw60O1t1WHjUDfqgPbMvSPvc82J2-FVuBs1Tho-g28q8Zr7VqPFDTmLEGu4CVV0JTyKVmFaLGqRqj6MUTIlZ8JvSdlKiIUZUspm5Hsa55PN0qel-MJcu9JWsionCVEUJ-RMSdvLVReAffyMhPIdSoCchdojlyMHa1lYKxbVsNqGrZtK-hZplsabjjYMUzDdGzHMc2lgn5UpoamY91oNnXdbuJV1V7-AUQIg0I
+            - generic [ref=e246]:
+              - generic [ref=e247]: v11.14.0
+              - button "Privacy & Security" [ref=e248]:
+                - link [ref=e249] [cursor=pointer]:
+                  - /url: https://mermaid.ai/web/privacy-policy
+              - separator [ref=e250]
+              - button "Switch to dark theme" [ref=e251]
+            - generic [ref=e255]:
+              - button "Hand-Drawn" [ref=e256]
+              - button "Background Grid" [pressed] [ref=e257]
+  - generic [ref=e259]:
+    - alert
+    - alert

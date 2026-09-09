@@ -8,7 +8,7 @@ Provides REST API endpoints for hospital kiosk touchscreens:
 """
 
 from typing import Dict, Any, List, Optional
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, UploadFile, File, Form
 from pydantic import BaseModel, Field
 
 from app.ai.dialogue import (
@@ -208,3 +208,36 @@ async def check_red_flags(request: RedFlagCheckRequest):
         is_red_flag=bool(alert and alert.is_red_flag),
         alert=alert
     )
+
+@router.post("/stream-turn", summary="Real-time SSE Token Stream -> Voice TTS (Primary)")
+async def stream_dialogue_turn_endpoint(
+    audio_file: Optional[UploadFile] = File(None, description="16kHz audio from Push-to-Talk"),
+    text_response: Optional[str] = Form(None, description="Typed text or touchscreen response"),
+    selected_option_id: Optional[str] = Form(None, description="Selected option ID"),
+    session_id: Optional[str] = Form(None, description="Active session ID"),
+    patient_id: str = Form("PAT-DEMO-01", description="Patient ID in Supabase"),
+    hospital_type: str = Form("allopathy", description="'allopathy' | 'ayurveda'"),
+    language: str = Form("hi", description="Patient language ISO code ('hi', 'ta', 'te', 'mr', 'bn', 'en')"),
+    conversation_history: Optional[str] = Form("[]", description="JSON history"),
+    max_turns: int = Form(10, description="Max questions limit"),
+    chief_complaint_hint: Optional[str] = Form(None, description="Chief complaint hint")
+):
+    """
+    Primary Dialogue Engine Endpoint (POST /api/v1/dialogue/stream-turn):
+    Ultra-Low Latency Server-Sent Events (SSE) streaming conversational turn:
+    streams question chunks, synthesized voice audio, touch options, and state updates.
+    """
+    from app.api.v1.endpoints.interview import stream_interview_turn
+    return await stream_interview_turn(
+        audio_file=audio_file,
+        text_response=text_response,
+        selected_option_id=selected_option_id,
+        session_id=session_id,
+        patient_id=patient_id,
+        hospital_type=hospital_type,
+        language=language,
+        conversation_history=conversation_history,
+        max_turns=max_turns,
+        chief_complaint_hint=chief_complaint_hint
+    )
+

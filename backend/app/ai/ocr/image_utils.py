@@ -3,23 +3,38 @@ In-memory WebP image optimization and thumbnail utilities for MediKiosk.
 """
 
 import io
-from typing import Tuple
+from typing import Tuple, Union
 from PIL import Image
+import numpy as np
 
 
-def generate_thumbnail_webp(image_bytes: bytes, max_dim: int = 300, quality: int = 75) -> bytes:
+def ndarray_to_webp(img_rgb: np.ndarray, quality: int = 88) -> bytes:
     """
-    Generates an ultra-fast in-memory WebP thumbnail (~30 KB) from raw image bytes.
+    Converts an RGB numpy array (cropped/rectified document) to high-res master WebP bytes.
+    """
+    pil_img = Image.fromarray(img_rgb)
+    buffer = io.BytesIO()
+    pil_img.save(buffer, format="WEBP", quality=quality, method=4)
+    return buffer.getvalue()
+
+
+def generate_thumbnail_webp(image_input: Union[bytes, np.ndarray], max_dim: int = 300, quality: int = 75) -> bytes:
+    """
+    Generates an ultra-fast in-memory WebP thumbnail (~30 KB) from raw image bytes or numpy array.
     Used for instant doctor timeline rendering with zero storage download penalty.
     """
-    with Image.open(io.BytesIO(image_bytes)) as img:
-        if img.mode in ("RGBA", "P", "LA"):
-            img = img.convert("RGB")
-        thumb_img = img.copy()
-        thumb_img.thumbnail((max_dim, max_dim), Image.Resampling.LANCZOS)
-        buffer = io.BytesIO()
-        thumb_img.save(buffer, format="WEBP", quality=quality, method=3)
-        return buffer.getvalue()
+    if isinstance(image_input, np.ndarray):
+        img = Image.fromarray(image_input)
+    else:
+        img = Image.open(io.BytesIO(image_input))
+
+    if img.mode in ("RGBA", "P", "LA"):
+        img = img.convert("RGB")
+    thumb_img = img.copy()
+    thumb_img.thumbnail((max_dim, max_dim), Image.Resampling.LANCZOS)
+    buffer = io.BytesIO()
+    thumb_img.save(buffer, format="WEBP", quality=quality, method=3)
+    return buffer.getvalue()
 
 
 def create_optimized_image_variants(raw_bytes: bytes) -> Tuple[bytes, bytes]:

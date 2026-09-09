@@ -1,0 +1,75 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "प्रोफाइल पर वापस जाएं" [ref=e5] [cursor=pointer]
+    - generic [ref=e9] [cursor=pointer]: MediKiosk
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - button "Hindi (हिन्दी)" [active] [ref=e13] [cursor=pointer]
+        - generic [ref=e76]:
+          - generic [ref=e77] [cursor=pointer]:
+            - generic [ref=e78]: Hindi
+            - generic [ref=e79]: हिन्दी
+          - generic [ref=e80] [cursor=pointer]:
+            - generic [ref=e81]: English
+            - generic [ref=e82]: English
+          - generic [ref=e83] [cursor=pointer]:
+            - generic [ref=e84]: Tamil
+            - generic [ref=e85]: தமிழ்
+          - generic [ref=e86] [cursor=pointer]:
+            - generic [ref=e87]: Telugu
+            - generic [ref=e88]: తెలుగు
+          - generic [ref=e89] [cursor=pointer]:
+            - generic [ref=e90]: Marathi
+            - generic [ref=e91]: मराठी
+          - generic [ref=e92] [cursor=pointer]:
+            - generic [ref=e93]: Bengali
+            - generic [ref=e94]: বাংলা
+          - generic [ref=e95] [cursor=pointer]:
+            - generic [ref=e96]: Gujarati
+            - generic [ref=e97]: ગુજરાતી
+          - generic [ref=e98] [cursor=pointer]:
+            - generic [ref=e99]: Kannada
+            - generic [ref=e100]: ಕನ್ನಡ
+          - generic [ref=e101] [cursor=pointer]:
+            - generic [ref=e102]: Malayalam
+            - generic [ref=e103]: മലയാളം
+          - generic [ref=e104] [cursor=pointer]:
+            - generic [ref=e105]: Punjabi
+            - generic [ref=e106]: ਪੰਜਾਬੀ
+          - generic [ref=e107] [cursor=pointer]:
+            - generic [ref=e108]: Odia
+            - generic [ref=e109]: ଓଡ଼ିଆ
+          - generic [ref=e110] [cursor=pointer]:
+            - generic [ref=e111]: Assamese
+            - generic [ref=e112]: অসমীয়া
+      - img [ref=e22]:
+        - generic [ref=e33]: Ayushman Bharat
+        - generic [ref=e34]: Digital Mission
+        - generic [ref=e35]: Building Digital Health Ecosystem
+  - main [ref=e36]:
+    - generic [ref=e37]:
+      - heading "नमस्ते!" [level=2] [ref=e38]
+      - paragraph [ref=e39]: आज मैं आपकी क्या मदद कर सकता हूँ?
+    - paragraph [ref=e69]: बुखार और खांसी
+    - paragraph [ref=e71]: आपको असुविधा या दर्द कहाँ महसूस हो रहा है?
+    - paragraph [ref=e114]: गले में और सीने में
+    - paragraph [ref=e116]: आपको कितने समय से बुखार और खांसी है, और क्या यह अचानक शुरू हुआ या धीरे-धीरे आया?
+  - region "Quick symptom options" [ref=e40]:
+    - button "बुखार और खांसी लक्षण" [ref=e41] [cursor=pointer]:
+      - generic [ref=e42]: बुखार और खांसी
+      - generic [ref=e43]: लक्षण
+    - button "तेज सिरदर्द लक्षण" [ref=e44] [cursor=pointer]:
+      - generic [ref=e45]: तेज सिरदर्द
+      - generic [ref=e46]: लक्षण
+    - button "पेट में दर्द लक्षण" [ref=e47] [cursor=pointer]:
+      - generic [ref=e48]: पेट में दर्द
+      - generic [ref=e49]: लक्षण
+    - button "सीने में तकलीफ लक्षण" [ref=e50] [cursor=pointer]:
+      - generic [ref=e51]: सीने में तकलीफ
+      - generic [ref=e52]: लक्षण
+  - generic [ref=e53]:
+    - textbox "यहाँ संदेश लिखें..." [ref=e54]
+    - button "Send message" [disabled] [ref=e55]
+  - contentinfo [ref=e58]:
+    - generic [ref=e59]: बोलने के लिए टैप करें
+    - button "बोलने के लिए टैप करें" [ref=e60] [cursor=pointer]

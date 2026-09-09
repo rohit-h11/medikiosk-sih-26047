@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useVoiceContext } from '../context/VoiceContext';
 import { usePushToTalk } from '../hooks/usePushToTalk';
 import { ProcessedAudioResult } from '../types/audio';
 
@@ -17,9 +18,15 @@ interface TouchOption {
   slot_tag?: string;
 }
 
-export const SimpleVoiceTest: React.FC = () => {
-  const [language, setLanguage] = useState<string>('hi');
-  const [patientId, setPatientId] = useState<string>(() => `PAT-DEMO-${Math.floor(1000 + Math.random() * 9000)}`);
+interface SimpleVoiceTestProps {
+  patientProfile?: any;
+}
+
+export const SimpleVoiceTest: React.FC<SimpleVoiceTestProps> = ({ patientProfile }) => {
+  const { language, setLanguage, supportedLanguages } = useVoiceContext();
+  const [patientId, setPatientId] = useState<string>(() => {
+    return patientProfile?.abhaNumber || localStorage.getItem('medikiosk_patient_id') || 'PAT-ROHIT-01';
+  });
   const [sessionId, setSessionId] = useState<string>(() => `sess_${Math.random().toString(36).substring(2, 10)}`);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -89,7 +96,7 @@ export const SimpleVoiceTest: React.FC = () => {
       }));
       formData.append('conversation_history', JSON.stringify(historyPayload));
 
-      const res = await fetch('http://localhost:8000/api/v1/interview/turn', {
+      const res = await fetch('/api/v1/interview/turn', {
         method: 'POST',
         body: formData,
       });
@@ -212,12 +219,11 @@ export const SimpleVoiceTest: React.FC = () => {
             onChange={(e) => setLanguage(e.target.value)}
             style={{ padding: '6px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem', fontWeight: 600, background: '#f8fafc', color: '#0f172a', outline: 'none' }}
           >
-            <option value="hi">🇮🇳 Hindi (हिंदी)</option>
-            <option value="ta">🇮🇳 Tamil (தமிழ்)</option>
-            <option value="te">🇮🇳 Telugu (తెలుగు)</option>
-            <option value="mr">🇮🇳 Marathi (मराठी)</option>
-            <option value="bn">🇮🇳 Bengali (বাংলা)</option>
-            <option value="en">🌐 English</option>
+            {supportedLanguages.map((l) => (
+              <option key={l.code} value={l.code}>
+                🇮🇳 {l.name} ({l.nativeName})
+              </option>
+            ))}
           </select>
 
           <button

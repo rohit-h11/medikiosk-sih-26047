@@ -1,0 +1,25 @@
+- generic [ref=f1e3]:
+  - generic [ref=f1e4]:
+    - button "Back" [ref=f1e5] [cursor=pointer]
+    - generic [ref=f1e8]:
+      - heading "स्वागत है" [level=1] [ref=f1e9]
+      - generic [ref=f1e10]: MediKiosk
+      - paragraph [ref=f1e11]: भाषा चुनें या बोलने के लिए माइक दबाएं
+    - img [ref=f1e13]:
+      - generic [ref=f1e24]: Ayushman Bharat
+      - generic [ref=f1e25]: Digital Mission
+      - generic [ref=f1e26]: Building Digital Health Ecosystem
+  - generic [ref=f1e27]:
+    - generic [ref=f1e28]:
+      - generic [ref=f1e29]: भाषा चुनें
+      - button "Hindi (हिन्दी)" [ref=f1e31] [cursor=pointer]
+      - generic [ref=f1e35]:
+        - generic [ref=f1e36] [cursor=pointer]
+        - button "बोलने के लिए दबाएं" [ref=f1e40] [cursor=pointer]
+      - generic [ref=f1e41]:
+        - generic [ref=f1e42]:
+          - textbox "आभा (ABHA) आईडी" [ref=f1e43]
+          - button "ओटीपी जनरेट करें" [ref=f1e44] [cursor=pointer]
+        - textbox "ओटीपी (OTP)" [ref=f1e45]
+        - button "ओटीपी पुनः भेजें" [ref=f1e46] [cursor=pointer]
+    - generic [ref=f1e47]: आभा आईडी प्राप्त करने के लिए क्यूआर स्कैन करें

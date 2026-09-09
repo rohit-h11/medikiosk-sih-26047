@@ -1,0 +1,20 @@
+- generic [ref=f3e3]:
+  - banner [ref=f3e4]:
+    - button "Back" [ref=f3e5] [cursor=pointer]
+    - generic [ref=f3e8]:
+      - generic [ref=f3e9]: WELCOME TO
+      - generic [ref=f3e10]:
+        - generic [ref=f3e11]: Medi
+        - generic [ref=f3e12]: Kiosk
+      - heading "Ayushman Beneficiary" [level=1] [ref=f3e13]
+    - img [ref=f3e16]:
+      - generic [ref=f3e27]: Ayushman Bharat
+      - generic [ref=f3e28]: Digital Mission
+      - generic [ref=f3e29]: Building Digital Health Ecosystem
+  - generic [ref=f3e33]:
+    - button "Capture & Scan Document" [ref=f3e34] [cursor=pointer]
+    - button "Upload from Device" [ref=f3e38] [cursor=pointer]
+  - contentinfo [ref=f3e42]:
+    - generic [ref=f3e43]: मेडिकियोस्क सहायता से संपर्क करें
+    - button "यहाँ बातचीत करें!" [ref=f3e44] [cursor=pointer]
+  - button "Start Consultation" [ref=f3e45] [cursor=pointer]

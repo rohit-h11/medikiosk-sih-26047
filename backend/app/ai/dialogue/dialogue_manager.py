@@ -116,20 +116,52 @@ async def get_next_dialogue_turn(
     # Build system prompt using resolved ClinicalProtocol strategy
     system_prompt = protocol.build_system_prompt(ctx, rag_snippets)
     
-    # Construct user prompt
+    # Build confirmed clinical facts from current state
+    active_state = current_state or {}
+    confirmed_slots = {
+        k: v for k, v in active_state.items()
+        if v and str(v).lower() not in ["null", "none", "[]", "{}"]
+    }
+    if confirmed_slots:
+        confirmed_facts_text = "\n".join([f"- {k.replace('_', ' ').title()}: {v}" for k, v in confirmed_slots.items()])
+    else:
+        confirmed_facts_text = "None confirmed yet (initial triage)."
+
+    # Extract patient's latest utterance for prominent emphasis
+    latest_patient_utterance = ctx.chief_complaint or "Initial presentation"
+    if history:
+        for m in reversed(history):
+            if m.get("role") in ["patient", "user"]:
+                latest_patient_utterance = m.get("content", m.get("text", ""))
+                break
+
+    # Construct user prompt with clear separation of facts, transcript, and latest utterance
     history_text = _format_conversation_history_text(history)
     user_prompt = f"""PATIENT CONTEXT:
 - Name: {ctx.name or 'Patient'} | Age: {ctx.age or 'Unspecified'} | Gender: {ctx.gender or 'Unspecified'}
 - Chief Complaint: {ctx.chief_complaint or 'Under investigation'}
 - Target Maximum Turns: {max_turns}
 
-CONVERSATION HISTORY TO DATE:
+CONFIRMED CLINICAL FACTS SO FAR:
+{confirmed_facts_text}
+
+CONVERSATION TRANSCRIPT:
 {history_text}
 
+PATIENT'S LATEST STATEMENT:
+"{latest_patient_utterance}"
+
 INSTRUCTIONS:
-Evaluate whether all target clinical slots ({', '.join(protocol.target_slots)}) are covered.
-If missing slots remain and turns < {max_turns}, formulate the next single targeted question and 3-4 touch options.
-If complete, set should_stop = true and generate the comprehensive clinical summary.
+1. Empathize naturally with the patient's latest statement ("{latest_patient_utterance}").
+2. Review CONFIRMED CLINICAL FACTS above. NEVER ask about a clinical dimension that has already been confirmed!
+3. Select the single most important missing dimension from ({', '.join(protocol.target_slots)}) and ask ONE clear, focused follow-up question.
+4. Provide 3 to 4 distinct, concrete `touch_options` that directly answer your question. Each option must have:
+   - "id": string (e.g. "opt_1")
+   - "label": concise button text (e.g. "Started today", "Dry cough", "Mild (1-3)")
+   - "value": natural patient response text
+   - "slot_tag": target clinical slot
+5. Update "state" with any newly extracted facts from the patient's latest statement.
+6. If all core clinical dimensions are gathered or turns >= {max_turns}, set should_stop = true and generate the clinical summary.
 Respond strictly in JSON format."""
 
     # Call LLM (Groq -> Gemini -> OpenAI -> Fallback Heuristic)

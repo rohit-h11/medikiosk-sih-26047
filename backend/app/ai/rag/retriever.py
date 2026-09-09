@@ -14,13 +14,13 @@ logger = logging.getLogger("medikiosk.rag.retriever")
 _embedding_model = None
 
 def get_embedding_model():
-    """Loads and caches the all-MiniLM-L6-v2 model (384 dimensions)."""
+    """Loads and caches the BAAI/bge-small-en-v1.5 model (384 dimensions)."""
     global _embedding_model
     if _embedding_model is None:
         try:
             from sentence_transformers import SentenceTransformer
-            logger.info("Loading sentence-transformers/all-MiniLM-L6-v2 model...")
-            _embedding_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+            logger.info("Loading BAAI/bge-small-en-v1.5 model...")
+            _embedding_model = SentenceTransformer("BAAI/bge-small-en-v1.5")
         except Exception as e:
             logger.warning(f"Could not load sentence-transformers: {e}. Vector RAG fallback enabled.")
             _embedding_model = None
@@ -172,7 +172,7 @@ async def store_dialogue_summary_in_rag_async(
 
 async def retrieve_clinical_guidelines_async(
     query_text: str,
-    top_k: int = 4,
+    top_k: int = 5,
     similarity_threshold: float = 0.35,
     domain: Optional[str] = None,
     category: Optional[str] = None,

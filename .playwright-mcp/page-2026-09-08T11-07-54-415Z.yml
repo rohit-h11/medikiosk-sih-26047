@@ -1,0 +1,35 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "Back to Profile" [ref=e5] [cursor=pointer]
+    - generic [ref=e9] [cursor=pointer]: MediKiosk
+    - generic [ref=e11]:
+      - button "English (English)" [ref=e13] [cursor=pointer]
+      - img [ref=e22]:
+        - generic [ref=e33]: Ayushman Bharat
+        - generic [ref=e34]: Digital Mission
+        - generic [ref=e35]: Building Digital Health Ecosystem
+  - main [ref=e36]:
+    - generic [ref=e37]:
+      - heading "Hello!" [level=2] [ref=e38]
+      - paragraph [ref=e39]: How can I help you today?
+    - paragraph [ref=e65]: Fever & Cough
+    - generic [ref=e66]: Analyzing symptoms...
+  - region "Quick symptom options" [ref=e40]:
+    - button "Fever & Cough Symptom" [disabled] [ref=e41]:
+      - generic [ref=e42]: Fever & Cough
+      - generic [ref=e43]: Symptom
+    - button "Severe Headache Symptom" [disabled] [ref=e44]:
+      - generic [ref=e45]: Severe Headache
+      - generic [ref=e46]: Symptom
+    - button "Stomach Pain Symptom" [disabled] [ref=e47]:
+      - generic [ref=e48]: Stomach Pain
+      - generic [ref=e49]: Symptom
+    - button "Chest Discomfort Symptom" [disabled] [ref=e50]:
+      - generic [ref=e51]: Chest Discomfort
+      - generic [ref=e52]: Symptom
+  - generic [ref=e53]:
+    - textbox "Message here..." [disabled] [ref=e54]
+    - button "Send message" [disabled] [ref=e55]
+  - contentinfo [ref=e58]:
+    - generic [ref=e59]: TAP TO SPEAK
+    - button "TAP TO SPEAK" [disabled] [ref=e60] [cursor=pointer]

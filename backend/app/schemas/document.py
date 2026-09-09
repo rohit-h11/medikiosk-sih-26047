@@ -26,12 +26,13 @@ class PreIngestionCheckResult(BaseModel):
     """
     is_acceptable: bool = Field(..., description="True if image passes sharpness, contrast, and glare checks")
     is_duplicate: bool = Field(False, description="True if an identical or near-identical image already exists")
-    duplicate_reason: Optional[str] = Field(None, description="'EXACT_SHA256' or 'VISUAL_DHASH' or None")
+    duplicate_reason: Optional[str] = Field(None, description="'EXACT_SHA256', 'VISUAL_DHASH', 'VISUAL_PHASH' or None")
     existing_document_id: Optional[str] = Field(None, description="UUID of existing document if duplicate detected")
     
     # Forensic & Quality Metrics
     sha256_hash: str = Field(..., description="Cryptographic SHA-256 checksum of raw image bytes")
     dhash_fingerprint: Optional[str] = Field(None, description="64-bit perceptual structural difference hash")
+    phash_fingerprint: Optional[str] = Field(None, description="64-bit DCT-based perceptual frequency hash")
     sharpness: float = Field(0.0, description="Laplacian variance (higher = sharper)")
     contrast_std: float = Field(0.0, description="Standard deviation of grayscale luminance")
     glare_ratio: float = Field(0.0, description="Ratio of specular highlight / overexposed pixels")
@@ -71,6 +72,7 @@ class StoredDocumentResult(BaseModel):
     # Forensic Integrity
     file_hash_sha256: str = Field(..., description="SHA-256 checksum")
     perceptual_hash_dhash: Optional[str] = Field(None, description="Perceptual dHash")
+    perceptual_hash_phash: Optional[str] = Field(None, description="Perceptual pHash (DCT)")
     file_size_bytes: int = Field(..., description="Raw file size in bytes")
     mime_type: str = Field(..., description="MIME type")
     

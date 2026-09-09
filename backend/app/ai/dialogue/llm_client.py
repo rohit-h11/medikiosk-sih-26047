@@ -43,11 +43,13 @@ def get_gemini_api_key() -> str:
     return os.getenv("GEMINI_API_KEY") or _DEFAULT_GEMINI
 
 # Preferred Groq models in order of priority (20b has higher TPM quota and faster inference)
-GROQ_MODELS = ["openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.6-27b", "qwen/qwen3.8-27b"]
+GROQ_MODELS = ["openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.8-27b", "qwen/qwen3.6-27b"]
 
 def _clean_json_text(raw_text: str) -> str:
-    """Strip markdown code fence if LLM wraps output in ```json ... ```"""
+    """Strip think tags and markdown code fence if LLM wraps output in ```json ... ```"""
     text = raw_text.strip()
+    # Strip <think> ... </think> reasoning tokens if present
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
     if text.startswith("```"):
         lines = text.splitlines()
         if lines[0].startswith("```"):
@@ -92,11 +94,12 @@ async def call_groq_llm(system_prompt: str, user_prompt: str) -> Optional[Dict[s
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
-            "temperature": 0.2,
-            "max_tokens": 512
+            "temperature": 0.35,
+            "max_tokens": 1500,
+            "response_format": {"type": "json_object"}
         }
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
+            async with httpx.AsyncClient(timeout=15.0) as client:
                 res = await client.post(
                     "https://api.groq.com/openai/v1/chat/completions",
                     headers=headers,
@@ -107,6 +110,7 @@ async def call_groq_llm(system_prompt: str, user_prompt: str) -> Optional[Dict[s
                     content = data["choices"][0]["message"]["content"]
                     parsed = parse_llm_json_response(content)
                     if parsed:
+                        logger.info(f"Groq {model_name} generated valid dialogue turn ({len(content)} chars)")
                         return parsed
                 else:
                     logger.warning(f"Groq {model_name} failed with status {res.status_code}: {res.text}")
@@ -121,7 +125,8 @@ async def call_gemini_llm(system_prompt: str, user_prompt: str) -> Optional[Dict
     if not api_key or api_key.startswith("your-"):
         return None
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={api_key}"
+    # Use verified active gemini-3.6-flash model
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key={api_key}"
     payload = {
         "contents": [
             {
@@ -137,7 +142,7 @@ async def call_gemini_llm(system_prompt: str, user_prompt: str) -> Optional[Dict
     }
 
     try:
-        async with httpx.AsyncClient(timeout=10.0) as client:
+        async with httpx.AsyncClient(timeout=15.0) as client:
             res = await client.post(url, json=payload)
             if res.status_code == 200:
                 data = res.json()
@@ -146,7 +151,10 @@ async def call_gemini_llm(system_prompt: str, user_prompt: str) -> Optional[Dict
                     parts = candidates[0].get("content", {}).get("parts", [])
                     if parts:
                         text = parts[0].get("text", "")
-                        return parse_llm_json_response(text)
+                        parsed = parse_llm_json_response(text)
+                        if parsed:
+                            logger.info("Gemini 3.6 Flash fallback successfully generated dialogue turn")
+                            return parsed
             else:
                 logger.warning(f"Gemini API returned {res.status_code}: {res.text}")
     except Exception as e:

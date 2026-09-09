@@ -1,0 +1,2 @@
+[     149ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:3000/node_modules/.vite/deps/chunk-PJEEZAML.js?v=3927db0e:21550
+[     700ms] [WARNING] Camera scanner initialization notice: Error getting userMedia, error = NotReadableError: Device in use @ http://localhost:3000/src/pages/ScreenD_Qr.tsx:100

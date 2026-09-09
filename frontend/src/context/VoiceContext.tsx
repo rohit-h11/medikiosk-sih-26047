@@ -62,7 +62,14 @@ export const VoiceProvider: React.FC<VoiceProviderProps> = ({
   defaultLanguage = 'hi',
   initialConfig = {},
 }) => {
-  const [language, setLanguage] = useState<string>(defaultLanguage);
+  const [language, setLanguageState] = useState<string>(() => {
+    return localStorage.getItem('medikiosk_language') || defaultLanguage;
+  });
+
+  const setLanguage = useCallback((lang: string) => {
+    setLanguageState(lang);
+    localStorage.setItem('medikiosk_language', lang);
+  }, []);
   const [audioConfig, setAudioConfig] = useState<AudioProcessingConfig>({
     targetSampleRate: 16000,
     noiseSuppression: true,

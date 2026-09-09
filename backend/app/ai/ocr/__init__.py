@@ -14,7 +14,7 @@ from .quality import assess_quality, QualityReport
 from .steps import classify_handwritten_vs_printed
 from .vision_llm import VisionLLMClient
 from .extractor import DocumentExtractor, extract_document_data
-from .image_utils import generate_thumbnail_webp
+from .image_utils import generate_thumbnail_webp, ndarray_to_webp, create_optimized_image_variants
 from .schemas import (
     ExtractedDocumentData,
     MedicationItem,
@@ -28,6 +28,8 @@ from .schemas import (
 
 __all__ = [
     "generate_thumbnail_webp",
+    "ndarray_to_webp",
+    "create_optimized_image_variants",
     "PreprocessConfig",
     "VisionLLMConfig",
     "DocumentType",

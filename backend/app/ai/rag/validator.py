@@ -5,8 +5,8 @@ from pathlib import Path
 
 class ExtractedData(BaseModel):
     """Validates the core extracted data from OCR"""
-    document_type: str = Field(..., description="Type of the document")
-    document_date: str = Field(..., description="Date of the document")
+    document_type: Optional[str] = Field(default="prescription", description="Type of the document")
+    document_date: Optional[str] = Field(default=None, description="Date of the document")
     patient_name: Optional[str] = None
     
     # Allow any other extracted clinical fields to pass through (medications, vitals, etc.)

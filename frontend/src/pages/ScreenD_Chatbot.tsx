@@ -24,6 +24,36 @@ interface TouchOptionItem {
   value: string;
 }
 
+const renderFormattedSummary = (content: string) => {
+  const lines = content.split('\n');
+  return lines.map((line, idx) => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      return <div key={idx} style={{ height: '8px' }} />;
+    }
+    if (trimmed.startsWith('###') || trimmed.startsWith('##')) {
+      const headerText = trimmed.replace(/^#+\s*/, '');
+      return (
+        <h4 key={idx} style={{ color: '#0f766e', fontWeight: 700, margin: '14px 0 4px 0', fontSize: '15px' }}>
+          {headerText}
+        </h4>
+      );
+    }
+    const boldParts = trimmed.split(/(\*\*.*?\*\*)/g);
+    const isBullet = trimmed.startsWith('•') || trimmed.startsWith('-');
+    return (
+      <div key={idx} style={{ marginLeft: isBullet ? '12px' : '0', marginBottom: '3px' }}>
+        {boldParts.map((part, pIdx) => {
+          if (part.startsWith('**') && part.endsWith('**')) {
+            return <strong key={pIdx} style={{ color: '#0f172a' }}>{part.slice(2, -2)}</strong>;
+          }
+          return <span key={pIdx}>{part}</span>;
+        })}
+      </div>
+    );
+  });
+};
+
 interface ScreenD_ChatbotProps {
   profile?: AbhaProfile | null;
   attachedDocument?: any;
@@ -42,9 +72,9 @@ export const ScreenD_Chatbot: React.FC<ScreenD_ChatbotProps> = ({
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState<boolean>(false);
 
-  // Patient identification
-  const patientId = profile?.abhaNumber || localStorage.getItem('medikiosk_patient_id') || 'PAT-ROHIT-01';
-  const [sessionId] = useState<string>(() => `sess_${Math.random().toString(36).substring(2, 10)}`);
+  // Patient identification from active session
+  const [activeSessionId, setActiveSessionId] = useState<string>(() => `sess_${Math.random().toString(36).substring(2, 10)}`);
+  const patientId = profile?.abhaNumber || 'PAT-ROHIT-01';
 
   // Active language object for header display
   const currentLangObj = supportedLanguages.find((l) => l.code === language) || {
@@ -63,60 +93,73 @@ export const ScreenD_Chatbot: React.FC<ScreenD_ChatbotProps> = ({
     },
   ]);
 
-  // Update initial welcome message if language changes
+  // Rehydrate full dialogue history and active patient from Kiosk DB on page mount / refresh
   useEffect(() => {
-    setMessages((prev) => {
-      if (prev.length === 1 && prev[0].id === 'msg_welcome') {
-        return [
-          {
-            id: 'msg_welcome',
-            role: 'assistant',
-            title: t('chatbot_hello'),
-            text: t('chatbot_how_help'),
-          },
-        ];
-      }
-      return prev;
-    });
-  }, [language, t]);
+    const hydrateFromKioskDb = async () => {
+      try {
+        const res = await fetch('/api/v1/kiosk/session');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.authenticated) {
+            if (data.session_id) {
+              setActiveSessionId(data.session_id);
+            }
+            if (data.messages && data.messages.length > 0) {
+              setMessages(
+                data.messages.map((m: any) => ({
+                  id: m.id,
+                  role: m.role,
+                  text: m.text,
+                  textEnglish: m.textEnglish,
+                  audioBase64: m.audioBase64,
+                }))
+              );
 
-  // Dynamic touch pills (initially populated from selected language translations)
+              // Restore question-specific touch options from last assistant message
+              const lastBotMsg = [...data.messages].reverse().find(
+                (m: any) => m.role === 'assistant' && Array.isArray(m.touch_options) && m.touch_options.length > 0
+              );
+              if (lastBotMsg && lastBotMsg.touch_options.length > 0) {
+                setPills(
+                  lastBotMsg.touch_options.slice(0, 4).map((opt: any) => ({
+                    id: opt.id,
+                    title: opt.label || opt.value,
+                    subtitle: opt.slot_tag || t('chatbot_symptom_tag'),
+                    value: opt.value || opt.label,
+                  }))
+                );
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Could not rehydrate kiosk session from DB:', err);
+      }
+    };
+
+    hydrateFromKioskDb();
+  }, [t]);
+
+  // Dynamic touch pills
   const [pills, setPills] = useState<TouchOptionItem[]>(() => [
-    {
-      id: 'opt_fever',
-      title: t('chatbot_opt_fever'),
-      subtitle: t('chatbot_symptom_tag'),
-      value: t('chatbot_opt_fever'),
-    },
-    {
-      id: 'opt_headache',
-      title: t('chatbot_opt_headache'),
-      subtitle: t('chatbot_symptom_tag'),
-      value: t('chatbot_opt_headache'),
-    },
-    {
-      id: 'opt_stomach',
-      title: t('chatbot_opt_stomach'),
-      subtitle: t('chatbot_symptom_tag'),
-      value: t('chatbot_opt_stomach'),
-    },
-    {
-      id: 'opt_chest',
-      title: t('chatbot_opt_chest'),
-      subtitle: t('chatbot_symptom_tag'),
-      value: t('chatbot_opt_chest'),
-    },
+    { id: 'opt_fever', title: t('chatbot_opt_fever'), subtitle: t('chatbot_symptom_tag'), value: t('chatbot_opt_fever') },
+    { id: 'opt_headache', title: t('chatbot_opt_headache'), subtitle: t('chatbot_symptom_tag'), value: t('chatbot_opt_headache') },
+    { id: 'opt_stomach', title: t('chatbot_opt_stomach'), subtitle: t('chatbot_symptom_tag'), value: t('chatbot_opt_stomach') },
+    { id: 'opt_chest', title: t('chatbot_opt_chest'), subtitle: t('chatbot_symptom_tag'), value: t('chatbot_opt_chest') },
   ]);
 
-  // Refresh default pills when language changes
+  // Only reset default pills if conversation hasn't started yet
   useEffect(() => {
-    setPills([
-      { id: 'opt_fever', title: t('chatbot_opt_fever'), subtitle: t('chatbot_symptom_tag'), value: t('chatbot_opt_fever') },
-      { id: 'opt_headache', title: t('chatbot_opt_headache'), subtitle: t('chatbot_symptom_tag'), value: t('chatbot_opt_headache') },
-      { id: 'opt_stomach', title: t('chatbot_opt_stomach'), subtitle: t('chatbot_symptom_tag'), value: t('chatbot_opt_stomach') },
-      { id: 'opt_chest', title: t('chatbot_opt_chest'), subtitle: t('chatbot_symptom_tag'), value: t('chatbot_opt_chest') },
-    ]);
-  }, [language, t]);
+    if (messages.length <= 1) {
+      setPills([
+        { id: 'opt_fever', title: t('chatbot_opt_fever'), subtitle: t('chatbot_symptom_tag'), value: t('chatbot_opt_fever') },
+        { id: 'opt_headache', title: t('chatbot_opt_headache'), subtitle: t('chatbot_symptom_tag'), value: t('chatbot_opt_headache') },
+        { id: 'opt_stomach', title: t('chatbot_opt_stomach'), subtitle: t('chatbot_symptom_tag'), value: t('chatbot_opt_stomach') },
+        { id: 'opt_chest', title: t('chatbot_opt_chest'), subtitle: t('chatbot_symptom_tag'), value: t('chatbot_opt_chest') },
+      ]);
+    }
+  }, [language, messages.length, t]);
+
 
   const [inputMessage, setInputMessage] = useState<string>('');
   const [isProcessingTurn, setIsProcessingTurn] = useState<boolean>(false);
@@ -200,16 +243,27 @@ export const ScreenD_Chatbot: React.FC<ScreenD_ChatbotProps> = ({
     // Stop any previous speech playback on new turn
     stopAudio();
 
-    // 1. Immediately create user chat bubble in UI
-    const tempUserText = textInput || (audioBlob ? `🎤 ${t('chatbot_listening')}` : t('chatbot_option_selected'));
-    const userMsgId = `msg_user_${Date.now()}`;
-    const initialUserMsg: ChatMessage = {
-      id: userMsgId,
-      role: 'patient',
-      text: tempUserText,
-    };
+    // 1. Immediately create or update user chat bubble in UI
+    const tempUserText = textInput || (audioBlob ? `🎤 ${t('chatbot_transcribing')}` : (optionId ? optionId : t('chatbot_option_selected')));
+    const userMsgId = liveMsgIdRef.current || `msg_user_${Date.now()}`;
+    liveMsgIdRef.current = null;
 
-    setMessages((prev) => [...prev, initialUserMsg]);
+    setMessages((prev) => {
+      const exists = prev.some((m) => m.id === userMsgId);
+      if (exists) {
+        return prev.map((m) =>
+          m.id === userMsgId ? { ...m, text: textInput || m.text || tempUserText } : m
+        );
+      }
+      return [
+        ...prev,
+        {
+          id: userMsgId,
+          role: 'patient',
+          text: tempUserText,
+        },
+      ];
+    });
 
     try {
       const formData = new FormData();
@@ -222,7 +276,7 @@ export const ScreenD_Chatbot: React.FC<ScreenD_ChatbotProps> = ({
       if (optionId) {
         formData.append('selected_option_id', optionId);
       }
-      formData.append('session_id', sessionId);
+      formData.append('session_id', activeSessionId);
       formData.append('patient_id', patientId);
       formData.append('language', language);
       formData.append('hospital_type', 'allopathy');
@@ -504,18 +558,92 @@ export const ScreenD_Chatbot: React.FC<ScreenD_ChatbotProps> = ({
     }
   };
 
+  // Real-time Speech WebSocket references
+  const speechWsRef = useRef<WebSocket | null>(null);
+  const liveMsgIdRef = useRef<string | null>(null);
+  const receivedFinalViaWsRef = useRef<boolean>(false);
+
   // Push-To-Talk Voice integration for the lime green bottom button
   const { isRecording, isProcessing: isVoiceProcessing, startRecording, stopRecording } = usePushToTalk({
+    onAudioChunk: (chunk: Float32Array) => {
+      if (speechWsRef.current && speechWsRef.current.readyState === WebSocket.OPEN) {
+        const int16 = new Int16Array(chunk.length);
+        for (let i = 0; i < chunk.length; i++) {
+          const s = Math.max(-1, Math.min(1, chunk[i]));
+          int16[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
+        }
+        speechWsRef.current.send(int16.buffer);
+      }
+    },
     onAudioReady: async (result) => {
       if (!result.blob) return;
+      if (receivedFinalViaWsRef.current) {
+        return;
+      }
       await submitTurn(result.blob, undefined, undefined);
     },
   });
 
   const handleMicClick = () => {
     if (isRecording) {
+      if (speechWsRef.current && speechWsRef.current.readyState === WebSocket.OPEN) {
+        speechWsRef.current.send(JSON.stringify({ event: 'stop' }));
+      }
       stopRecording();
     } else {
+      receivedFinalViaWsRef.current = false;
+      const msgId = `msg_user_${Date.now()}`;
+      liveMsgIdRef.current = msgId;
+
+      try {
+        const wsProto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${wsProto}//${window.location.host}/api/v1/ws/speech?language=${language}&session_id=${activeSessionId}`;
+        const ws = new WebSocket(wsUrl);
+        speechWsRef.current = ws;
+
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.event === 'partial' && data.transcript) {
+              setMessages((prev) => {
+                const targetId = liveMsgIdRef.current;
+                if (!targetId) return prev;
+                const existing = prev.some((m) => m.id === targetId);
+                if (existing) {
+                  return prev.map((m) =>
+                    m.id === targetId ? { ...m, text: data.transcript } : m
+                  );
+                } else {
+                  return [
+                    ...prev,
+                    {
+                      id: targetId,
+                      role: 'patient',
+                      text: data.transcript,
+                    },
+                  ];
+                }
+              });
+            } else if (data.event === 'final' && data.native) {
+              receivedFinalViaWsRef.current = true;
+              submitTurn(undefined, data.native, undefined);
+            }
+          } catch (e) {
+            console.debug('Speech WS parse err', e);
+          }
+        };
+
+        ws.onerror = (err) => {
+          console.warn('Speech WS error, fallback to audio upload', err);
+        };
+
+        ws.onclose = () => {
+          speechWsRef.current = null;
+        };
+      } catch (err) {
+        console.warn('Speech WS connection error:', err);
+      }
+
       startRecording();
     }
   };
@@ -530,7 +658,7 @@ export const ScreenD_Chatbot: React.FC<ScreenD_ChatbotProps> = ({
 
   const handlePillClick = (pill: TouchOptionItem) => {
     if (isProcessingTurn || isCompleted) return;
-    submitTurn(undefined, pill.value, pill.id);
+    submitTurn(undefined, pill.title, pill.id);
   };
 
   const handleBack = () => {
@@ -657,7 +785,7 @@ export const ScreenD_Chatbot: React.FC<ScreenD_ChatbotProps> = ({
               <CheckCircle2 size={24} color="#16a34a" />
               <h3 className="figma-chatbot-summary-title">{t('chatbot_intake_completed')}</h3>
             </div>
-            <div className="figma-chatbot-summary-body">{clinicalSummary}</div>
+            <div className="figma-chatbot-summary-body">{renderFormattedSummary(clinicalSummary)}</div>
             <div className="figma-chatbot-summary-actions">
               <button
                 className="figma-chatbot-btn-finish"
@@ -727,9 +855,9 @@ export const ScreenD_Chatbot: React.FC<ScreenD_ChatbotProps> = ({
           <div className={`figma-chatbot-mic-label ${isRecording ? 'recording' : ''}`}>
             {isRecording
               ? t('chatbot_listening')
-              : isVoiceProcessing
-              ? t('chatbot_processing')
-              : t('chatbot_tap_to_speak')}
+              : (isVoiceProcessing || isProcessingTurn)
+                ? t('chatbot_transcribing')
+                : t('chatbot_tap_to_speak')}
           </div>
 
           <button

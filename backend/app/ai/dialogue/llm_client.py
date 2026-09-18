@@ -42,8 +42,8 @@ def get_openai_api_key() -> str:
 def get_gemini_api_key() -> str:
     return os.getenv("GEMINI_API_KEY") or _DEFAULT_GEMINI
 
-# Preferred Groq models in order of priority (20b has higher TPM quota and faster inference)
-GROQ_MODELS = ["openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.8-27b", "qwen/qwen3.6-27b"]
+# Preferred Groq models in order of priority
+GROQ_MODELS = ["llama-3.1-70b-versatile", "llama-3.1-8b-instant", "mixtral-8x7b-32768"]
 
 def _clean_json_text(raw_text: str) -> str:
     """Strip think tags and markdown code fence if LLM wraps output in ```json ... ```"""
@@ -87,15 +87,20 @@ async def call_groq_llm(system_prompt: str, user_prompt: str) -> Optional[Dict[s
         "Content-Type": "application/json"
     }
 
+    # Ensure Groq response_format: {"type": "json_object"} requirement is satisfied
+    sys_content = system_prompt
+    if "json" not in sys_content.lower() and "json" not in user_prompt.lower():
+        sys_content = sys_content + "\nRespond strictly in valid JSON format."
+
     for model_name in GROQ_MODELS:
         payload = {
             "model": model_name,
             "messages": [
-                {"role": "system", "content": system_prompt},
+                {"role": "system", "content": sys_content},
                 {"role": "user", "content": user_prompt}
             ],
             "temperature": 0.35,
-            "max_tokens": 1500,
+            "max_tokens": 800,
             "response_format": {"type": "json_object"}
         }
         try:
@@ -125,8 +130,8 @@ async def call_gemini_llm(system_prompt: str, user_prompt: str) -> Optional[Dict
     if not api_key or api_key.startswith("your-"):
         return None
 
-    # Use verified active gemini-3.6-flash model
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key={api_key}"
+    # Use verified active gemini-1.5-flash model
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
     payload = {
         "contents": [
             {
@@ -153,7 +158,7 @@ async def call_gemini_llm(system_prompt: str, user_prompt: str) -> Optional[Dict
                         text = parts[0].get("text", "")
                         parsed = parse_llm_json_response(text)
                         if parsed:
-                            logger.info("Gemini 3.6 Flash fallback successfully generated dialogue turn")
+                            logger.info("Gemini 1.5 Flash fallback successfully generated dialogue turn")
                             return parsed
             else:
                 logger.warning(f"Gemini API returned {res.status_code}: {res.text}")
@@ -190,6 +195,155 @@ async def call_openai_llm(system_prompt: str, user_prompt: str) -> Optional[Dict
                 return parse_llm_json_response(content)
     except Exception as e:
         logger.warning(f"OpenAI API error: {e}")
+
+    return None
+
+async def generate_gemini_clinical_summary(
+    patient_context: PatientContext,
+    conversation_history: List[Dict[str, Any]],
+    accumulated_rag_snippets: List[str],
+    socrates_state: Optional[Dict[str, Any]] = None
+) -> Optional[str]:
+    """
+    Dedicated Clinical Synthesis Engine (Consultation Conclusion):
+    Uses Google Gemini 1.5 Flash to synthesize the full conversation transcript,
+    accumulated RAG context, and extracted clinical findings into an authoritative,
+    hospital-grade 6-part clinical note for the attending physician.
+    """
+    import asyncio
+    api_key = get_gemini_api_key()
+    if not api_key or api_key.startswith("your-"):
+        logger.warning("GEMINI_API_KEY missing. Falling back to Groq synthesis.")
+        client = None
+    else:
+        try:
+            from google import genai
+            client = genai.Client(api_key=api_key)
+        except Exception as e:
+            logger.warning(f"Could not initialize genai.Client: {e}")
+            client = None
+
+    rag_text = "\n".join([f"• {s}" for s in accumulated_rag_snippets]) if accumulated_rag_snippets else "No past clinical records retrieved."
+    state_text = json.dumps(socrates_state, indent=2) if socrates_state else "None confirmed."
+
+    # Format history transcript
+    transcript_lines = []
+    for m in conversation_history:
+        role = m.get("role", "patient")
+        speaker = "Patient" if role in ["patient", "user"] else "MediKiosk Clinical Assistant"
+        content = m.get("content_english") or m.get("content") or m.get("textEnglish") or m.get("text", "")
+        if content:
+            transcript_lines.append(f"{speaker}: {content}")
+    transcript_text = "\n".join(transcript_lines) if transcript_lines else "No conversation recorded."
+
+    patient_name = patient_context.name or "Rohit Hudlikar"
+    patient_age = patient_context.age or 24
+    patient_gender = patient_context.gender or "Male"
+    patient_id = patient_context.patient_id or "PAT-ROHIT-01"
+    hosp_type = getattr(patient_context, "hospital_type", "allopathy") or "allopathy"
+
+    prompt = f"""You are a Senior Consultant Physician and Medical Director in a tertiary hospital.
+Review the following patient intake conversation transcript, extracted symptoms, and retrieved EHR records.
+Generate a comprehensive, authoritative, hospital-grade Clinical Summary for the Attending OPD Physician.
+
+PATIENT PROFILE:
+- Name: {patient_name} | Age: {patient_age} | Gender: {patient_gender} | ID: {patient_id}
+- Department: {hosp_type.upper()} OPD
+- Chief Complaint Reported: {patient_context.chief_complaint or 'Under investigation'}
+
+CONFIRMED CLINICAL FINDINGS (SOCRATES):
+{state_text}
+
+PRIOR EHR RECORDS & SCANNED PRESCRIPTIONS (RAG):
+{rag_text}
+
+COMPLETE INTAKE CONVERSATION TRANSCRIPT:
+{transcript_text}
+
+CRITICAL DOCUMENTATION REQUIREMENTS:
+Generate the clinical intake report in professional, beautifully formatted Markdown following this exact structure:
+
+### 📋 Clinical Intake & Triage Summary (for Attending Physician)
+* **Patient:** {patient_name} | {patient_age}Y / {patient_gender} | ID: {patient_id}
+* **Triage Urgency:** **[Emergency Red / Priority Yellow / Routine Green]** — [Brief 1-sentence clinical rationale for triage assignment]
+
+---
+
+#### 1. Chief Complaint (CC)
+* [Primary presenting symptom with exact onset and duration]
+
+---
+
+#### 2. History of Present Illness (HPI — SOCRATES Breakdown)
+* **Site & Radiation:** [Precise anatomical location; mention whether it radiates]
+* **Onset & Timing:** [Sudden vs gradual onset, constant vs intermittent, frequency]
+* **Character & Severity:** [Quality of pain/symptom, severity rating e.g. 8/10 or severe]
+* **Exacerbating & Relieving Factors:** [What aggravates or alleviates the symptoms]
+* **Associated Systemic Symptoms:** [Any concurrent signs like fever, nausea, cough, etc.]
+
+---
+
+#### 3. Pertinent Negatives (Emergency Red-Flag Screening)
+* **Neurological:** [e.g. Denies paresthesia, weakness, numbness]
+* **Cauda Equina / Systemic:** [e.g. Denies bowel/bladder incontinence, saddle anesthesia]
+* **Trauma / Surgical:** [e.g. No history of trauma or recent invasive procedures]
+* **Medications Taken:** [e.g. Denies taking OTC painkillers or antipyretics]
+
+---
+
+#### 4. Prior Records & Medication Reconciliation (RAG Grounding)
+* **Prior Diagnoses & Prescriptions:** [Reconcile against prior records above, or state 'None on file']
+* **Allergies:** [State reported allergies or 'No known drug allergies']
+
+---
+
+#### 5. Provisional Differential Diagnoses (For Attending Physician)
+1. **[Differential 1]:** [Clinical rationale based on patient presentation]
+2. **[Differential 2]:** [Clinical rationale]
+3. **[Differential 3]:** [Clinical rationale]
+
+---
+
+#### 6. Recommended Bedside Workup & Next Steps
+* **Physical & Bedside Exam Priorities:** [Specific physical exams, vitals checks, or palpation to perform]
+* **STAT Diagnostic & Lab Orders:** [Recommended laboratory, urine, or imaging investigations]
+"""
+
+    if client:
+        try:
+            response = await asyncio.to_thread(
+                client.models.generate_content,
+                model="gemini-1.5-flash",
+                contents=prompt
+            )
+            if response and response.text:
+                logger.info(f"Gemini 1.5 Flash successfully generated clinical summary ({len(response.text)} chars)")
+                return response.text.strip()
+        except Exception as e:
+            logger.error(f"Gemini summary generation failed: {e}. Falling back to Groq synthesis.")
+
+    # Fallback to Groq 70B if Gemini fails
+    try:
+        groq_payload = {
+            "model": "llama-3.1-70b-versatile",
+            "messages": [
+                {"role": "system", "content": "You are a Senior Consultant Physician. Generate a detailed clinical intake summary in markdown."},
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.2,
+            "max_tokens": 1200
+        }
+        headers = {
+            "Authorization": f"Bearer {get_groq_api_key()}",
+            "Content-Type": "application/json"
+        }
+        async with httpx.AsyncClient(timeout=20.0) as http_client:
+            res = await http_client.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=groq_payload)
+            if res.status_code == 200:
+                content = res.json()["choices"][0]["message"]["content"]
+                return content.strip()
+    except Exception as ge:
+        logger.error(f"Groq summary fallback failed: {ge}")
 
     return None
 

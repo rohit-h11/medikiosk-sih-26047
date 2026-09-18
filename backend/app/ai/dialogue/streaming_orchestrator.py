@@ -92,19 +92,48 @@ async def stream_static_turn_sse(
         "phase": "STATIC_MCQ"
     })
 
+async def localize_touch_option(opt: Dict[str, Any], language: str = "hi") -> Dict[str, Any]:
+    """
+    Translates an English clinical touch option into natural, culturally accurate regional tongue
+    dynamically using Sarvam AI translation.
+    """
+    label = (opt.get("label") or "").strip()
+    native_label = label
+
+    if language != "en" and label:
+        try:
+            native_label = await sarvam_tts_service.translate_text_async(
+                label,
+                source_lang="en",
+                target_lang=language
+            )
+        except Exception as e:
+            logger.warning(f"Dynamic option translation error for '{label}': {e}")
+            native_label = label
+
+    return {
+        "id": opt.get("id"),
+        "label": native_label,
+        "english_label": label,
+        "value": opt.get("value"),
+        "slot_tag": opt.get("slot_tag")
+    }
+
 async def stream_dynamic_turn_sse(
     raw_result: Dict[str, Any],
     language: str = "hi"
 ) -> AsyncGenerator[str, None]:
     """
     Streams dynamic turn results (from LLM protocol execution) over SSE:
-    1. Translates next_question to patient's native tongue.
-    2. Synthesizes Sarvam audio and streams audio chunk.
-    3. Translates and emits touchscreen options.
+    1. Translates next_question and touch_options dynamically via Sarvam in parallel.
+    2. IMMEDIATELY emits text_chunk and touch_options (~2.1s) so patient can read and interact.
+    3. Synthesizes Sarvam audio concurrently in background and streams audio_chunk (~3.0s).
     4. Emits state update and clinical summary (if completed).
     """
     next_q_en = raw_result.get("next_question") or ""
+    native_q = raw_result.get("native_question")
     touch_opts = raw_result.get("touch_options", [])
+    localized_chips = raw_result.get("localized_options")
     clinical_state = raw_result.get("state", raw_result.get("socrates_state", {}))
     is_completed = raw_result.get("should_stop", False)
     summary = raw_result.get("clinical_summary")
@@ -131,27 +160,95 @@ async def stream_dynamic_turn_sse(
         yield await format_sse_event("done", {"is_completed": True})
         return
 
-    # 1. Translate question to patient's language
-    native_q = next_q_en
-    if next_q_en and language != "en":
-        try:
-            native_q = await sarvam_tts_service.translate_text_async(
-                text=next_q_en,
-                source_lang="en",
-                target_lang=language
-            )
-        except Exception as e:
-            logger.warning(f"Translation exception: {e}")
-            native_q = next_q_en
+    # 1. Translate question AND touch options concurrently via Sarvam AI batch translation
+    if language != "en":
+        items_to_translate = []
+        needs_q_trans = not native_q and bool(next_q_en)
+        if needs_q_trans:
+            items_to_translate.append(next_q_en)
 
-    # 2. Emit text event
+        needs_opts_trans = localized_chips is None and bool(touch_opts)
+        opts_labels = []
+        if needs_opts_trans:
+            for opt in touch_opts:
+                lbl = opt.get("label") if isinstance(opt, dict) else getattr(opt, "label", "")
+                opts_labels.append(lbl or "")
+            items_to_translate.extend(opts_labels)
+
+        if items_to_translate:
+            try:
+                translated_items = await sarvam_tts_service.translate_batch_async(
+                    texts=items_to_translate,
+                    source_lang="en",
+                    target_lang=language
+                )
+            except Exception as e:
+                logger.warning(f"Batch translation exception: {e}")
+                translated_items = items_to_translate
+
+            idx = 0
+            if needs_q_trans:
+                native_q = translated_items[0] if translated_items else next_q_en
+                idx = 1
+
+            if needs_opts_trans:
+                localized_chips = []
+                for i, opt in enumerate(touch_opts):
+                    opt_id = opt.get("id") if isinstance(opt, dict) else getattr(opt, "id", f"opt_{i}")
+                    orig_label = opt.get("label") if isinstance(opt, dict) else getattr(opt, "label", "")
+                    val = opt.get("value") if isinstance(opt, dict) else getattr(opt, "value", orig_label)
+                    slot_tag = opt.get("slot_tag") if isinstance(opt, dict) else getattr(opt, "slot_tag", None)
+                    trans_idx = idx + i
+                    trans_label = translated_items[trans_idx] if trans_idx < len(translated_items) else orig_label
+                    localized_chips.append({
+                        "id": opt_id,
+                        "label": trans_label,
+                        "english_label": orig_label,
+                        "value": val,
+                        "slot_tag": slot_tag
+                    })
+        else:
+            if not native_q:
+                native_q = next_q_en
+            if localized_chips is None:
+                localized_chips = touch_opts or []
+    else:
+        native_q = next_q_en
+        if localized_chips is None:
+            localized_chips = []
+            for i, opt in enumerate(touch_opts):
+                opt_id = opt.get("id") if isinstance(opt, dict) else getattr(opt, "id", f"opt_{i}")
+                lbl = opt.get("label") if isinstance(opt, dict) else getattr(opt, "label", "")
+                val = opt.get("value") if isinstance(opt, dict) else getattr(opt, "value", lbl)
+                slot_tag = opt.get("slot_tag") if isinstance(opt, dict) else getattr(opt, "slot_tag", None)
+                localized_chips.append({
+                    "id": opt_id,
+                    "label": lbl,
+                    "english_label": lbl,
+                    "value": val,
+                    "slot_tag": slot_tag
+                })
+
+    # 2. Progressive SSE: IMMEDIATELY emit question text & clickable touch options to screen! (~2.1s mark)
     if native_q:
         yield await format_sse_event("text_chunk", {
             "text": native_q,
             "english_text": next_q_en
         })
-        
-        # 3. Synthesize and emit audio chunk (<700ms TTFA)
+
+    yield await format_sse_event("touch_options", {
+        "touch_options": list(localized_chips or [])
+    })
+
+    # 3. Stream state update
+    yield await format_sse_event("state_update", {
+        "clinical_state": clinical_state,
+        "covered_slots": raw_result.get("covered_slots", []),
+        "missing_slots": raw_result.get("missing_slots", [])
+    })
+
+    # 4. Synthesize and emit audio chunk in background (~3.0s mark)
+    if native_q:
         try:
             audio_b64 = await sarvam_tts_service.synthesize_speech_async(
                 text=native_q,
@@ -164,39 +261,6 @@ async def stream_dynamic_turn_sse(
                 })
         except Exception as e:
             logger.warning(f"Audio chunk synthesis exception: {e}")
-
-    # 4. Translate & emit touchscreen options concurrently (<300ms)
-    async def _localize_option(opt: Dict[str, Any]) -> Dict[str, Any]:
-        label = opt.get("label", "")
-        native_label = label
-        if language != "en" and label:
-            try:
-                native_label = await sarvam_tts_service.translate_text_async(label, source_lang="en", target_lang=language)
-            except Exception:
-                native_label = label
-        return {
-            "id": opt.get("id"),
-            "label": native_label,
-            "english_label": label,
-            "value": opt.get("value"),
-            "slot_tag": opt.get("slot_tag")
-        }
-
-    if touch_opts:
-        localized_chips = await asyncio.gather(*[_localize_option(opt) for opt in touch_opts])
-    else:
-        localized_chips = []
-
-    yield await format_sse_event("touch_options", {
-        "touch_options": list(localized_chips)
-    })
-
-    # 5. Emit state update
-    yield await format_sse_event("state_update", {
-        "clinical_state": clinical_state,
-        "covered_slots": raw_result.get("covered_slots", []),
-        "missing_slots": raw_result.get("missing_slots", [])
-    })
 
     # 6. If interview completed, emit clinical summary & closing message
     if is_completed:

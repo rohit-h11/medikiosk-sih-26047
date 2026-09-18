@@ -41,7 +41,10 @@ export const MobileUploadPage: React.FC = () => {
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.detail || 'Upload failed');
+        const detailStr = typeof errorData.detail === 'string' 
+            ? errorData.detail 
+            : JSON.stringify(errorData.detail || 'Upload failed');
+        throw new Error(detailStr);
       }
 
       setStatus('success');

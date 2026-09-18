@@ -218,8 +218,6 @@ export const ScreenD_Qr: React.FC<ScreenDProps> = ({ onBack, onLoginSuccess }) =
           prakriti: p.prakriti,
         };
 
-        localStorage.setItem('medikiosk_patient_id', profile.abhaNumber);
-        localStorage.setItem('medikiosk_patient_profile', JSON.stringify(profile));
         setStatusFeedback(`✅ Authenticated: ${profile.name}`);
         setTimeout(() => {
           onLoginSuccess?.(profile);
@@ -227,16 +225,14 @@ export const ScreenD_Qr: React.FC<ScreenDProps> = ({ onBack, onLoginSuccess }) =
       } catch (err) {
         const fallbackProfile: AbhaProfile = {
           abhaNumber: normalizeAbhaNumber(abhaId || '91-8824-3942-1092'),
-          name: 'Ayushman Beneficiary',
+          name: 'Rohit Hudlikar',
           gender: 'M',
-          dob: '1995-01-01',
-          abhaAddress: 'beneficiary@abdm',
-          photoUrl: 'https://ijnostquvznatsiwqdej.supabase.co/storage/v1/object/public/patient-photos/profiles/mohan_kumar.jpg',
+          dob: '2002-05-12',
+          abhaAddress: 'rohit.hudlikar@abdm',
+          photoUrl: 'https://ijnostquvznatsiwqdej.supabase.co/storage/v1/object/public/patient-photos/profiles/rohit_hudlikar.jpg',
           recordsCount: 8,
           documentsCount: 0,
         };
-        localStorage.setItem('medikiosk_patient_id', fallbackProfile.abhaNumber);
-        localStorage.setItem('medikiosk_patient_profile', JSON.stringify(fallbackProfile));
         onLoginSuccess?.(fallbackProfile);
       }
     }

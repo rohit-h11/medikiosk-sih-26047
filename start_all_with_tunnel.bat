@@ -1,7 +1,7 @@
 @echo off
 title MediKiosk Full Stack Launcher with Cloudflare Tunnel
 echo =======================================================
-echo   MediKiosk AI - Launching Backend, Frontend & Tunnel
+echo   MediKiosk AI - Launching Backend, Frontend ^& Tunnel
 echo =======================================================
 echo.
 

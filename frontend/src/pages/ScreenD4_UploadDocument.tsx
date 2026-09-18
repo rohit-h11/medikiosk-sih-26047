@@ -167,8 +167,13 @@ export const ScreenD4_UploadDocument: React.FC<ScreenD4UploadDocumentProps> = ({
     setScanStatusStage('Initializing secure mobile link...');
     
     try {
-      // Create session
-      const res = await fetch(`${getApiBase()}/mobile-upload/session`, { method: 'POST' });
+      // Create session (Link to active patient profile)
+      const sessionFormData = new FormData();
+      sessionFormData.append('patient_id', patientId);
+      const res = await fetch(`${getApiBase()}/mobile-upload/session`, { 
+        method: 'POST',
+        body: sessionFormData
+      });
       if (!res.ok) throw new Error('Failed to create session');
       const data = await res.json();
       
@@ -184,9 +189,12 @@ export const ScreenD4_UploadDocument: React.FC<ScreenD4UploadDocumentProps> = ({
         console.warn('Failed to fetch dynamic IP, falling back to hostname');
       }
 
-      // Determine public QR URL: auto-detect if running on Cloudflare/ngrok, otherwise check VITE_NGROK_URL, fallback to local IP
+      // Determine public QR URL: auto-detect if running on ANY non-localhost domain, otherwise check VITE_NGROK_URL, fallback to local IP
       let finalQrUrl = '';
-      if (window.location.origin.includes('trycloudflare.com') || window.location.origin.includes('ngrok-free.app')) {
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      
+      if (!isLocalhost) {
+        // Automatically works on ngrok, Cloudflare tunnels, Vercel, or any custom domain
         finalQrUrl = `${window.location.origin}/mobile-upload?session=${data.session_id}`;
       } else if ((import.meta as any).env && (import.meta as any).env.VITE_NGROK_URL) {
         finalQrUrl = `${(import.meta as any).env.VITE_NGROK_URL}/mobile-upload?session=${data.session_id}`;
@@ -802,6 +810,13 @@ export const ScreenD4_UploadDocument: React.FC<ScreenD4UploadDocumentProps> = ({
                 fgColor="#0f172a" 
                 level="Q"
               />
+            </div>
+
+            <div style={{ marginBottom: '24px', padding: '12px', backgroundColor: '#f1f5f9', borderRadius: '8px', wordBreak: 'break-all', fontSize: '13px', color: '#64748b', textAlign: 'center' }}>
+              <span style={{ fontWeight: 600, color: '#334155', display: 'block', marginBottom: '4px' }}>Scanner URL:</span>
+              <a href={qrUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'none' }}>
+                {qrUrl}
+              </a>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '32px', color: '#0f766e', fontWeight: 500 }}>

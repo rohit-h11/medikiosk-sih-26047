@@ -11,7 +11,7 @@ import uuid
 import time
 import asyncio
 from typing import Optional
-from fastapi import APIRouter, UploadFile, File, HTTPException, Form
+from fastapi import APIRouter, UploadFile, File, HTTPException, Form, BackgroundTasks
 from fastapi.responses import JSONResponse
 
 import socket
@@ -93,6 +93,7 @@ async def get_session(session_id: str):
 @router.post("/session/{session_id}/file")
 async def upload_file_for_session(
     session_id: str,
+    background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     patient_id: Optional[str] = Form(None),
 ):
@@ -110,41 +111,29 @@ async def upload_file_for_session(
     session["status"] = "processing"
 
     try:
-        # Read uploaded bytes
-        image_bytes = await file.read()
-        if len(image_bytes) == 0:
-            raise ValueError("Empty file received")
+        # Unified OCR Pipeline (Deduplication, WebP Conversion, Storage, pgvector)
+        from app.api.v1.endpoints.ocr import process_document
+        
+        pid = patient_id or session.get("patient_id")
 
-        # Reuse the existing OCR pipeline
-        from app.ai.ocr.ocr import process_document_image
-        from app.ai.ocr.extractor import DocumentExtractor
+        # Ensure file cursor is at the beginning before passing it along
+        await file.seek(0)
 
-        # Run OCR → structured data
-        ocr_result = await asyncio.get_event_loop().run_in_executor(
-            None,
-            process_document_image,
-            image_bytes,
-            file.filename or "mobile_upload.jpg",
+        # Run exactly what the kiosk runs
+        # Note: session_id=None because mobile upload sessions are NOT dialogue sessions
+        # and the DB has a FK constraint on dialogue_sessions(id)
+        process_response = await process_document(
+            background_tasks=background_tasks,
+            file=file,
+            patient_id=pid,
+            session_id=None,
+            document_type=None,
+            bypass_duplicate_check=False
         )
 
-        # Store to vector DB if patient_id available
-        pid = patient_id or session.get("patient_id")
-        if pid and ocr_result:
-            extractor = DocumentExtractor()
-            try:
-                await asyncio.get_event_loop().run_in_executor(
-                    None,
-                    extractor.store_document,
-                    ocr_result,
-                    pid,
-                )
-            except Exception as store_err:
-                # Non-fatal: log but don't fail the session
-                print(f"[mobile_upload] Vector store warning: {store_err}")
-
-        session["status"] = "complete"
-        session["result"] = ocr_result
-        return {"status": "complete", "message": "Document processed successfully"}
+        session["status"] = "complete" if process_response.status == "completed" else process_response.status
+        session["result"] = process_response.model_dump()
+        return {"status": session["status"], "message": process_response.message}
 
     except Exception as exc:
         session["status"] = "error"

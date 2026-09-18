@@ -131,43 +131,51 @@ async def verify_abdm_otp(payload: dict):
         photo_url = _get_patient_photo_url(patient_record)
         name_val = patient_record.get("name") or "Registered Beneficiary"
         slug_name = name_val.lower().replace(" ", ".")
+        patient_data = {
+            "id": patient_record.get("id"),
+            "abha_number": patient_record.get("abha_number") or raw_ident,
+            "abha_address": patient_record.get("abha_address") or f"{slug_name}@abdm",
+            "name": name_val,
+            "gender": (patient_record.get("gender") or "M")[:1].upper(),
+            "age": age_val,
+            "dob": f"{2026 - age_val}-05-12",
+            "phone": patient_record.get("phone") or "+91 98765 43210",
+            "photo_url": photo_url,
+            "records_count": 8,
+            "documents_count": 0,
+            "prakriti": patient_record.get("prakriti") or "Pitta-Vata"
+        }
+        from app.db.kiosk_db import create_or_resume_kiosk_session
+        kiosk_sess = create_or_resume_kiosk_session(patient_data)
         return {
             "success": True,
             "authenticated": True,
-            "patient": {
-                "id": patient_record.get("id"),
-                "abha_number": patient_record.get("abha_number") or raw_ident,
-                "abha_address": patient_record.get("abha_address") or f"{slug_name}@abdm",
-                "name": name_val,
-                "gender": (patient_record.get("gender") or "M")[:1].upper(),
-                "age": age_val,
-                "dob": f"{2026 - age_val}-05-12",
-                "phone": patient_record.get("phone") or "+91 98765 43210",
-                "photo_url": photo_url,
-                "records_count": 8,
-                "documents_count": 0,
-                "prakriti": patient_record.get("prakriti") or "Pitta-Vata"
-            }
+            "session_id": kiosk_sess.get("session_id"),
+            "patient": patient_data
         }
 
     default_photo = "https://ijnostquvznatsiwqdej.supabase.co/storage/v1/object/public/patient-photos/profiles/rohit_hudlikar.jpg"
+    fallback_patient = {
+        "id": f"PAT-{uuid.uuid4().hex[:6].upper()}",
+        "abha_number": raw_ident or "91-8824-3942-1092",
+        "abha_address": "rohit.hudlikar@abdm",
+        "name": "Rohit Hudlikar",
+        "gender": "M",
+        "age": 24,
+        "dob": "2002-05-12",
+        "phone": "+91 98765 43210",
+        "photo_url": default_photo,
+        "records_count": 8,
+        "documents_count": 0,
+        "prakriti": "Pitta-Kapha"
+    }
+    from app.db.kiosk_db import create_or_resume_kiosk_session
+    kiosk_sess = create_or_resume_kiosk_session(fallback_patient)
     return {
         "success": True,
         "authenticated": True,
-        "patient": {
-            "id": f"PAT-{uuid.uuid4().hex[:6].upper()}",
-            "abha_number": raw_ident or "91-8824-3942-1092",
-            "abha_address": "rohit.hudlikar@abdm",
-            "name": "Rohit Hudlikar",
-            "gender": "M",
-            "age": 19,
-            "dob": "2007-05-12",
-            "phone": "+91 98765 43210",
-            "photo_url": default_photo,
-            "records_count": 8,
-            "documents_count": 0,
-            "prakriti": "Pitta-Vata"
-        }
+        "session_id": kiosk_sess.get("session_id"),
+        "patient": fallback_patient
     }
 
 

@@ -17,7 +17,7 @@ import { calculateRms, detectSpeechInBuffer, linearToDbfs } from './vad';
 import { spectralSubtractNoise } from './spectralSubtraction';
 import { applyNoiseGate } from './noiseGate';
 
-const DEFAULT_CONFIG: Required<AudioProcessingConfig> = {
+const DEFAULT_CONFIG: Required<Omit<AudioProcessingConfig, 'onAudioChunk'>> = {
   targetSampleRate: 16000,
   noiseSuppression: true,
   echoCancellation: true,

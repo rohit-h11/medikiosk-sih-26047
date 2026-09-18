@@ -25,7 +25,7 @@ interface SimpleVoiceTestProps {
 export const SimpleVoiceTest: React.FC<SimpleVoiceTestProps> = ({ patientProfile }) => {
   const { language, setLanguage, supportedLanguages } = useVoiceContext();
   const [patientId, setPatientId] = useState<string>(() => {
-    return patientProfile?.abhaNumber || localStorage.getItem('medikiosk_patient_id') || 'PAT-ROHIT-01';
+    return patientProfile?.abhaNumber || 'PAT-ROHIT-01';
   });
   const [sessionId, setSessionId] = useState<string>(() => `sess_${Math.random().toString(36).substring(2, 10)}`);
   const [messages, setMessages] = useState<ChatMessage[]>([

@@ -34,6 +34,7 @@ class DialogueSession(BaseModel):
     turn_count: int = 0
     max_turns: int = 10
     is_completed: bool = False
+    accumulated_rag_snippets: List[str] = Field(default_factory=list)
     created_at: str = Field(default_factory=_utc_now_iso)
     updated_at: str = Field(default_factory=_utc_now_iso)
 

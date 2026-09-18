@@ -14,24 +14,37 @@ const AppRoutes: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [activePatient, setActivePatient] = useState<AbhaProfile | null>(() => {
-    try {
-      const saved = localStorage.getItem('medikiosk_patient_profile');
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
-  });
-
+  const [activePatient, setActivePatient] = useState<AbhaProfile | null>(null);
   const [activeDocument, setActiveDocument] = useState<any>(null);
 
-  // Sync active patient into localStorage
+  // Rehydrate active patient from Kiosk Database on mount / page refresh
   useEffect(() => {
-    if (activePatient) {
-      localStorage.setItem('medikiosk_patient_profile', JSON.stringify(activePatient));
-      localStorage.setItem('medikiosk_patient_id', activePatient.abhaNumber || 'PAT-ROHIT-01');
-    }
-  }, [activePatient]);
+    const fetchSession = async () => {
+      try {
+        const res = await fetch('/api/v1/kiosk/session');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.authenticated && data.patient) {
+            setActivePatient({
+              abhaNumber: data.patient.abha_number,
+              abhaAddress: data.patient.abha_address || 'rohit.hudlikar@abdm',
+              name: data.patient.name,
+              gender: data.patient.gender,
+              age: data.patient.age,
+              mobile: data.patient.phone,
+              photoUrl: data.patient.photo_url,
+              prakriti: data.patient.prakriti,
+              recordsCount: 8,
+              documentsCount: 0,
+            });
+          }
+        }
+      } catch (err) {
+        console.warn('Could not fetch active kiosk session from DB:', err);
+      }
+    };
+    fetchSession();
+  }, []);
 
   // When patient successfully enters OTP on Screen 2 (Screen D)
   const handleLoginSuccess = (profile: AbhaProfile) => {
@@ -39,13 +52,17 @@ const AppRoutes: React.FC = () => {
     navigate('/profile');
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('medikiosk_patient_id');
-    localStorage.removeItem('medikiosk_patient_profile');
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/v1/kiosk/session/logout', { method: 'POST' });
+    } catch (e) {
+      console.warn('Kiosk session logout notice:', e);
+    }
     setActivePatient(null);
     setActiveDocument(null);
     navigate('/');
   };
+
 
   return (
     <Routes>

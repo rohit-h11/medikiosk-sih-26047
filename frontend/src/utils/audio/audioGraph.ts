@@ -103,6 +103,9 @@ export async function createAudioGraph(
     const chunk = new Float32Array(inputData);
     recordedChunks.push(chunk);
     totalLength += chunk.length;
+    if (config.onAudioChunk) {
+      config.onAudioChunk(chunk);
+    }
   };
 
   analyserNode.connect(processorNode);

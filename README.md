@@ -14,15 +14,20 @@ Indian OPDs handle 4,000–10,000 patients daily with only 2–5 minutes availab
 
 ---
 
+> 📘 **For full technical architecture, clinical benchmarks, and verification details, see [PROJECT_STATUS.md](./PROJECT_STATUS.md).**
+
+---
+
 ## 🌟 Key Features & Capabilities
 
-- 🗣️ **Multilingual Voice Interview Engine:** Powered by AI4Bharat IndicConformer/IndicWhisper, IndicTrans2, and Bhashini TTS with an English reasoning core ("translate-then-reason").
-- 🌿 **AYUSH-Native Dual Dialogue Engine:** Features a dedicated, government-standardized **CCRAS Prakriti Assessment Scale (PAS)** battery alongside standard allopathic SOCRATES adaptive history branching.
-- 📄 **Document Digitization & Structured Extraction:** OCR extraction of handwritten/typed prescriptions, lab reports, and discharge summaries into structured JSON with abnormal lab value flagging.
-- ⚡ **Instant Clinical Summarizer:** Generates direct context-stuffed, FHIR-shaped summaries formatted for 30-second physician review.
-- 🔍 **Doctor Ad-Hoc RAG Assistant:** Scoped pgvector retrieval for cross-visit historical patient Q&A without cross-patient data leaks.
-- 🚨 **Rule-Based Red-Flag Triage:** Instant emergency symptom detection (e.g., acute chest pain, stroke signs) triggering priority queue alerts.
-- 🔐 **ABDM & DPDP Act 2023 Compliant:** ABHA authentication, tokenized/encrypted identity storage, AES-256 document encryption at rest, and cryptographic hash consent audit trails.
+- 🗣️ **Multilingual Voice Intake Engine:** Powered by **Sarvam AI Saaras v2** (ASR with automatic Language Identification), **Mayura v1** (bidirectional translation), and **Bulbul v2** (regional voice synthesis) with English reasoning core.
+- 🩺 **Doctor-Grade Allopathic Intake:** Full **SOCRATES** framework with hypothesis-driven Bayesian life-threat screening, strict single-question constraint (< 25 words, 1 `?`), spontaneous multi-slot extraction (never re-asks volunteered info), and attending physician SOAP summaries.
+- 🌿 **AYUSH-Native Dual Dialogue Engine:** Features a 12-question **CCRAS Prakriti Assessment** with permanent Supabase storage, 3-question **Dashavidha** functional evaluation, dynamic **Vikriti / Rogi-Roga Pariksha**, and provisional **NAMASTE** morbidity coding (`SM39`).
+- 📄 **Document Digitization & Structured Extraction:** Google Cloud Vision OCR extraction of handwritten/typed prescriptions, lab reports, and discharge summaries with automated abnormal lab value detection.
+- 🔍 **Real-Time Clinical & Patient RAG:** Dual-source vector search grounded on **ICMR guidelines / NAMASTE terminology** and the patient's past medical records, scoped by `patient_id`.
+- ⚡ **Progressive SSE Streaming:** Delivers transcribed speech in ~1.5s, touchscreen quick-tap options in ~2.1s, and audio playback in ~3.5s for near-instant perceived response times.
+- 🚨 **Life-Threat & Arishta Lakshana Triage:** Instant emergency detection (cardiac ischemia equivalents, stroke FAST signs, *Tamaka Shwasa* crisis) triggering priority queue alerts.
+- 🔐 **ABDM & DPDP Act 2023 Compliant:** ABHA authentication, tokenized/encrypted identity storage, AES-256 document encryption at rest, and cryptographic audit trails.
 
 ---
 
@@ -33,6 +38,13 @@ backend/
 ├── .env
 ├── .env.example
 ├── requirements.txt
+├── tests/                        # 🧪 Unit & Integration Test Suites (28 passing tests)
+│   ├── conftest.py               # Auto sys.path injection
+│   ├── verify_doctor_dialogue.py # Live Allopathy SOCRATES intake verification
+│   ├── verify_ayurveda_dialogue.py # Live Ayurveda Rogi-Roga intake verification
+│   ├── test_dialogue_protocols.py# Dialogue strategy unit tests
+│   ├── test_prakriti_scorer.py   # Prakriti 12-question algorithm tests
+│   └── test_dashavidha_scorer.py # Dashavidha functional capacity tests
 └── app/
     ├── main.py                   # FastAPI initialization, middlewares, /healthz
     ├── config.py                 # Pydantic BaseSettings & Environment config
@@ -52,11 +64,11 @@ backend/
     │           └── abdm.py       # /api/v1/abdm (ABHA Sandbox Auth & Linkage)
     ├── schemas/                  # Pydantic data validation schemas
     └── ai/                       # Isolated AI package subdirectories
-        ├── asr/                  # 🎧 Member 1: Audio-to-Text & Speech Synthesis
-        ├── translation/          # 🌐 Member 2: Text-to-Text Translation
-        ├── dialogue/             # 🧠 Member 3: Prompt Engineering & SOCRATES Engine
-        ├── ocr/                  # 📄 Member 4: Document OCR & Extraction
-        └── rag/                  # 🔍 Member 5: pgvector Vector Store & Clinical RAG
+        ├── asr/                  # 🎧 Audio-to-Text & Speech Synthesis (Sarvam Saaras/Bulbul)
+        ├── translation/          # 🌐 Text-to-Text Translation (Sarvam Mayura)
+        ├── dialogue/             # 🧠 Prompt Engineering, Protocols (Allopathy & Ayurveda)
+        ├── ocr/                  # 📄 Document OCR & Extraction (Google Cloud Vision)
+        └── rag/                  # 🔍 Vector Store & Clinical RAG (ICMR & NAMASTE)
 ```
 
 ---

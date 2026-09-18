@@ -1,6 +1,8 @@
 # backend/app/ai/rag/__init__.py
 from app.ai.rag.retriever import (
     retrieve_patient_history_async,
+    retrieve_clinical_guidelines_async,
+    build_conversational_rag_query,
     store_dialogue_summary_in_rag_async,
     generate_embedding,
     generate_embedding_async,
@@ -16,6 +18,8 @@ from app.ai.rag.inserter import (
 
 __all__ = [
     "retrieve_patient_history_async",
+    "retrieve_clinical_guidelines_async",
+    "build_conversational_rag_query",
     "store_dialogue_summary_in_rag_async",
     "generate_embedding",
     "generate_embedding_async",

@@ -1,7 +1,7 @@
-# MediKiosk — Cloudflare Tunnel Exposing & Server Launch Guide
+# MediKiosk — Cloudflare Tunnel & Ngrok Exposing & Server Launch Guide
 
 > **Target Audience:** Hackathon Judges, Deployment Engineers, and Developers  
-> **Purpose:** Exposing both MediKiosk Frontend (React/Vite) and Backend (FastAPI) securely over public HTTPS using **Cloudflare Tunnel (`cloudflared`)** for remote access, mobile camera QR uploads, and live demonstrations.
+> **Purpose:** Exposing both MediKiosk Frontend (React/Vite) and Backend (FastAPI) securely over public HTTPS using **Cloudflare Tunnel (`cloudflared`)** or **Ngrok** for remote access, mobile camera QR uploads, and live demonstrations.
 
 ---
 
@@ -56,7 +56,9 @@ npm run dev
 
 ---
 
-### Step 3: Launch the Cloudflare Tunnel
+### Step 3: Launch the Tunnel (Cloudflare or Ngrok)
+
+**Option A: Using Cloudflare Tunnel (Included in project)**
 Open **Terminal 3**:
 ```powershell
 cloudflared tunnel --url http://localhost:3000
@@ -69,18 +71,24 @@ Cloudflare will initialize and print an output similar to:
 2026-09-08T11:55:00Z INF |  https://clinical-kiosk-sample-domain.trycloudflare.com                                    |
 2026-09-08T11:55:00Z INF +--------------------------------------------------------------------------------------------+
 ```
-
 Copy the **`https://<random-name>.trycloudflare.com`** URL!
+
+**Option B: Using Ngrok (Alternative)**
+Open **Terminal 3**:
+```powershell
+ngrok http 3000
+```
+Ngrok will initialize and display a dashboard in your terminal. Copy the Forwarding URL that looks like **`https://<random-id>.ngrok-free.app`**!
 
 ---
 
 ### Step 4: Connecting the Mobile Upload QR Code
 
 MediKiosk has **auto-detection built-in**:
-* If you open the kiosk on your laptop using the Cloudflare URL (e.g. `https://clinical-kiosk-sample-domain.trycloudflare.com`), the screen **automatically** generates QR codes pointing to that public tunnel!
-* If you run the kiosk locally on `http://localhost:3000` but want the QR code to point to your Cloudflare tunnel, update [frontend/.env](file:///f:/Coding/projects/midiosk%20SIH%20hackathon/frontend/.env):
+* If you open the kiosk on your laptop using the Tunnel URL (e.g. `https://clinical-kiosk-sample-domain.trycloudflare.com` or `https://<id>.ngrok-free.app`), the screen **automatically** generates QR codes pointing to that public tunnel!
+* If you run the kiosk locally on `http://localhost:3000` but want the QR code to point to your Tunnel, update [frontend/.env](file:///f:/Coding/projects/midiosk%20SIH%20hackathon/frontend/.env):
   ```bash
-  VITE_NGROK_URL=https://clinical-kiosk-sample-domain.trycloudflare.com
+  VITE_NGROK_URL=https://<your-tunnel-url>
   ```
 
 ---
@@ -96,7 +104,7 @@ To start everything simultaneously in one command, double-click **`start_all_wit
 This launches three separate terminal windows:
 1. **Window 1 (MediKiosk Backend)**: Uvicorn FastAPI on `http://127.0.0.1:8000`
 2. **Window 2 (MediKiosk Frontend)**: Vite Dev Server on `http://localhost:3000`
-3. **Window 3 (Cloudflare Tunnel)**: Exposes `http://localhost:3000` to the public web and displays your live HTTPS link.
+3. **Window 3 (Cloudflare Tunnel)**: Exposes `http://localhost:3000` to the public web and displays your live HTTPS link. *(You can optionally edit this batch script to run `ngrok http 3000` instead of `cloudflared`)*
 
 ---
 

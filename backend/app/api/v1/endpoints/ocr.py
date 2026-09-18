@@ -6,6 +6,7 @@ and pgvector RAG ingestion.
 """
 
 import hashlib
+import json
 import uuid
 import logging
 from typing import Optional, Dict, Any, List
@@ -148,7 +149,7 @@ async def process_document(
                 if is_db_dup and existing_doc_id:
                     logger.info(f"Duplicate document detected in database ({db_dup_reason}) for patient {patient_id} (doc_id: {existing_doc_id}).")
                     existing_doc = supabase.table("patient_medical_documents") \
-                        .select("file_path, file_path_thumb") \
+                        .select("file_path_processed, file_path_thumbnail") \
                         .eq("id", existing_doc_id) \
                         .single() \
                         .execute()
@@ -159,8 +160,8 @@ async def process_document(
                         .execute()
 
                     cached_json = existing_extraction.data[0]["structured_data"] if existing_extraction.data else {}
-                    master_p = existing_doc.data.get("file_path") if existing_doc.data else None
-                    thumb_p = existing_doc.data.get("file_path_thumb") if existing_doc.data else None
+                    master_p = existing_doc.data.get("file_path_processed") if existing_doc.data else None
+                    thumb_p = existing_doc.data.get("file_path_thumbnail") if existing_doc.data else None
 
                     # Cache in memory
                     _patient_doc_cache.setdefault(patient_id, []).append({
@@ -204,6 +205,7 @@ async def process_document(
             )
 
         extracted_json = extraction_result.get("extracted_data") or {}
+        logger.info(f"🔬 GEMINI EXTRACTED DATA: {json.dumps(extracted_json, indent=2, default=str)}")
 
         # ── AUTO-DETECT DOCUMENT TYPE IF NOT PROVIDED ─────────────────────────
         resolved_doc_type = document_type
@@ -256,8 +258,8 @@ async def process_document(
                     "session_id": session_id,
                     "document_type": resolved_doc_type,
                     "storage_bucket": "patient-medical-records",
-                    "file_path": master_path,
-                    "file_path_thumb": thumb_path,
+                    "file_path_processed": master_path,
+                    "file_path_thumbnail": thumb_path,
                     "mime_type": "image/webp",
                     "file_size_bytes": len(master_bytes),
                     "file_hash_sha256": file_hash,
@@ -270,6 +272,7 @@ async def process_document(
                 supabase.table("document_ocr_extractions").insert({
                     "document_id": doc_id,
                     "patient_id": patient_id,
+                    "raw_extracted_text": extracted_json.get("raw_extracted_text", "Document digitized successfully."),
                     "structured_data": extracted_json
                 }).execute()
             except Exception as persist_err:

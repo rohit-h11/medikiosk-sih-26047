@@ -63,13 +63,13 @@ def run_ingestion():
     print(f"Total clinical knowledge records to ingest: {len(all_chunks)}")
 
     # 2. Load Embedding Model
-    print("\n📦 Loading local embedding model: sentence-transformers/all-MiniLM-L6-v2...")
+    print("\n📦 Loading local embedding model: BAAI/bge-small-en-v1.5...")
     t0 = time.time()
-    embedder = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    embedder = SentenceTransformer("BAAI/bge-small-en-v1.5")
     print(f"✓ Model loaded in {round(time.time() - t0, 2)}s (Embedding dimension: 384)")
 
     # 3. Generate Embeddings in Batches
-    print("\n⚡ Generating 384-dimensional vector embeddings...")
+    print("\n⚡ Generating 384-dimensional vector embeddings with BAAI/bge-small-en-v1.5...")
     texts_to_embed = [
         f"{c.get('title', '')}\n{c.get('content', '')}\nKeywords: {', '.join(c.get('symptom_triggers', []))}"
         for c in all_chunks
@@ -111,17 +111,27 @@ def run_ingestion():
             print(f"\n☁️ Connecting to Supabase: {SUPABASE_URL}...")
             supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
             
-            print("  Upserting vectors into 'clinical_reference_vectors' table...")
+            # Clean old vectors first to guarantee 100% vector index purity
+            print("  🧹 Clearing existing vectors from database...")
+            try:
+                supabase.table("clinical_reference_vectors").delete().neq("chunk_id", "dummy_non_existent").execute()
+                print("  ✓ Cleared 'clinical_reference_vectors' table.")
+            except Exception as clr_err:
+                print(f"  ⚠️ Notice while clearing clinical_reference_vectors: {clr_err}")
+
+            try:
+                supabase.table("patient_structured_vectors").delete().neq("patient_id", "dummy_non_existent").execute()
+                print("  ✓ Cleared 'patient_structured_vectors' table.")
+            except Exception as clr_p_err:
+                print(f"  ⚠️ Notice while clearing patient_structured_vectors: {clr_p_err}")
+
+            print(f"  🚀 Ingesting {len(enriched_records)} new BAAI/bge-small-en-v1.5 vectors into 'clinical_reference_vectors'...")
             batch_size = 100
             for i in range(0, len(enriched_records), batch_size):
                 batch = enriched_records[i:i+batch_size]
-                # Upsert into table
-                supabase.table("clinical_reference_vectors").upsert(
-                    batch, 
-                    on_conflict="chunk_id"
-                ).execute()
-                print(f"  ✓ Upserted records {i+1} to {min(i+batch_size, len(enriched_records))} / {len(enriched_records)}")
-            print("\n🎉 ALL CLINICAL VECTORS SUCCESSFULLY INGESTED INTO SUPABASE!")
+                supabase.table("clinical_reference_vectors").insert(batch).execute()
+                print(f"  ✓ Ingested records {i+1} to {min(i+batch_size, len(enriched_records))} / {len(enriched_records)}")
+            print("\n🎉 ALL CLINICAL VECTORS SUCCESSFULLY RE-INGESTED INTO SUPABASE!")
         except Exception as e:
             print(f"\n⚠️ Note on Supabase live upload: {e}")
             print("  (If the 'clinical_reference_vectors' table has not been created yet in Supabase SQL editor, run `backend/app/ai/rag/supabase_clinical_setup.sql` in your Supabase Dashboard).")

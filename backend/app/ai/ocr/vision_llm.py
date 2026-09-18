@@ -179,10 +179,56 @@ class VisionLLMClient:
             try:
                 return self._call_gemini_api(jpg_bytes, doc_type, ocr_hint_text)
             except Exception as e:
-                print(f"[WARNING] Live Gemini API call failed: {e}. Falling back to rule-based mock extractor.")
-                return self._generate_intelligent_mock(doc_type, ocr_hint_text)
+                print(f"[WARNING] Live Gemini API call failed: {e}")
+                raise RuntimeError(f"Gemini Vision API failed: {str(e)}")
         else:
-            return self._generate_intelligent_mock(doc_type, ocr_hint_text)
+            raise ValueError("Gemini API key is not configured.")
+
+    def extract_from_text(
+        self,
+        text: str,
+        doc_type: DocumentType = DocumentType.HYBRID_MIXED
+    ) -> ExtractedDocumentData:
+        """
+        Uses Groq (fast LLM) to convert raw text into structured JSON.
+        Ideal for use with an external OCR engine like Bhashini.
+        """
+        groq_api_key = os.getenv("GROQ_API_KEY")
+        if not groq_api_key or groq_api_key.startswith("your-"):
+            raise ValueError("GROQ_API_KEY missing or invalid.")
+            
+        import requests
+        url = "https://api.groq.com/openai/v1/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {groq_api_key}",
+            "Content-Type": "application/json"
+        }
+        
+        user_prompt = f"Extract all clinical data from this {doc_type.value} medical document.\n\n[OCR Text Extraction]:\n{text}\n\nPlease use the above OCR text heavily to construct the final JSON."
+        
+        payload = {
+            "model": "groq/compound-mini", # Groq official fast JSON Extraction model
+            "messages": [
+                {"role": "system", "content": CLINICAL_AYUSH_SYSTEM_PROMPT},
+                {"role": "user", "content": user_prompt}
+            ],
+            "temperature": 0.2,
+            "max_tokens": 1500,
+            "response_format": {"type": "json_object"}
+        }
+        
+        try:
+            response = requests.post(url, headers=headers, json=payload, timeout=20)
+            if response.status_code == 200:
+                data = response.json()
+                content = data["choices"][0]["message"]["content"]
+                return self._parse_json_to_schema(content, doc_type)
+            else:
+                print(f"[WARNING] Groq API returned {response.status_code}: {response.text}")
+                raise RuntimeError(f"Groq API failed with status {response.status_code}: {response.text}")
+        except Exception as e:
+            print(f"[WARNING] Groq API error: {e}")
+            raise RuntimeError(f"Groq LLM processing failed: {str(e)}")
 
     def _call_gemini_api(
         self,
@@ -192,13 +238,13 @@ class VisionLLMClient:
     ) -> ExtractedDocumentData:
         """Calls Google Gemini Vision API."""
         if not self._genai_client:
-            return self._generate_intelligent_mock(doc_type, ocr_hint_text)
+            raise ValueError("Gemini client is not initialized.")
 
         from google.genai import types  # type: ignore # pyright: ignore[reportMissingImports]
 
         user_prompt = f"Extract all clinical data from this {doc_type.value} medical document."
         if ocr_hint_text:
-            user_prompt += f"\n\nPreliminary OCR Anchor Text from printed headers:\n{ocr_hint_text[:1000]}"
+            user_prompt += f"\n\n[OCR Text Extraction]:\n{ocr_hint_text[:4000]}\n\nPlease use the above OCR text heavily to construct the final JSON."
 
         contents = [
             types.Content(
@@ -268,8 +314,8 @@ class VisionLLMClient:
 
             return ExtractedDocumentData(**data)
         except Exception as e:
-            print(f"[WARNING] Failed to parse model JSON: {e}. Using fallback schema.")
-            return self._generate_intelligent_mock(fallback_doc_type, ocr_hint_text=json_str)
+            print(f"[WARNING] Failed to parse model JSON: {e}")
+            raise ValueError(f"Failed to parse LLM JSON: {str(e)}")
 
 
 

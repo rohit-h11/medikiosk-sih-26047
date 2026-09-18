@@ -85,11 +85,26 @@ class FastOCREngine:
     """
 
     def __init__(self):
-        self._tesseract_available = self._check_tesseract()
+        pass
+
+    @property
+    def _tesseract_available(self) -> bool:
+        return self._check_tesseract()
+
+    def _get_tesseract_cmd(self) -> str:
+        import os
+        project_tesseract = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "tesseract", "tesseract.exe"))
+        if os.path.exists(project_tesseract):
+            os.environ["TESSDATA_PREFIX"] = os.path.join(os.path.dirname(project_tesseract), "tessdata")
+            return project_tesseract
+        return r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
     def _check_tesseract(self) -> bool:
         try:
             import pytesseract  # type: ignore
+            import os
+            if os.name == 'nt':
+                pytesseract.pytesseract.tesseract_cmd = self._get_tesseract_cmd()
             pytesseract.get_tesseract_version()
             return True
         except Exception:
@@ -102,8 +117,12 @@ class FastOCREngine:
         try:
             import pytesseract  # type: ignore
             import cv2
+            import os
+            if os.name == 'nt':
+                pytesseract.pytesseract.tesseract_cmd = self._get_tesseract_cmd()
+            
             # Use PSM 6 (uniform block of text) — good for printed prescriptions
-            config = r"--oem 3 --psm 6 -l eng+hin"
+            config = r"--oem 3 --psm 6" # Restricted to eng to prevent missing lang errors
             gray = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2GRAY) if len(image_rgb.shape) == 3 else image_rgb
             text = pytesseract.image_to_string(gray, config=config)
             return text.strip()

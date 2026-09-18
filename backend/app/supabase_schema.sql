@@ -203,6 +203,7 @@ CREATE TABLE IF NOT EXISTS patient_medical_documents (
     -- Forensic Hashes & Technical Attributes
     file_hash_sha256 TEXT NOT NULL,      -- Exact byte-level cryptographic checksum
     perceptual_hash_dhash TEXT,          -- 64-bit structural visual fingerprint
+    perceptual_hash_phash TEXT,          -- 64-bit frequency domain visual fingerprint
     mime_type TEXT NOT NULL,             -- 'image/jpeg', 'image/png', 'image/webp', 'application/pdf'
     file_size_bytes BIGINT NOT NULL,
     page_count INT NOT NULL DEFAULT 1,

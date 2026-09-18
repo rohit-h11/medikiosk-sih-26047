@@ -5,7 +5,7 @@ Performs sub-30ms CPU-based image validation before any database write or Vision
 - Contrast & Illumination Uniformity Check
 - Glare / Reflection Analysis
 - Cryptographic SHA-256 Deduplication (Exact Byte Match)
-- 64-bit Perceptual Difference Hash (dHash) for Visual Duplicate Detection
+- Dual Perceptual Hashing (dHash + pHash) for Robust Visual Duplicate Detection
 """
 
 import hashlib
@@ -15,6 +15,7 @@ from typing import Tuple, Optional, Dict, Any, List, Union
 import cv2
 import numpy as np
 from PIL import Image
+import imagehash
 
 from app.schemas.document import PreIngestionCheckResult
 
@@ -26,42 +27,56 @@ def compute_sha256(file_bytes: bytes) -> str:
     return hashlib.sha256(file_bytes).hexdigest()
 
 
-def compute_perceptual_dhash(image_input: Union[bytes, Image.Image, np.ndarray], hash_size: int = 8) -> str:
-    """
-    Computes a 64-bit Perceptual Difference Hash (dHash) using grayscale gradients.
-    Detects two different camera captures of the same physical document page.
-    
-    Algorithm:
-    1. Resize image to (hash_size + 1, hash_size), default (9, 8) = 72 pixels.
-    2. Convert to grayscale.
-    3. Compare adjacent horizontal pixels (pixel[col] > pixel[col + 1]).
-    4. Construct 64-bit binary integer -> return 16-character hexadecimal string.
-    """
+def _to_pil_grayscale(image_input: Union[bytes, Image.Image, np.ndarray]) -> Image.Image:
+    """Converts bytes, NumPy ndarray, or PIL Image into a normalized PIL Grayscale Image."""
     if isinstance(image_input, bytes):
-        pil_img = Image.open(io.BytesIO(image_input)).convert("L")
+        return Image.open(io.BytesIO(image_input)).convert("L")
     elif isinstance(image_input, np.ndarray):
         if len(image_input.shape) == 3:
             gray_arr = cv2.cvtColor(image_input, cv2.COLOR_BGR2GRAY)
         else:
             gray_arr = image_input
-        pil_img = Image.fromarray(gray_arr)
+        return Image.fromarray(gray_arr)
     else:
-        pil_img = image_input.convert("L")
+        return image_input.convert("L")
 
-    # Resize to (width=9, height=8) for 8x8 difference matrix
-    resized = pil_img.resize((hash_size + 1, hash_size), Image.Resampling.LANCZOS)
-    pixels = np.asarray(resized, dtype=np.int32)
 
-    # Compute difference: True if left pixel > right pixel
-    diff = pixels[:, 1:] > pixels[:, :-1]
+def compute_perceptual_dhash(image_input: Union[bytes, Image.Image, np.ndarray], hash_size: int = 8) -> str:
+    """
+    Computes a 64-bit Perceptual Difference Hash (dHash) using horizontal gradient comparison.
+    Captures text layout, line boundaries, and structural alignment in < 1.5ms.
+    """
+    pil_img = _to_pil_grayscale(image_input)
+    try:
+        h = imagehash.dhash(pil_img, hash_size=hash_size)
+        return str(h)
+    except Exception as e:
+        logger.warning(f"imagehash.dhash fallback: {e}")
+        resized = pil_img.resize((hash_size + 1, hash_size), Image.Resampling.LANCZOS)
+        pixels = np.asarray(resized, dtype=np.int32)
+        diff = pixels[:, 1:] > pixels[:, :-1]
+        decimal_val = 0
+        for bit in diff.flatten():
+            decimal_val = (decimal_val << 1) | int(bit)
+        return f"{decimal_val:016x}"
 
-    # Convert boolean 8x8 array to 64-bit integer
-    decimal_val = 0
-    for bit in diff.flatten():
-        decimal_val = (decimal_val << 1) | int(bit)
 
-    # Return 16-character hex string (zero-padded)
-    return f"{decimal_val:016x}"
+def compute_perceptual_phash(image_input: Union[bytes, Image.Image, np.ndarray], hash_size: int = 8) -> str:
+    """
+    Computes a 64-bit DCT-based Perceptual Hash (pHash).
+    Invariant to lighting shifts, flash glare, shadows, and minor camera perspective tilts.
+    """
+    pil_img = _to_pil_grayscale(image_input)
+    h = imagehash.phash(pil_img, hash_size=hash_size)
+    return str(h)
+
+
+def compute_dual_perceptual_hashes(image_input: Union[bytes, Image.Image, np.ndarray], hash_size: int = 8) -> Tuple[str, str]:
+    """Computes both (dHash, pHash) fingerprints for composite two-factor visual verification."""
+    pil_img = _to_pil_grayscale(image_input)
+    dhash_val = str(imagehash.dhash(pil_img, hash_size=hash_size))
+    phash_val = str(imagehash.phash(pil_img, hash_size=hash_size))
+    return dhash_val, phash_val
 
 
 def compute_hamming_distance(hex_hash1: str, hex_hash2: str) -> int:
@@ -80,8 +95,8 @@ def compute_hamming_distance(hex_hash1: str, hex_hash2: str) -> int:
         return 64
 
 
-def is_perceptual_duplicate(hash1: str, hash2: str, max_distance: int = 8) -> bool:
-    """Returns True if two visual dHash fingerprints are within the duplicate threshold."""
+def is_perceptual_duplicate(hash1: str, hash2: str, max_distance: int = 6) -> bool:
+    """Returns True if two visual fingerprints are within the duplicate threshold."""
     if not hash1 or not hash2:
         return False
     return compute_hamming_distance(hash1, hash2) <= max_distance
@@ -180,7 +195,8 @@ def assess_image_clarity(
 def check_existing_duplicates(
     patient_id: str,
     sha256_hash: str,
-    dhash_fingerprint: str,
+    dhash_fingerprint: Optional[str] = None,
+    phash_fingerprint: Optional[str] = None,
     document_type: Optional[str] = None,
     supabase_client: Any = None
 ) -> Tuple[bool, Optional[str], Optional[str]]:
@@ -188,7 +204,7 @@ def check_existing_duplicates(
     High-Performance Multi-Tier Duplicate Check:
     1. Direct $O(1)$ SQL Index Hit for exact SHA-256 matches.
     2. Document-Type Scoped query in PostgreSQL.
-    3. C-Speed Vectorized NumPy Bitwise XOR (`np.bitwise_count`) for visual dHash comparison (< 0.05ms).
+    3. C-Speed Vectorized NumPy Bitwise XOR for dHash (gradient) and pHash (DCT frequency) comparison.
     
     Returns: (is_duplicate: bool, reason: Optional[str], existing_document_id: Optional[str])
     """
@@ -211,53 +227,87 @@ def check_existing_duplicates(
             logger.info(f"Direct SHA-256 index hit: Duplicate detected for patient {patient_id} (Doc ID: {doc_id})")
             return True, "EXACT_SHA256", doc_id
 
-        # ── OPTIMIZATION 2: DOCUMENT-TYPE SCOPED VISUAL DHASH LOOKUP ────────────
-        if not dhash_fingerprint:
+        # ── OPTIMIZATION 2: DUAL PERCEPTUAL (dHash + pHash) LOOKUP ───────────────
+        if not dhash_fingerprint and not phash_fingerprint:
             return False, None, None
 
-        dhash_query = supabase_client.table("patient_medical_documents") \
-            .select("id, perceptual_hash_dhash") \
-            .eq("patient_id", patient_id)
-        
-        if document_type:
-            dhash_query = dhash_query.eq("document_type", document_type)
-
-        dhash_rows = dhash_query.execute().data or []
-        valid_rows = [r for r in dhash_rows if r.get("perceptual_hash_dhash")]
-
-        if not valid_rows:
-            return False, None, None
-
-        # ── OPTIMIZATION 3: VECTORIZED NUMPY BITWISE COMPARISON (C-SPEED) ────────
+        fields_to_select = "id, perceptual_hash_dhash"
+        # We also select perceptual_hash_phash if available
         try:
-            target_int = np.uint64(int(dhash_fingerprint, 16))
-            doc_ids = [r["id"] for r in valid_rows]
-            
-            # Parse all 64-bit integer hashes into a contiguous C-array in memory
-            hashes_arr = np.array([int(r["perceptual_hash_dhash"], 16) for r in valid_rows], dtype=np.uint64)
-            
-            # Vectorized bitwise XOR and bit-counting across all documents simultaneously
-            if hasattr(np, "bitwise_count"):
-                diffs = np.bitwise_count(hashes_arr ^ target_int)
-            else:
-                # Fallback vectorized popcount
-                xor_arr = hashes_arr ^ target_int
-                diffs = np.array([bin(int(x)).count("1") for x in xor_arr], dtype=np.int32)
-            
-            match_indices = np.where(diffs <= 5)[0]
-            if len(match_indices) > 0:
-                # Select the closest visual match (minimum Hamming distance)
-                best_idx = match_indices[np.argmin(diffs[match_indices])]
-                matched_doc_id = doc_ids[best_idx]
-                min_dist = int(diffs[best_idx])
-                logger.info(f"Vectorized dHash hit: Duplicate detected for patient {patient_id} (Doc ID: {matched_doc_id}, distance={min_dist})")
-                return True, "VISUAL_DHASH", matched_doc_id
+            hash_query = supabase_client.table("patient_medical_documents") \
+                .select("id, perceptual_hash_dhash, perceptual_hash_phash") \
+                .eq("patient_id", patient_id)
+            if document_type:
+                hash_query = hash_query.eq("document_type", document_type)
+            hash_rows = hash_query.execute().data or []
+        except Exception:
+            # Fallback if perceptual_hash_phash column is not yet migrated in DB schema
+            hash_query = supabase_client.table("patient_medical_documents") \
+                .select("id, perceptual_hash_dhash") \
+                .eq("patient_id", patient_id)
+            if document_type:
+                hash_query = hash_query.eq("document_type", document_type)
+            hash_rows = hash_query.execute().data or []
 
-        except Exception as vec_err:
-            logger.warning(f"Vectorized dHash comparison fallback to scalar loop: {vec_err}")
-            for row in valid_rows:
-                if is_perceptual_duplicate(dhash_fingerprint, row.get("perceptual_hash_dhash", ""), max_distance=5):
-                    return True, "VISUAL_DHASH", row.get("id")
+        if not hash_rows:
+            return False, None, None
+
+        # ── OPTIMIZATION 3: VECTORIZED NUMPY DUAL COMPARISON ─────────────────────
+        # Check dHash (Threshold <= 5)
+        if dhash_fingerprint:
+            valid_dhash_rows = [r for r in hash_rows if r.get("perceptual_hash_dhash")]
+            if valid_dhash_rows:
+                try:
+                    target_int = np.uint64(int(dhash_fingerprint, 16))
+                    doc_ids = [r["id"] for r in valid_dhash_rows]
+                    hashes_arr = np.array([int(r["perceptual_hash_dhash"], 16) for r in valid_dhash_rows], dtype=np.uint64)
+                    
+                    if hasattr(np, "bitwise_count"):
+                        diffs = np.bitwise_count(hashes_arr ^ target_int)
+                    else:
+                        xor_arr = hashes_arr ^ target_int
+                        diffs = np.array([bin(int(x)).count("1") for x in xor_arr], dtype=np.int32)
+                    
+                    match_indices = np.where(diffs <= 5)[0]
+                    if len(match_indices) > 0:
+                        best_idx = match_indices[np.argmin(diffs[match_indices])]
+                        matched_doc_id = doc_ids[best_idx]
+                        min_dist = int(diffs[best_idx])
+                        logger.info(f"Vectorized dHash hit: Duplicate detected for patient {patient_id} (Doc ID: {matched_doc_id}, distance={min_dist})")
+                        return True, "VISUAL_DHASH", matched_doc_id
+                except Exception as e:
+                    logger.warning(f"dHash vectorized check error: {e}")
+                    for row in valid_dhash_rows:
+                        if is_perceptual_duplicate(dhash_fingerprint, row.get("perceptual_hash_dhash", ""), max_distance=5):
+                            return True, "VISUAL_DHASH", row.get("id")
+
+        # Check pHash (Threshold <= 6)
+        if phash_fingerprint:
+            valid_phash_rows = [r for r in hash_rows if r.get("perceptual_hash_phash")]
+            if valid_phash_rows:
+                try:
+                    target_int_p = np.uint64(int(phash_fingerprint, 16))
+                    doc_ids_p = [r["id"] for r in valid_phash_rows]
+                    hashes_arr_p = np.array([int(r["perceptual_hash_phash"], 16) for r in valid_phash_rows], dtype=np.uint64)
+                    
+                    if hasattr(np, "bitwise_count"):
+                        diffs_p = np.bitwise_count(hashes_arr_p ^ target_int_p)
+                    else:
+                        xor_arr_p = hashes_arr_p ^ target_int_p
+                        diffs_p = np.array([bin(int(x)).count("1") for x in xor_arr_p], dtype=np.int32)
+                    
+                    match_indices_p = np.where(diffs_p <= 6)[0]
+                    if len(match_indices_p) > 0:
+                        best_idx_p = match_indices_p[np.argmin(diffs_p[match_indices_p])]
+                        matched_doc_id_p = doc_ids_p[best_idx_p]
+                        min_dist_p = int(diffs_p[best_idx_p])
+                        logger.info(f"Vectorized pHash hit: Duplicate detected for patient {patient_id} (Doc ID: {matched_doc_id_p}, distance={min_dist_p})")
+                        return True, "VISUAL_PHASH", matched_doc_id_p
+                except Exception as e:
+                    logger.warning(f"pHash vectorized check error: {e}")
+                    for row in valid_phash_rows:
+                        if is_perceptual_duplicate(phash_fingerprint, row.get("perceptual_hash_phash", ""), max_distance=6):
+                            return True, "VISUAL_PHASH", row.get("id")
 
         return False, None, None
 
@@ -275,17 +325,17 @@ def run_pre_ingestion_gate(
 ) -> PreIngestionCheckResult:
     """
     Executes the complete unified Pre-Ingestion Gate:
-    1. Computes forensic SHA-256 and visual dHash fingerprints.
+    1. Computes forensic SHA-256, visual dHash (gradient), and pHash (DCT) fingerprints.
     2. Assesses image sharpness, blur, contrast, and glare.
-    3. Checks for existing duplicates in DB (Direct SQL index + Vectorized NumPy dHash).
+    3. Checks for existing duplicates in DB (Direct SQL index + Vectorized Dual dHash/pHash).
     4. Returns a typed PreIngestionCheckResult.
     """
-    # 1. Hashes
+    # 1. Forensic & Perceptual Hashes
     sha256_hash = compute_sha256(image_bytes)
     try:
-        dhash_val = compute_perceptual_dhash(image_bytes)
+        dhash_val, phash_val = compute_dual_perceptual_hashes(image_bytes)
     except Exception:
-        dhash_val = None
+        dhash_val, phash_val = None, None
 
     # 2. Quality & Blur Assessment
     clarity_report = assess_image_clarity(image_bytes)
@@ -296,18 +346,20 @@ def run_pre_ingestion_gate(
             is_duplicate=False,
             sha256_hash=sha256_hash,
             dhash_fingerprint=dhash_val,
+            phash_fingerprint=phash_val,
             quality_score=0.0,
             reasons=clarity_report.get("reasons", ["Invalid image file."]),
             suggested_action="REJECT"
         )
 
-    # 3. Duplicate Detection Check (Optimized)
+    # 3. Duplicate Detection Check (Optimized Dual Check)
     is_dup, dup_reason, existing_id = False, None, None
     if not bypass_duplicate_check and supabase_client:
         is_dup, dup_reason, existing_id = check_existing_duplicates(
             patient_id=patient_id,
             sha256_hash=sha256_hash,
-            dhash_fingerprint=dhash_val or "",
+            dhash_fingerprint=dhash_val,
+            phash_fingerprint=phash_val,
             document_type=document_type,
             supabase_client=supabase_client
         )
@@ -329,6 +381,7 @@ def run_pre_ingestion_gate(
         existing_document_id=existing_id,
         sha256_hash=sha256_hash,
         dhash_fingerprint=dhash_val,
+        phash_fingerprint=phash_val,
         sharpness=clarity_report.get("sharpness", 0.0),
         contrast_std=clarity_report.get("contrast_std", 0.0),
         glare_ratio=clarity_report.get("glare_ratio", 0.0),

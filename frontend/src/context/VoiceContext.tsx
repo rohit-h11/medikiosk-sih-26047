@@ -62,7 +62,11 @@ export const VoiceProvider: React.FC<VoiceProviderProps> = ({
   defaultLanguage = 'hi',
   initialConfig = {},
 }) => {
-  const [language, setLanguage] = useState<string>(defaultLanguage);
+  const [language, setLanguageState] = useState<string>(defaultLanguage);
+
+  const setLanguage = useCallback((lang: string) => {
+    setLanguageState(lang);
+  }, []);
   const [audioConfig, setAudioConfig] = useState<AudioProcessingConfig>({
     targetSampleRate: 16000,
     noiseSuppression: true,

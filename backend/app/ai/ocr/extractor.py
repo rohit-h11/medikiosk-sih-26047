@@ -66,38 +66,78 @@ class DocumentExtractor:
                 "rag_chunks": []
             }
 
-        # ── DUAL ENGINE ROUTING ──────────────────────────────────────────────────
-        # OCR_FAST        → PRINTED / LAB_REPORT  → FastOCREngine  (100% local, zero API cost)
-        # VISION_LLM      → HANDWRITTEN           → Gemini Vision API
-        # HYBRID_FUSION   → HYBRID_MIXED          → Gemini Vision API (handles both streams)
-        # VISION_LLM_FALLBACK → borderline quality → Gemini Vision API (resilient)
-        # ─────────────────────────────────────────────────────────────────────────
+        # ── BHASHINI TOGGLE ──────────────────────────────────────────────────────
+        import os
+        from .bhashini import run_bhashini_ocr
+        
+        use_bhashini = os.getenv("USE_BHASHINI_OCR", "False") == "True"
+        
+        if use_bhashini:
+            print("[INFO] USE_BHASHINI_OCR is True. Running Bhashini...")
+            bhashini_text = run_bhashini_ocr(pipeline_result.final_image_rgb)
+            
+            if bhashini_text:
+                print(f"[INFO] Bhashini succeeded. Extracted {len(bhashini_text)} chars. Passing to Groq JSON extraction...")
+                # Pass Bhashini text to Groq for fast structured JSON extraction
+                ocr_hint = f"Detected Document Type: {doc_type.value}\n[Bhashini OCR Extraction]:\n{bhashini_text}"
+                
+                extracted_data = self.vision_client.extract_from_text(
+                    text=ocr_hint,
+                    doc_type=doc_type
+                )
+            else:
+                print("[WARNING] Bhashini OCR returned empty (likely due to API 500 error). Falling back to Gemini Vision Dual Engine.")
+                use_bhashini = False # Force fallback logic
+        
+        if not use_bhashini:
+            # ── DUAL ENGINE ROUTING ──────────────────────────────────────────────────
+            # OCR_FAST        → PRINTED / LAB_REPORT  → FastOCREngine  (100% local, zero API cost)
+            # VISION_LLM      → HANDWRITTEN           → Gemini Vision API
+            # HYBRID_FUSION   → HYBRID_MIXED          → Gemini Vision API (handles both streams)
+            # VISION_LLM_FALLBACK → borderline quality → Gemini Vision API (resilient)
+            # ─────────────────────────────────────────────────────────────────────────
 
-        if route == RoutingDecision.OCR_FAST:
-            # PRINTED or LAB_REPORT: 100% local Tesseract OCR — no Gemini API call, zero cost
-            extracted_data: ExtractedDocumentData = self.fast_ocr_client.extract_from_image(
-                image_bin=pipeline_result.final_image_binary,
-                image_rgb=pipeline_result.final_image_rgb,
-                doc_type=doc_type,
-                ocr_hint_text=f"Detected Document Type: {doc_type.value}, Text Regions Count: {len(pipeline_result.text_regions)}"
-            )
-        elif route in (
-            RoutingDecision.VISION_LLM,
-            RoutingDecision.HYBRID_FUSION,
-            RoutingDecision.VISION_LLM_FALLBACK,
-        ):
-            # HANDWRITTEN / HYBRID_MIXED / low-quality fallback: Gemini multimodal Vision LLM
-            extracted_data: ExtractedDocumentData = self.vision_client.extract_from_image(
-                image_rgb=pipeline_result.final_image_rgb,
-                doc_type=doc_type,
-                ocr_hint_text=f"Detected Document Type: {doc_type.value}, Text Regions Count: {len(pipeline_result.text_regions)}"
-            )
-        else:
-            # Safety net — should never reach here after RETAKE is handled above
-            extracted_data: ExtractedDocumentData = self.vision_client.extract_from_image(
-                image_rgb=pipeline_result.final_image_rgb,
-                doc_type=doc_type
-            )
+            if route == RoutingDecision.OCR_FAST:
+                # PRINTED or LAB_REPORT: Try 100% local Tesseract OCR first (zero API cost)
+                if self.fast_ocr_client._tesseract_available:
+                    extracted_data: ExtractedDocumentData = self.fast_ocr_client.extract_from_image(
+                        image_bin=pipeline_result.final_image_binary,
+                        image_rgb=pipeline_result.final_image_rgb,
+                        doc_type=doc_type,
+                        ocr_hint_text=f"Detected Document Type: {doc_type.value}, Text Regions Count: {len(pipeline_result.text_regions)}"
+                    )
+                    # If Tesseract returned nothing useful, fall back to Gemini
+                    if not extracted_data.medications and not extracted_data.diagnoses and not extracted_data.lab_investigations:
+                        extracted_data = self._safe_extract_from_image(
+                            image_rgb=pipeline_result.final_image_rgb,
+                            doc_type=doc_type,
+                            text_regions_count=len(pipeline_result.text_regions)
+                        )
+                else:
+                    # Tesseract not installed — route to Gemini Vision LLM directly
+                    extracted_data: ExtractedDocumentData = self._safe_extract_from_image(
+                        image_rgb=pipeline_result.final_image_rgb,
+                        doc_type=doc_type,
+                        text_regions_count=len(pipeline_result.text_regions)
+                    )
+            elif route in (
+                RoutingDecision.VISION_LLM,
+                RoutingDecision.HYBRID_FUSION,
+                RoutingDecision.VISION_LLM_FALLBACK,
+            ):
+                # HANDWRITTEN / HYBRID_MIXED / low-quality fallback: Gemini multimodal Vision LLM
+                extracted_data: ExtractedDocumentData = self._safe_extract_from_image(
+                    image_rgb=pipeline_result.final_image_rgb,
+                    doc_type=doc_type,
+                    text_regions_count=len(pipeline_result.text_regions)
+                )
+            else:
+                # Safety net — should never reach here after RETAKE is handled above
+                extracted_data: ExtractedDocumentData = self._safe_extract_from_image(
+                    image_rgb=pipeline_result.final_image_rgb,
+                    doc_type=doc_type,
+                    text_regions_count=len(pipeline_result.text_regions)
+                )
 
         rag_chunks = self._generate_rag_chunks(extracted_data, patient_id=patient_id)
 
@@ -109,9 +149,27 @@ class DocumentExtractor:
             "is_acceptable": quality.is_acceptable,
             "reasons": quality.reasons,
             "retake_required": False,
+            "processed_rgb": pipeline_result.final_image_rgb,
             "extracted_data": extracted_data.model_dump(),
             "rag_chunks": rag_chunks
         }
+
+    def _safe_extract_from_image(self, image_rgb, doc_type, text_regions_count: int) -> ExtractedDocumentData:
+        try:
+            return self.vision_client.extract_from_image(
+                image_rgb=image_rgb,
+                doc_type=doc_type,
+                ocr_hint_text=f"Detected Document Type: {doc_type.value}, Text Regions Count: {text_regions_count}"
+            )
+        except Exception as e:
+            print(f"[WARNING] Gemini Vision API call failed ({e}). Falling back to local Tesseract OCR + Groq LLM...")
+            raw_text = self.fast_ocr_client._run_ocr(image_rgb)
+            if not raw_text:
+                print("[WARNING] Local Tesseract OCR returned empty string. Re-raising Gemini error.")
+                raise e
+            print(f"[INFO] Local Tesseract extracted {len(raw_text)} chars. Passing to Groq LLM...")
+            ocr_hint = f"Detected Document Type: {doc_type.value}\n[Tesseract Local OCR Fallback]:\n{raw_text}"
+            return self.vision_client.extract_from_text(text=ocr_hint, doc_type=doc_type)
 
     def _generate_rag_chunks(
         self,
@@ -125,6 +183,12 @@ class DocumentExtractor:
         doc_date = data.document_date or "Unknown Date"
         hospital = data.clinic_or_hospital or "OPD Clinic"
         sys_type = data.medicine_system.value
+
+        full_dump = data.model_dump()
+        serialized_meds = full_dump.get("medications", [])
+        serialized_diags = full_dump.get("diagnoses", [])
+        serialized_labs = full_dump.get("lab_investigations", [])
+        serialized_ayur = full_dump.get("ayurvedic_assessment")
 
         # Chunk 1: Document Overview & Diagnoses
         diag_lines = [f"- {d.condition} (Code: {d.code or 'N/A'}, System: {d.system_terminology})" for d in data.diagnoses]
@@ -144,7 +208,12 @@ class DocumentExtractor:
             "metadata": {
                 "patient_id": patient_id,
                 "date": doc_date,
-                "system": sys_type
+                "facility": hospital,
+                "system": sys_type,
+                "diagnoses": serialized_diags,
+                "chief_complaints": data.chief_complaints,
+                "document_type": data.document_type.value if hasattr(data.document_type, "value") else str(data.document_type),
+                "structured_data": full_dump
             }
         })
 
@@ -167,7 +236,9 @@ class DocumentExtractor:
                 "metadata": {
                     "patient_id": patient_id,
                     "date": doc_date,
-                    "system": sys_type
+                    "facility": hospital,
+                    "system": sys_type,
+                    "medications": serialized_meds
                 }
             })
 
@@ -185,7 +256,9 @@ class DocumentExtractor:
                 "content": lab_content,
                 "metadata": {
                     "patient_id": patient_id,
-                    "date": doc_date
+                    "date": doc_date,
+                    "facility": hospital,
+                    "lab_investigations": serialized_labs
                 }
             })
 
@@ -207,7 +280,9 @@ class DocumentExtractor:
                 "metadata": {
                     "patient_id": patient_id,
                     "date": doc_date,
-                    "system": "ayurvedic"
+                    "system": "ayurvedic",
+                    "ayurvedic_assessment": serialized_ayur,
+                    "diet_and_lifestyle_advice": data.diet_and_lifestyle_advice
                 }
             })
 

@@ -1,0 +1,333 @@
+/**
+ * MediKiosk — Screen D4: Patient Profile & Health Records Dashboard
+ * Exact 1:1 Figma Geometry, Colors (#5DB075) & Typography (Node 258:3414)
+ * Zero-Scroll Full-Viewport Kiosk Layout (100vh Fits-as-a-Whole)
+ */
+
+.figma-screen-d4 {
+  width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  background-color: #ffffff;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: clamp(10px, 1.6vh, 22px) clamp(24px, 3.5vw, 48px) clamp(10px, 1.6vh, 22px) clamp(24px, 3.5vw, 48px);
+  position: relative;
+  color: #000000;
+}
+
+/* 1. TOP HEADER BAR */
+.figma-d4-header {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.figma-d4-back-btn {
+  width: clamp(42px, 5vh, 50px);
+  height: clamp(42px, 5vh, 50px);
+  border-radius: 50%;
+  border: 2px solid #b3b3b3;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #b3b3b3;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.figma-d4-back-btn:hover {
+  border-color: #5db075;
+  color: #5db075;
+  background: #f0fdf4;
+}
+
+.figma-d4-brand-logo {
+  font-size: clamp(24px, 3.2vh, 32px);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  margin-left: clamp(12px, 1.5vw, 20px);
+}
+
+.figma-d4-brand-medi {
+  color: #000000;
+}
+
+.figma-d4-brand-kiosk {
+  color: #34c759;
+}
+
+.figma-d4-abdm-wrapper {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* 2. PROFILE GREEN BANNER */
+.figma-d4-banner-container {
+  width: 100%;
+  max-width: 1312px;
+  margin: clamp(6px, 1vh, 14px) auto 0 auto;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.figma-d4-green-banner {
+  width: 100%;
+  height: clamp(160px, 22vh, 230px);
+  background-color: #5db075;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: clamp(14px, 2vh, 24px) clamp(24px, 3.5vw, 48px);
+  box-sizing: border-box;
+  color: #ffffff;
+}
+
+.figma-d4-banner-link {
+  font-size: clamp(15px, 2vh, 18px);
+  font-weight: 600;
+  color: #ffffff;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.figma-d4-banner-link:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.figma-d4-banner-title {
+  font-size: clamp(22px, 3vh, 28px);
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* 3. CENTERED CIRCULAR AVATAR OVERLAY */
+.figma-d4-avatar-wrapper {
+  position: relative;
+  margin-top: clamp(-90px, -11.5vh, -70px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+}
+
+.figma-d4-avatar-circle {
+  width: clamp(145px, 18.5vh, 200px);
+  height: clamp(145px, 18.5vh, 200px);
+  border-radius: 50%;
+  border: clamp(4px, 0.6vh, 6px) solid #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  background-color: #f1f5f9;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.figma-d4-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.figma-d4-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e2e8f0;
+  color: #475569;
+  font-size: clamp(40px, 6vh, 56px);
+  font-weight: 700;
+}
+
+/* 4. PATIENT NAME & INFO */
+.figma-d4-name {
+  font-size: clamp(20px, 2.7vh, 26px);
+  font-weight: 700;
+  color: #000000;
+  margin: clamp(6px, 0.9vh, 10px) 0 2px 0;
+  text-align: center;
+}
+
+.figma-d4-abha-tag {
+  font-size: clamp(11px, 1.4vh, 13.5px);
+  font-weight: 600;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: clamp(6px, 0.8vh, 12px);
+}
+
+.figma-d4-badge {
+  background: #ecfdf5;
+  color: #059669;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: clamp(10px, 1.3vh, 12px);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 5. TWO INTERACTIVE ACTION ROWS */
+.figma-d4-actions-grid {
+  width: 100%;
+  max-width: 1100px;
+  margin: clamp(4px, 0.8vh, 14px) auto clamp(4px, 0.8vh, 14px) auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: clamp(24px, 4vw, 64px);
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.figma-d4-action-item {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  padding: clamp(3px, 0.5vh, 6px) 0;
+  transition: transform 0.15s ease;
+}
+
+.figma-d4-action-item:hover {
+  transform: translateY(-2px);
+}
+
+.figma-d4-action-content {
+  display: flex;
+  align-items: center;
+  padding-bottom: clamp(6px, 1vh, 12px);
+}
+
+.figma-d4-action-iconbox {
+  width: clamp(38px, 4.8vh, 44px);
+  height: clamp(38px, 4.8vh, 44px);
+  background-color: #f6f6f6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.figma-d4-action-title {
+  font-size: clamp(16px, 2.2vh, 20px);
+  font-weight: 700;
+  color: #000000;
+  margin-left: 14px;
+}
+
+.figma-d4-action-subtitle {
+  font-size: clamp(14px, 1.8vh, 16px);
+  font-weight: 500;
+  color: #666666;
+  margin-left: auto;
+}
+
+.figma-d4-action-line {
+  width: 100%;
+  height: 1.5px;
+  background-color: #000000;
+}
+
+/* 6. BOTTOM SUPPORT & CONSULTATION FOOTER */
+.figma-d4-footer {
+  width: 100%;
+  max-width: 1312px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(4px, 0.8vh, 8px) 0;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.figma-d4-support-text {
+  font-size: clamp(13px, 1.6vh, 15px);
+  font-weight: 500;
+  color: #000000;
+}
+
+.figma-d4-chat-btn {
+  font-size: clamp(14px, 1.8vh, 16px);
+  font-weight: 700;
+  color: #000000;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.figma-d4-chat-btn:hover {
+  color: #5db075;
+}
+
+/* Floating Consultation Bot/Mic Button */
+.figma-d4-floating-btn {
+  position: fixed;
+  bottom: clamp(16px, 2.5vh, 28px);
+  right: clamp(20px, 3.5vw, 44px);
+  width: clamp(56px, 7vh, 70px);
+  height: clamp(56px, 7vh, 70px);
+  border-radius: 50%;
+  background: #5db075;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(93, 176, 117, 0.4);
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+  z-index: 50;
+}
+
+.figma-d4-floating-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 10px 24px rgba(93, 176, 117, 0.5);
+}
+
+.figma-d4-floating-btn:active {
+  transform: scale(0.96);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .figma-d4-actions-grid {
+    grid-template-columns: 1fr;
+    row-gap: 16px;
+  }
+}

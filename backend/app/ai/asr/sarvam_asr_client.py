@@ -29,6 +29,8 @@ class SarvamASRClient:
             "ml": "ml-IN",
             "pa": "pa-IN",
             "od": "od-IN",
+            "or": "od-IN",
+            "as": "as-IN",
             "auto": "unknown",
             "unknown": "unknown"
         }

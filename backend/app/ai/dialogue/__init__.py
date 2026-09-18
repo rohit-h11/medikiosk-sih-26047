@@ -16,7 +16,8 @@ from app.ai.dialogue.dialogue_manager import (
     start_dialogue
 )
 from app.ai.dialogue.llm_client import (
-    scan_text_for_red_flags
+    scan_text_for_red_flags,
+    generate_gemini_clinical_summary
 )
 from app.ai.dialogue.session_store import (
     DialogueSession,
@@ -41,6 +42,7 @@ __all__ = [
     "TouchOption",
     "RedFlagAlert",
     "scan_text_for_red_flags",
+    "generate_gemini_clinical_summary",
     "DialogueSession",
     "create_session",
     "get_session",

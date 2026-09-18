@@ -49,6 +49,31 @@ def _normalize_history(
             })
     return normalized
 
+def detect_inquired_axes(history: List[Dict[str, Any]]) -> List[str]:
+    """Scans prior assistant turns to determine which clinical axes have already been questioned."""
+    inquired = set()
+    for turn in history:
+        if turn.get("role") in ["assistant", "model"]:
+            content = (turn.get("content") or turn.get("text") or "").lower()
+            slot_tag = (turn.get("slot_tag") or "").lower()
+            if slot_tag in ["site", "onset", "character", "radiation", "associations", "time_course", "exacerbating_relieving", "severity"]:
+                inquired.add(slot_tag)
+            if any(w in content for w in ["feel like", "how would you describe", "nature of", "sharp", "dull", "burning", "throbbing", "tight", "squeezing", "burst", "कैसा महसूस", "झगड़न", "जकड़न"]):
+                inquired.add("character")
+            if any(w in content for w in ["1 to 10", "scale", "rate", "how severe", "severity", "1 से 10", "पैमाने"]):
+                inquired.add("severity")
+            if any(w in content for w in ["where", "location", "which part", "कहाँ", "किस हिस्से"]):
+                inquired.add("site")
+            if any(w in content for w in ["when did", "how long", "how many days", "start", "कब शुरू"]):
+                inquired.add("onset")
+            if any(w in content for w in ["spread", "radiat", "travel", "move to", "फैलता", "कहाँ तक"]):
+                inquired.add("radiation")
+            if any(w in content for w in ["worse", "better", "reliev", "trigger", "aggravat", "eating", "food"]):
+                inquired.add("exacerbating_relieving")
+            if any(w in content for w in ["nausea", "fever", "vomit", "sweat", "breathless", "dizz"]):
+                inquired.add("associations")
+    return list(inquired)
+
 def _format_conversation_history_text(history: List[Dict[str, Any]]) -> str:
     if not history:
         return "No previous dialogue turns (First turn)."
@@ -59,10 +84,11 @@ def _format_conversation_history_text(history: List[Dict[str, Any]]) -> str:
         lines.append(f"Turn {idx} [{role}]: {content}")
     return "\n".join(lines)
 
+
 async def get_next_dialogue_turn(
     patient_context: Union[PatientContext, Dict[str, Any]],
     conversation_history: List[Union[ConversationMessage, Dict[str, Any]]],
-    max_turns: int = 10,
+    max_turns: int = 14,
     current_state: Optional[Dict[str, Any]] = None,
     rag_context_snippets: Optional[List[str]] = None
 ) -> DialogueTurnResult:
@@ -116,21 +142,92 @@ async def get_next_dialogue_turn(
     # Build system prompt using resolved ClinicalProtocol strategy
     system_prompt = protocol.build_system_prompt(ctx, rag_snippets)
     
-    # Construct user prompt
+    # Build confirmed clinical facts from current state
+    active_state = current_state or {}
+    confirmed_slots = {
+        k: v for k, v in active_state.items()
+        if v and str(v).lower() not in ["null", "none", "[]", "{}"]
+    }
+    missing_slots = [s for s in protocol.target_slots if s not in confirmed_slots]
+    if confirmed_slots:
+        confirmed_facts_text = "\n".join([f"- {k.replace('_', ' ').title()}: {v}" for k, v in confirmed_slots.items()])
+    else:
+        confirmed_facts_text = "None confirmed yet (initial presentation)."
+
+    missing_slots_text = ", ".join([s.replace('_', ' ').title() for s in missing_slots]) if missing_slots else "All core clinical dimensions collected."
+
+    # Extract patient's latest utterance for prominent emphasis
+    latest_patient_utterance = ctx.chief_complaint or "Initial presentation"
+    if history:
+        for m in reversed(history):
+            if m.get("role") in ["patient", "user"]:
+                latest_patient_utterance = m.get("content", m.get("text", ""))
+                break
+
+    # Paradigm-specific context and instructions
+    if ctx.hospital_type.lower() in ["ayurveda", "ayush"]:
+        paradigm_context = f"""- Baseline Prakriti: {ctx.prakriti_profile or 'Pending Assessment'}
+- Dashavidha Profile: Sattva: {ctx.dashavidha_state.get('sattva', 'Madhyama') if ctx.dashavidha_state else 'Madhyama'} | Satmya: {ctx.dashavidha_state.get('satmya', 'Madhyama') if ctx.dashavidha_state else 'Madhyama'}"""
+        clinical_selection_instructions = f"""3. HYPOTHESIS-DRIVEN AYURVEDIC CLINICAL SELECTION:
+   - Step 1 (Active Vikriti vs. Baseline Prakriti): Compare presenting symptoms against baseline constitution ({ctx.prakriti_profile or 'baseline'}). Inquire about the exact physical sensation of the symptom (burning/Daha, pricking/Toda, heaviness/Gaurava).
+   - Step 2 (Agni & Ama Assessment): Inquire about metabolic fire (appetite pace: sharp vs sluggish vs irregular) or signs of undigested toxins (Ama: coated tongue in morning, heaviness, foul breath).
+   - Step 3 (Koshtha, Medications & Ahara-Vihara Hetu): Inquire about bowel movements (loose/frequent vs dry/constipated), active medications from chart, and causative dietary/lifestyle factors (spicy/oily food, late-night sleep / Ratri Jagarana).
+   - Step 4 (Clinical Closure Gate): When essential Ayurvedic slots are gathered, ask ONE final wrap-up question:
+     "I have noted your symptoms. Before I finalize your summary for the attending Vaidya, is there any other symptom or concern you want to mention?"
+   - If the patient confirms closure (e.g. "no", "that's all") or turns reach {max_turns}, set should_stop = true and generate the clinical summary."""
+    else:
+        paradigm_context = f"- Triage Mode: Allopathic Clinical Intake (SOCRATES)"
+        clinical_selection_instructions = f"""3. HYPOTHESIS-DRIVEN CLINICAL SELECTION:
+   - If red flags have not been screened yet (Turn 1 in a patient with chest discomfort and chronic risks like diabetes or hypertension), ask ONE question ruling out cardiac ischemia red flags (diaphoresis, dyspnea, jaw/left arm radiation).
+   - In subsequent turns, target remaining missing slots in TARGET REMAINING CLINICAL SLOTS, proactively correlating with their past hospital records and medications (e.g. Pantoprazole compliance, food triggers).
+   - When core slots are gathered and red flags are negative, ask ONE final wrap-up question:
+     "I have noted your symptoms. Before I finalize your summary for the attending doctor, is there any other symptom or concern you want to mention?"
+   - If the patient confirms closure (e.g., "no", "that's all") or turns reach {max_turns}, set should_stop = true and generate the clinical summary."""
+
+    # Construct user prompt with clear separation of facts, transcript, and latest utterance
     history_text = _format_conversation_history_text(history)
     user_prompt = f"""PATIENT CONTEXT:
 - Name: {ctx.name or 'Patient'} | Age: {ctx.age or 'Unspecified'} | Gender: {ctx.gender or 'Unspecified'}
 - Chief Complaint: {ctx.chief_complaint or 'Under investigation'}
-- Target Maximum Turns: {max_turns}
+- Hospital Paradigm: {ctx.hospital_type.upper()}
+{paradigm_context}
+- Maximum Safe Turns: {max_turns}
 
-CONVERSATION HISTORY TO DATE:
+CONFIRMED CLINICAL FACTS (LOCKED IN CHART - NEVER RE-ASK ANY OF THESE):
+{confirmed_facts_text}
+
+TARGET REMAINING CLINICAL SLOTS TO ASSESS:
+{missing_slots_text}
+
+CONVERSATION TRANSCRIPT:
 {history_text}
 
-INSTRUCTIONS:
-Evaluate whether all target clinical slots ({', '.join(protocol.target_slots)}) are covered.
-If missing slots remain and turns < {max_turns}, formulate the next single targeted question and 3-4 touch options.
-If complete, set should_stop = true and generate the comprehensive clinical summary.
+PATIENT'S LATEST STATEMENT:
+"{latest_patient_utterance}"
+
+INSTRUCTIONS FOR THIS TURN:
+1. SPONTANEOUS EXTRACTION & CHART LOCKING (CRITICAL):
+   - Extract ALL newly mentioned clinical facts from "{latest_patient_utterance}" directly into `state` (e.g. symptoms, appetite, bowel pattern, triggers).
+   - If a clinical fact is ALREADY present in CONFIRMED CLINICAL FACTS, you are STRICTLY FORBIDDEN from asking about it again!
+
+2. EXACTLY ONE QUESTION (STRICT SINGLE-BARREL RULE):
+   - Your `next_question` MUST contain EXACTLY ONE question mark (?).
+   - NEVER ask compound or multi-part questions (e.g. do NOT combine appetite, bowel, and sleep into one sentence).
+   - Keep the question concise, empathetic, and under 25 words so the patient can easily answer by voice or touch pill.
+
+{clinical_selection_instructions}
+
+4. RED FLAGS & SAFETY:
+   - Set `is_red_flag = true` and `should_stop = true` ONLY for active life-threatening emergencies experienced by the patient (acute severe respiratory distress, acute severe hemorrhage, sudden collapse).
+   - Otherwise, set `is_red_flag = false` and `red_flag_details = null`.
+
+5. TOUCH OPTIONS:
+   - Provide 3 to 4 distinct, concrete `touch_options` that directly answer your ONE question. Each option must have `id`, `label`, `value`, and `slot_tag`.
+   - IMPORTANT: Option labels MUST be descriptive phrases in English.
+
+6. Update "state" with all newly extracted findings.
 Respond strictly in JSON format."""
+
 
     # Call LLM (Groq -> Gemini -> OpenAI -> Fallback Heuristic)
     llm_output = await call_groq_llm(system_prompt, user_prompt)
@@ -142,8 +239,8 @@ Respond strictly in JSON format."""
     # Fallback if external LLM is offline
     if not llm_output:
         logger.info(f"External LLM unavailable. Utilizing intelligent clinical heuristic fallback for {ctx.hospital_type}.")
-        if ctx.hospital_type.lower() == "ayurveda":
-            norm = protocol.normalize_state({})
+        if ctx.hospital_type.lower() in ["ayurveda", "ayush"]:
+            norm = protocol.normalize_state(active_state)
             return DialogueTurnResult(
                 should_stop=(len(history) >= max_turns * 2),
                 next_question="Could you please describe how your digestion, appetite, and sleep are affected?",
@@ -159,7 +256,16 @@ Respond strictly in JSON format."""
                 clinical_summary=protocol.format_doctor_summary(norm["state"], ctx) if len(history) >= max_turns * 2 else None,
                 closing_message="Thank you. Your Ayurvedic consultation details have been recorded." if len(history) >= max_turns * 2 else None
             )
-        base_socrates = SocratesState()
+        base_socrates = SocratesState(
+            site=active_state.get("site"),
+            onset=active_state.get("onset"),
+            character=active_state.get("character"),
+            radiation=active_state.get("radiation"),
+            associations=active_state.get("associations", []) if isinstance(active_state.get("associations"), list) else ([active_state.get("associations")] if active_state.get("associations") else []),
+            time_course=active_state.get("time_course"),
+            exacerbating_relieving=active_state.get("exacerbating_relieving"),
+            severity=active_state.get("severity")
+        )
         return generate_heuristic_turn(ctx, history, base_socrates, max_turns=max_turns)
 
     # Parse and normalize LLM response
@@ -180,9 +286,16 @@ Respond strictly in JSON format."""
                         slot_tag=opt.get("slot_tag")
                     ))
 
-        # State normalization via protocol
+        # State normalization via protocol with cumulative merge
         raw_state = llm_output.get("state", llm_output.get("socrates_state", {}))
-        normalized = protocol.normalize_state(raw_state)
+        merged_state = dict(active_state)
+        if isinstance(raw_state, dict):
+            for k, v in raw_state.items():
+                if v and str(v).lower() not in ["null", "none", "[]", "{}"]:
+                    merged_state[k] = v
+
+        normalized = protocol.normalize_state(merged_state)
+
 
         # Red flag check
         is_red_flag = bool(llm_output.get("is_red_flag", False))

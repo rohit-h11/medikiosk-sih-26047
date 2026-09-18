@@ -1,0 +1,614 @@
+/* ==========================================================================
+   Exact 1:1 Pixel-Accurate & Responsive Styles for Screen Dchatbot (1440x1024)
+   Node 251:2956 — Fitted for 100vh Full-Viewport Kiosk Operation
+   ========================================================================== */
+
+.figma-chatbot-screen {
+  width: 100vw;
+  max-width: 1440px;
+  height: 100vh;
+  max-height: 1024px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  user-select: none;
+  box-sizing: border-box;
+  padding: clamp(10px, 1.5vh, 24px) clamp(20px, 3.5vw, 65px) 0 clamp(20px, 3.5vw, 65px);
+}
+
+/* --------------------------------------------------------------------------
+   1. Top Header Bar
+   -------------------------------------------------------------------------- */
+.figma-chatbot-header {
+  width: 100%;
+  height: clamp(60px, 9vh, 96px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Left Back / Menu Icon (exact geometry from SVG: stroke #303030, stroke-width 4) */
+.figma-chatbot-back-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 7px;
+  border-radius: 8px;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  flex-shrink: 0;
+}
+
+.figma-chatbot-back-btn:hover {
+  transform: scale(1.08);
+}
+
+.figma-chatbot-back-btn:active {
+  transform: scale(0.95);
+}
+
+.figma-chatbot-bar {
+  height: 4px;
+  background-color: #303030;
+  border-radius: 2px;
+}
+
+/* Center MediKiosk Gradient Brand Logo */
+.figma-chatbot-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.figma-chatbot-logo-text {
+  font-size: clamp(28px, 4vh, 46px);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(90deg, #000000 20%, #34C759 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  line-height: 1;
+}
+
+/* Right actions: Language Switcher & ABDM Logo */
+.figma-chatbot-header-actions {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.5vw, 20px);
+  flex-shrink: 0;
+}
+
+/* Language Switcher Pill in Header */
+.figma-chatbot-lang-container {
+  position: relative;
+}
+
+.figma-chatbot-lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.figma-chatbot-lang-btn:hover {
+  border-color: #34C759;
+  background: #f0fdf4;
+}
+
+.figma-chatbot-lang-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  width: 210px;
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 100;
+  padding: 6px;
+}
+
+.figma-chatbot-lang-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.figma-chatbot-lang-item:hover {
+  background: #f1f5f9;
+}
+
+.figma-chatbot-lang-item.active {
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-weight: 700;
+}
+
+.figma-chatbot-lang-item-native {
+  color: #64748b;
+  font-size: 12.5px;
+}
+
+.figma-chatbot-abdm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   2. Dialogue / Chat Messages Stream
+   -------------------------------------------------------------------------- */
+.figma-chatbot-dialogue-area {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-width: 1258px;
+  margin: 0 auto;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.4vh, 16px);
+  padding: 8px 12px 12px 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+/* Clean Custom Scrollbar */
+.figma-chatbot-dialogue-area::-webkit-scrollbar {
+  width: 6px;
+}
+.figma-chatbot-dialogue-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+.figma-chatbot-dialogue-area::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+/* Attached Prescription Badge */
+.figma-chatbot-attached-badge {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 20px;
+  color: #15803d;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.08);
+}
+
+/* Assistant Speech Bubble (Exact SVG: fill #F6F6F6, stroke #E8E8E8, tail at bottom-left) */
+.figma-chatbot-bubble-bot {
+  position: relative;
+  align-self: flex-start;
+  max-width: clamp(340px, 50vw, 620px);
+  background-color: #F6F6F6;
+  border: 1px solid #E8E8E8;
+  border-radius: 20px 20px 20px 4px;
+  padding: clamp(14px, 2vh, 24px) clamp(18px, 2.5vw, 32px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  animation: botFadeIn 0.3s ease-out;
+}
+
+@keyframes botFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.figma-chatbot-bot-title {
+  font-size: clamp(18px, 2.4vh, 24px);
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 6px 0;
+  line-height: 1.2;
+}
+
+.figma-chatbot-bot-text {
+  font-size: clamp(16px, 1.9vh, 20px);
+  font-weight: 400;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* TTS Speaking Audio Wave Badge */
+.figma-chatbot-speaking-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 4px 12px;
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.figma-chatbot-speaking-badge:hover {
+  opacity: 0.85;
+}
+
+/* Patient Speech Bubble (User message on right) */
+.figma-chatbot-bubble-patient {
+  align-self: flex-end;
+  max-width: clamp(320px, 45vw, 580px);
+  background-color: #34C759;
+  color: #ffffff;
+  border-radius: 20px 20px 4px 20px;
+  padding: clamp(12px, 1.8vh, 18px) clamp(16px, 2.2vw, 26px);
+  font-size: clamp(16px, 1.8vh, 19px);
+  font-weight: 500;
+  line-height: 1.4;
+  box-shadow: 0 4px 14px rgba(52, 199, 89, 0.25);
+  animation: userFadeIn 0.25s ease-out;
+}
+
+@keyframes userFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Emergency Red Flag Alert Notification */
+.figma-chatbot-redflag-alert {
+  background-color: #fef2f2;
+  border: 2px solid #ef4444;
+  border-radius: 12px;
+  padding: 14px 18px;
+  color: #991b1b;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.figma-chatbot-redflag-title {
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.03em;
+}
+
+.figma-chatbot-redflag-desc {
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+/* Consultation Complete Summary Card */
+.figma-chatbot-summary-card {
+  align-self: center;
+  width: 100%;
+  max-width: 800px;
+  background: #ffffff;
+  border: 2px solid #22c55e;
+  border-radius: 16px;
+  padding: clamp(16px, 2.2vh, 24px) clamp(20px, 2.5vw, 32px);
+  box-shadow: 0 8px 30px rgba(34, 197, 94, 0.15);
+  margin-top: 12px;
+}
+
+.figma-chatbot-summary-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.figma-chatbot-summary-title {
+  font-size: clamp(17px, 2vh, 20px);
+  font-weight: 700;
+  color: #15803d;
+  margin: 0;
+}
+
+.figma-chatbot-summary-body {
+  font-size: clamp(14px, 1.6vh, 16px);
+  color: #334155;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.figma-chatbot-summary-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.figma-chatbot-btn-finish {
+  padding: 12px 24px;
+  background-color: #16a34a;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.figma-chatbot-btn-finish:hover {
+  background-color: #15803d;
+}
+
+/* --------------------------------------------------------------------------
+   3. Quick-Select Suggestion Pills (Exact SVG: width=264, height=115, rx=57.5)
+   -------------------------------------------------------------------------- */
+.figma-chatbot-pills-row {
+  width: 100%;
+  max-width: 1258px;
+  margin: clamp(6px, 1vh, 14px) auto clamp(6px, 1vh, 14px) auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(10px, 2vw, 47px);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.figma-chatbot-pill-btn {
+  width: clamp(180px, 20vw, 264px);
+  height: clamp(60px, 8.5vh, 105px);
+  border-radius: 57.5px;
+  background-color: #F4F4F4;
+  border: 1.5px solid #000000;
+  opacity: 0.72;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 18px;
+  box-sizing: border-box;
+  text-align: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.figma-chatbot-pill-btn:hover:not(:disabled) {
+  opacity: 1;
+  transform: translateY(-3px);
+  background-color: #ffffff;
+  border-color: #34C759;
+  box-shadow: 0 8px 24px rgba(52, 199, 89, 0.18);
+}
+
+.figma-chatbot-pill-btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.figma-chatbot-pill-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.figma-chatbot-pill-title {
+  font-size: clamp(14px, 1.7vh, 18px);
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.25;
+}
+
+.figma-chatbot-pill-subtitle {
+  font-size: clamp(11px, 1.2vh, 13px);
+  font-weight: 500;
+  color: #64748b;
+  margin-top: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   4. Message Input Bar (Exact SVG: width = 1258px, height = 75px, rx = 37.5)
+   -------------------------------------------------------------------------- */
+.figma-chatbot-input-bar {
+  width: 100%;
+  max-width: 1258px;
+  height: clamp(52px, 6.5vh, 75px);
+  margin: 0 auto;
+  border-radius: 37.5px;
+  background-color: #F6F6F6;
+  border: 1.5px solid #E8E8E8;
+  display: flex;
+  align-items: center;
+  padding: 0 12px 0 clamp(16px, 2.5vw, 36px);
+  box-sizing: border-box;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  flex-shrink: 0;
+}
+
+.figma-chatbot-input-bar:focus-within {
+  border-color: #34C759;
+  box-shadow: 0 4px 20px rgba(52, 199, 89, 0.15);
+  background-color: #ffffff;
+}
+
+.figma-chatbot-input-field {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-size: clamp(16px, 1.8vh, 20px);
+  font-family: inherit;
+  color: #0f172a;
+  outline: none;
+}
+
+.figma-chatbot-input-field::placeholder {
+  color: #BDBDBD;
+  font-weight: 400;
+}
+
+/* Circular Send Button (Exact SVG: cx=1324.5, cy=827.1, r=17) */
+.figma-chatbot-send-btn {
+  width: clamp(38px, 4.4vh, 44px);
+  height: clamp(38px, 4.4vh, 44px);
+  border-radius: 50%;
+  background-color: #34C759;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  transition: all 0.18s ease;
+  box-shadow: 0 2px 8px rgba(52, 199, 89, 0.3);
+  flex-shrink: 0;
+}
+
+.figma-chatbot-send-btn:hover:not(:disabled) {
+  transform: scale(1.08);
+  background-color: #2eb14f;
+}
+
+.figma-chatbot-send-btn:disabled {
+  background-color: #cbd5e1;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   5. Bottom Voice Microphone Button (Exact SVG: y = 880px to 1024px)
+   -------------------------------------------------------------------------- */
+.figma-chatbot-mic-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  margin-top: clamp(6px, 0.8vh, 12px);
+  z-index: 20;
+}
+
+/* "TAP TO SPEAK" text above mic */
+.figma-chatbot-mic-label {
+  font-size: clamp(13px, 1.5vh, 16px);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #000000;
+  text-transform: uppercase;
+  margin-bottom: clamp(4px, 0.6vh, 8px);
+  transition: color 0.2s ease;
+}
+
+.figma-chatbot-mic-label.recording {
+  color: #dc2626;
+  animation: pulseText 1s infinite alternate;
+}
+
+@keyframes pulseText {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
+
+/* Lime Green Microphone Pill Button (width=180, rx=89, fill=#99FF00) */
+.figma-chatbot-mic-btn {
+  width: clamp(150px, 15vw, 180px);
+  height: clamp(75px, 9.5vh, 110px);
+  border-radius: 89px 89px 0 0;
+  background-color: #99FF00;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 -4px 24px rgba(153, 255, 0, 0.45);
+  position: relative;
+  outline: none;
+}
+
+.figma-chatbot-mic-btn:hover {
+  filter: brightness(1.06);
+  transform: translateY(-2px);
+}
+
+.figma-chatbot-mic-btn:active {
+  transform: scale(0.97);
+}
+
+/* Active Recording Pulsing Ring Animation */
+.figma-chatbot-mic-btn.recording {
+  background-color: #ff3333;
+  box-shadow: 0 -4px 30px rgba(255, 51, 51, 0.6);
+  animation: micGlow 1.2s infinite alternate;
+}
+
+@keyframes micGlow {
+  0% {
+    box-shadow: 0 -4px 20px rgba(255, 51, 51, 0.5), 0 0 0 0 rgba(255, 51, 51, 0.4);
+  }
+  100% {
+    box-shadow: 0 -4px 35px rgba(255, 51, 51, 0.8), 0 0 0 20px rgba(255, 51, 51, 0);
+  }
+}
+
+.figma-chatbot-mic-icon {
+  width: clamp(34px, 4vh, 42px);
+  height: clamp(34px, 4vh, 42px);
+  color: #1D1B20;
+}
+
+.figma-chatbot-mic-btn.recording .figma-chatbot-mic-icon {
+  color: #ffffff;
+}
+
+/* Streaming typing cursor animation */
+.figma-chatbot-stream-cursor {
+  display: inline-block;
+  width: 3px;
+  height: 18px;
+  background-color: #34C759;
+  margin-left: 4px;
+  vertical-align: middle;
+  animation: streamBlink 0.75s infinite;
+}
+
+@keyframes streamBlink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}

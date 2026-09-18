@@ -8,12 +8,28 @@ from app.core.middleware import (
 )
 from app.api.v1.router import api_router
 
+import asyncio
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Pre-warm embedding model in background thread to avoid 17s cold start on first turn
+    async def _preload():
+        try:
+            from app.ai.rag.retriever import get_embedding_model
+            await asyncio.to_thread(get_embedding_model)
+        except Exception:
+            pass
+    asyncio.create_task(_preload())
+    yield
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
     description="MediKiosk — AI Clinical History Software Platform API Backend (Ministry of Ayush / AIIA)",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    lifespan=lifespan
 )
 
 # 1. Register Essential Middlewares

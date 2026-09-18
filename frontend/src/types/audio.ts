@@ -47,6 +47,8 @@ export interface AudioProcessingConfig {
   minDurationMs?: number;
   /** Maximum recording safety duration in ms before auto-stopping (default 30000ms = 30s) */
   maxDurationMs?: number;
+  /** Real-time callback delivering continuous audio buffer chunks while speaking */
+  onAudioChunk?: (chunk: Float32Array) => void;
 }
 
 export interface AudioPreprocessingStats {
@@ -113,4 +115,6 @@ export interface UsePushToTalkOptions {
   onError?: (error: Error) => void;
   /** Callback for real-time volume changes (0.0 to 1.0) */
   onVolumeChange?: (volume: number) => void;
+  /** Real-time callback delivering continuous audio buffer chunks while speaking */
+  onAudioChunk?: (chunk: Float32Array) => void;
 }

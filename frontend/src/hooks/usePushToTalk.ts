@@ -15,7 +15,7 @@ import { createAudioGraph, LiveAudioGraph } from '@/utils/audio/audioGraph';
 import { preprocessAudio } from '@/utils/audio/audioPreprocessor';
 
 export function usePushToTalk(options: UsePushToTalkOptions = {}) {
-  const { config, onAudioReady, onStateChange, onError, onVolumeChange } = options;
+  const { config, onAudioReady, onStateChange, onError, onVolumeChange, onAudioChunk } = options;
 
   const [state, setState] = useState<PushToTalkState>('idle');
   const [volumeLevel, setVolumeLevel] = useState<number>(0);
@@ -129,7 +129,7 @@ export function usePushToTalk(options: UsePushToTalkOptions = {}) {
 
     try {
       // 1. Build and connect Web Audio DSP graph with 85Hz HighPass + DynamicsCompressor
-      const graph = await createAudioGraph(config);
+      const graph = await createAudioGraph({ ...config, onAudioChunk });
       audioGraphRef.current = graph;
       startTimeRef.current = Date.now();
 

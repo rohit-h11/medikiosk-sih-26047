@@ -63,8 +63,8 @@ def process_ocr_result(json_path: str):
     try:
         from sentence_transformers import SentenceTransformer
         
-        print("\n[INFO] Loading sentence-transformers (all-MiniLM-L6-v2)...")
-        model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+        print("\n[INFO] Loading BAAI/bge-small-en-v1.5...")
+        model = SentenceTransformer("BAAI/bge-small-en-v1.5")
         
         print("[INFO] Generating vector embeddings...")
         embeddings = model.encode(final_texts_to_embed, normalize_embeddings=True)

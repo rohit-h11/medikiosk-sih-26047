@@ -96,7 +96,15 @@ def generate_signed_document_url(
     if not file_path:
         return None
 
-    client = supabase_client or get_supabase_client()
+    if supabase_client is False:
+        client = None
+    elif supabase_client is not None:
+        client = supabase_client
+    else:
+        try:
+            client = get_supabase_client()
+        except Exception:
+            client = None
     if not client:
         return None
 
@@ -170,7 +178,15 @@ async def ingest_patient_document_pipeline(
     else:
         doc_type_enum = document_type
 
-    client = supabase_client or get_supabase_client()
+    if supabase_client is False:
+        client = None
+    elif supabase_client is not None:
+        client = supabase_client
+    else:
+        try:
+            client = get_supabase_client()
+        except Exception:
+            client = None
 
     # ── STEP 1: PRE-INGESTION QUALITY & DUPLICATE GATE (< 30ms) ───────────────
     gate_result: PreIngestionCheckResult = run_pre_ingestion_gate(
@@ -206,6 +222,7 @@ async def ingest_patient_document_pipeline(
                 signed_url_raw=generate_signed_document_url(d.get("file_path_raw"), supabase_client=client),
                 file_hash_sha256=d["file_hash_sha256"],
                 perceptual_hash_dhash=d.get("perceptual_hash_dhash"),
+                perceptual_hash_phash=d.get("perceptual_hash_phash"),
                 file_size_bytes=d["file_size_bytes"],
                 mime_type=d["mime_type"],
                 ocr_status=OCRStatus(d.get("ocr_status", "pending")),
@@ -259,6 +276,7 @@ async def ingest_patient_document_pipeline(
         "file_path_thumbnail": thumb_path,
         "file_hash_sha256": gate_result.sha256_hash,
         "perceptual_hash_dhash": gate_result.dhash_fingerprint,
+        "perceptual_hash_phash": gate_result.phash_fingerprint,
         "mime_type": "image/webp",
         "file_size_bytes": len(raw_file_bytes),
         "page_count": 1,
@@ -296,6 +314,7 @@ async def ingest_patient_document_pipeline(
         signed_url_raw=signed_raw,
         file_hash_sha256=gate_result.sha256_hash,
         perceptual_hash_dhash=gate_result.dhash_fingerprint,
+        perceptual_hash_phash=gate_result.phash_fingerprint,
         file_size_bytes=len(raw_file_bytes),
         mime_type="image/webp",
         ocr_status=OCRStatus.PENDING,

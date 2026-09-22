@@ -40,3 +40,8 @@ Thumbs.db
 # Antigravity & Agent Rules
 GEMINI.md
 .agents/
+
+# Tunnels & Logs
+cloudflared.exe
+.playwright-mcp/
+*.log
